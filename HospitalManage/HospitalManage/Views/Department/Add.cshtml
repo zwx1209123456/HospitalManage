@@ -1,0 +1,57 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="app">
+        <table class="table table-bordered">
+            <tr>
+                <td>姓名</td>
+                <td>
+                    <input type="text" v-model="DepartmentName" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="#" v-on:click="AddDepartment(DepartmentName)">添加</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            
+            methods: {
+                AddDepartment: function (departmentName) {
+                    axios.post('@Url.Action("Add", "Department")', { department: { DepartmentName: departmentName} }).then(
+                        (response) => {
+                            alert("添加成功")
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+
+
+            },
+
+        });
+</script>

@@ -1,0 +1,74 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <script src="~/Scripts/axios.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+    <script>
+
+    </script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>姓名；</td>
+            <td>
+                <input id="Text1" type="text" v-model="UserName" />
+            </td>
+        </tr>
+        <tr>
+            <td>工号：</td>
+            <td>
+                <input id="Text1" type="text" v-model="UserNumber" />
+            </td>
+        </tr>
+        <tr>
+            <td>所属科室：</td>
+            <td>
+                <select id="Select1" v-model="DepartmentName"></select>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>职务：</td>
+            <td>
+                <select id="Select1" v-model="DutyName"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>年假天数：</td>
+            <td>
+                <input id="Text1" type="text" v-model="AnnualDay" />
+            </td>
+        </tr>
+        <tr>
+            <td>入职时间：</td>
+            <td>
+                <input id="Text1" type="text" v-model="EntryTime" />
+            </td>
+        </tr>
+        <tr>
+            <td>层级：</td>
+            <td>
+                <select id="Select1" v-model="TierName"></select>
+               
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="Button1" type="button" value="保存" />
+            </td>
+            <td>
+                <input id="Text1" type="text" v-model="UserName" />
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
