@@ -28,7 +28,7 @@
                     <th>操作</th>
                 </tr>
                 <tr v-for="(tier,index) in tierList">
-                    <td><input type="text" v-model="tier.Name" /></td>
+                    <td><input type="text" v-model="tier.TierName" /></td>
                
                     <td>
                         <div v-if="tier.Id!=''">
@@ -61,7 +61,7 @@
                             for (var i = 0; i < response.data.length; i++) {
                                 this.tierList.push(response.data[i]);
                             }
-                            this.tierList.push({ Id:"", Name: "", PhoneNo: "", EmailAddress: "" });
+                            this.tierList.push({ Id: "", TierName: "" });
                         },
                         (response) => {
                             alert(response.status);
@@ -77,7 +77,7 @@
                             for (var i = 0; i < response.data.length; i++) {
                                 this.tierList.push(response.data[i]);
                             }
-                            this.tierList.push({ Id: "", Name: "", PhoneNo: "", EmailAddress: "" });
+                            this.tierList.push({ Id: "", TierName: "" });
                         },
                         (response) => {
                             alert(response.status);
@@ -93,7 +93,7 @@
                             for (var i = 0; i < response.data.length; i++) {
                                 this.tierList.push(response.data[i]);
                             }
-                            this.tierList.push({ Id: "", Name: "", PhoneNo: "", EmailAddress: "" });
+                            this.tierList.push({ Id: "", TierName: ""});
                         },
                         (response) => {
                             alert(response.status);
@@ -109,7 +109,7 @@
                             for (var i = 0; i < response.data.length; i++) {
                                 this.tierList.push(response.data[i]);
                             }
-                            this.tierList.push({ Id: "", Name: "", PhoneNo: "", EmailAddress: "" });
+                            this.tierList.push({ Id: "", TierName: "" });
                         },
                         (response) => {
                             alert(response.status);
