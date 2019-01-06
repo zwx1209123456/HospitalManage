@@ -12,28 +12,26 @@ namespace HospitalManage.Controllers
     public class UsersController : Controller
     {
         IDepartmentServices idepartmentServices = null;
-        //IDutyServices idutyServices = null;
+        IDutyServices idutyServices = null;
         ITierService itierService = null;
         IUsersServices iusersServices = null;
-        public UsersController(IUsersServices usersServices, IDepartmentServices departmentServices, /*IDutyServices dutyServices,*/ ITierService tierService)
+        public UsersController(IUsersServices usersServices, IDepartmentServices departmentServices, IDutyServices dutyServices, ITierService tierService)
         {
             iusersServices = usersServices;
             idepartmentServices = departmentServices;
-            //idutyServices = dutyServices;
+            idutyServices = dutyServices;
             itierService = tierService;
         }
         [HttpGet]
         // GET: Users
         public ActionResult Show()
         {
-            //return iusersServices.ShowUsers();
-            //return Json(iusersServices.ShowUsers(), JsonRequestBehavior.AllowGet);
+           
             return View();
         }
         public JsonResult Shows()
         {
-            //return iusersServices.ShowUsers();
-
+            
             return Json(iusersServices.ShowUsers(), JsonRequestBehavior.AllowGet);
         }
 
@@ -82,13 +80,13 @@ namespace HospitalManage.Controllers
         /// 职务显示
         /// </summary>
         /// <returns></returns>
-        //[HttpGet]
+        [HttpGet]
         //// GET: Users
-        //public JsonResult GetDuties()
-        //{
-        //    //return idepartmentServices.GetDepartments();
-        //    return Json(idutyServices.GetDuties(), JsonRequestBehavior.AllowGet);
-        //}
+        public JsonResult GetDuties()
+        {
+           //return idepartmentServices.GetDepartments();
+          return Json(idutyServices.GetDuties(), JsonRequestBehavior.AllowGet);
+        }
         /// <summary>
         /// 层级显示
         /// </summary>
