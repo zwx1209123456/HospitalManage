@@ -8,6 +8,9 @@ namespace Models
 {
    public  class Users
     {
+        /// <summary>
+        /// 用户表
+        /// </summary>
         public int Id { get; set; }
         
         /// <summary>
