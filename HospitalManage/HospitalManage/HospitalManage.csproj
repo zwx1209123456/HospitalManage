@@ -228,6 +228,9 @@
     <Content Include="Views\Duty\Index.cshtml" />
     <Content Include="Views\Users\Add.cshtml" />
     <Content Include="Views\Tier\Index.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Users\Show.cshtml" />
+    <Content Include="Views\Users\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

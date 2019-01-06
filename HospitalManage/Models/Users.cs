@@ -44,5 +44,17 @@ namespace Models
         /// 入职时间
         /// </summary>
         public string EntryTime { get; set; }
+        /// <summary>
+        /// 科室名称
+        /// </summary>
+        public string DepartmentName { get; set; }
+        /// <summary>
+        /// 职务名称
+        /// </summary>
+        public string DutyName { get; set; }
+        /// <summary>
+        /// 层级名称
+        /// </summary>
+        public string TierName { get; set; }
     }
 }
