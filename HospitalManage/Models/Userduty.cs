@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Models
 {
+    /// <summary>
+    /// 用户职务关联表
+    /// </summary>
     public class Userduty
     {
 

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Models
 {
+
+    /// <summary>
+    /// 接龙表
+    /// </summary>
   public   class Solitaire
     {
      public int Id { get; set; }

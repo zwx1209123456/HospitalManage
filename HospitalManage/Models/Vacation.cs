@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
+    //假期管理表
    public  class Vacation
     {
         public int Id { get; set; }

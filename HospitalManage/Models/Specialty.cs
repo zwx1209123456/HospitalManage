@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Models
 {
+    /// <summary>
+    /// 专业分组表
+    /// </summary>
   public   class Specialty
     {
      public int Id { get; set; }
