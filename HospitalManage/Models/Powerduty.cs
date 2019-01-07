@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Models
 {
     /// <summary>
-    /// 群贤职务关联表
+    /// 权限职务关联表
     /// </summary>
     public class Powerduty
     {
