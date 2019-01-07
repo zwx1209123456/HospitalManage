@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChainsGroup.cs" />
     <Compile Include="Powerduty.cs" />
     <Compile Include="Solitaire.cs" />
     <Compile Include="Specialty.cs" />

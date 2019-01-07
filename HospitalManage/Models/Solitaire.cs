@@ -26,17 +26,10 @@ namespace Models
         /// </summary>
      public DateTime LastStartSolitaire { get; set; }
         /// <summary>
-        /// 接龙组序
+        /// 接龙小组Id
         /// </summary>
-     public int SolitaireSort { get; set; }
-        /// <summary>
-        /// 组内人员
-        /// </summary>
-     public string GropCrew { get; set; }
-        /// <summary>
-        /// 组长
-        /// </summary>
-     public string GroupLeader { get; set; }
+     public int ChainsGroupIds { get; set; }
+
 
     }
 }
