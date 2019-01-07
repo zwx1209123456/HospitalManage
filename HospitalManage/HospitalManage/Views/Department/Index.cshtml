@@ -1,0 +1,164 @@
+﻿
+@{
+    /**/
+
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/axios.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <style>
+        .page-bar {
+            margin: 40px;
+        }
+
+        ul, li {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        li {
+            list-style: none
+        }
+
+        .page-bar li:first-child > a {
+            margin-left: 0px
+        }
+
+        .page-bar a {
+            border: 1px solid #ddd;
+            text-decoration: none;
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            cursor: pointer
+        }
+
+            .page-bar a:hover {
+                background-color: #eee;
+            }
+
+            .page-bar a.banclick {
+                cursor: not-allowed;
+            }
+
+        .page-bar .active a {
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .page-bar i {
+            font-style: normal;
+            color: #d44950;
+            margin: 0px 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <table class="table table-bordered">
+            <tr>
+                <td>编号</td>
+                <td>科室名称</td>
+                <td>编辑</td>
+            </tr>
+            <tr v-for="(department,key,index) in DepartmentList">
+                <td>{{department.Id}}</td>
+                <td><input type="text" v-model="department.DepartmentName" /></td>
+                <td>
+                    <div v-if="department.Id!=''">
+                        <a href="#" v-on:click="UpdateDepartment(department.Id,department.DepartmentName)">修改</a>
+                        <a href="#" v-on:click="DeleteDepartment(department.Id)">删除</a>
+                    </div>
+                    <div v-else>
+                        <a href="#" v-on:click="AddDepartment(department.DepartmentName)">添加</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+        //表格
+        var vm = new Vue({
+            //提供一个在页面上已存在的 DOM 元素作为 Vue 实例的挂载目标。可以是 CSS 选择器，也可以是一个 HTMLElement 实例。
+            el: "#app",
+            data: {
+               DepartmentList: [],
+            },
+            mounted() {
+                this.getAllUser();
+            },
+            methods: {
+                getAllUser: function () {
+                    axios.get('@Url.Action("GetDepartments", "Department")').then(
+                        (response) => {
+                            this.DepartmentList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                AddDepartment: function (departmentName) {
+                    axios.post('@Url.Action("Add", "Department")', { department: { DepartmentName: departmentName} }).then(
+                        (response) => {
+                            alert("添加成功")
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+            UpdateDepartment: function (id, departmentName) {
+                    axios.post('@Url.Action("Update", "Department")', { department: { Id: id, DepartmentName: departmentName} }).then(
+                        (response) => {
+                            alert("添加成功")
+                            console.log(response);
+                            if (response.data > 0) {
+                                this.getAllUser();
+                            }
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+            DeleteDepartment: function (id) {
+                    axios.post('@Url.Action("Delete", "Department")', { Id: id }).then(
+                        (response) => {
+                            if (response.data > 0) {
+                               this.getAllUser();
+                            }
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                }
+            },
+        });
+</script>

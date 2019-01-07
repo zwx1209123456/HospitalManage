@@ -16,5 +16,7 @@ namespace IServices
         int Delete(int Id);
 
         int Update(Department department);
+
+        int GetDepartment(int Id);
     }
 }

@@ -44,7 +44,6 @@ namespace Services
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                conn.Open();
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("_Id", Id);
                 return conn.Execute("sp_Duty_Delete", parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -56,7 +55,6 @@ namespace Services
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                conn.Open();
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("_Id", duty.Id);
                 parameters.Add("_DutyName", duty.DutyName);
@@ -71,7 +69,6 @@ namespace Services
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                conn.Open();
                 DynamicParameters parameters = new DynamicParameters();
                 return conn.Query<Duty>("Duty_show", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
 

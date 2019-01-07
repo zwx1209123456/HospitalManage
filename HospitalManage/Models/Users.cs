@@ -8,6 +8,9 @@ namespace Models
 {
    public  class Users
     {
+        /// <summary>
+        /// 用户表
+        /// </summary>
         public int Id { get; set; }
         
         /// <summary>
@@ -44,5 +47,17 @@ namespace Models
         /// 入职时间
         /// </summary>
         public string EntryTime { get; set; }
+        /// <summary>
+        /// 科室名称
+        /// </summary>
+        public string DepartmentName { get; set; }
+        /// <summary>
+        /// 职务名称
+        /// </summary>
+        public string DutyName { get; set; }
+        /// <summary>
+        /// 层级名称
+        /// </summary>
+        public string TierName { get; set; }
     }
 }

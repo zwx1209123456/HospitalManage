@@ -38,7 +38,7 @@ namespace Services
         {
             MySqlConnection conn = dapper.GetConnection();
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("Id");
+            parameters.Add("_Id",Id);//参数没写
             return conn.Execute("Department_Delete", parameters, commandType: System.Data.CommandType.StoredProcedure);
             throw new NotImplementedException();
         }
@@ -53,10 +53,16 @@ namespace Services
             return conn.Query<Department>("Department_Show", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
         }
 
+        /// <summary>
+        /// 修改科室
+        /// </summary>
+        /// <param name="department"></param>
+        /// <returns></returns>
         public int Update(Department department)
         {
             MySqlConnection conn = dapper.GetConnection();
             DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@_Id", department.Id);
             parameters.Add("@_DepartmentName", department.DepartmentName);
             int res = conn.Execute("Department_update", parameters, commandType: System.Data.CommandType.StoredProcedure);
             return res;
@@ -70,7 +76,7 @@ namespace Services
         {
             MySqlConnection conn = dapper.GetConnection();
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("Id");
+            parameters.Add("_Id", Id);
             return conn.Execute("Department_GetDeparrment", parameters, commandType: System.Data.CommandType.StoredProcedure);
             throw new NotImplementedException();
         }
