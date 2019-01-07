@@ -1,0 +1,136 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/axios.js"></script>
+    <script src="~/js/My97DatePicker/My97DatePicker/WdatePicker.js"></script>
+    <title>Add</title>
+</head>
+<body>
+    <div>
+        <div id="app">
+            <table class="table-bordered">
+                <tr>
+                    <td>班次颜色</td>
+                    <td>
+                        <input type="color" v-model="ClassesColor"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>班次名称</td>
+                    <td>
+                        <input type="text" v-model="ClassesName" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>上班时间</td>
+                    <td>
+                        <input class="Wdate" type="text" v-model="StartTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                    </td>
+                </tr>
+             
+                <tr>
+                    <td>下班时间</td>
+                    <td>
+                        <input class="Wdate" type="text" v-model="LastTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                    </td>
+                </tr>
+                <tr>
+                    <td>班次类型</td>
+                    <td>
+                        <div>
+                            <select v-model="ClasserType">
+                                <option v-for="item in items" v-bind:value="item.value">{{item.text}}</option>
+                            </select>
+                            <span>已选:{{selected}}</span>
+                        </div>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>有效排班日</td>
+                    <td>
+                        <div>
+                            <label>周一<input type="checkbox" v-model="ValidClasses" value="周一" /></label>
+                            <label>周二<input type="checkbox" v-model="ValidClasses" value="周二" /></label>
+                            <label>周三 <input type="checkbox" v-model="ValidClasses" value="周三" /></label>
+                            <label>周四<input type="checkbox" v-model="ValidClasses" value="周四" /></label>
+                            <label>周五<input type="checkbox" v-model="ValidClasses" value="周五" /></label>
+                            <label>周六 <input type="checkbox" v-model="ValidClasses" value="周六" /></label>
+                            <label>周日<input type="checkbox" v-model="ValidClasses" value="周日" /></label>
+                            <label>工作日<input type="checkbox" v-model="ValidClasses" value="工作日" /></label>
+                            <label>公共假日 <input type="checkbox" v-model="ValidClasses" value="公共假日" /></label>
+                            <label>法定节假日 <input type="checkbox" v-model="ValidClasses" value="法定节假日" /></label>
+                            <p>已选:{{ValidClasses.join('|')}}</p>
+                        </div>
+
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>排序</td>
+                    <td>
+                        <input type="text" v-model="Sort" />
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <a href="#" v-on:click="add(ClassesColor,ClassesName,StartTime+StartTimea,LastTime+LastTimea,ClasserType,ValidClasses,Sort)">添加</a>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
+<script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                ClassesColor:"",
+                ClassesName: "",
+                StartTime: "",
+                LastTime: "",
+                ClasserType: "请选择",
+                ValidClasses: [],
+                Sort: "",
+                whom: [],
+                items: [{ text: '请选择', value: '请选择' }, { text: '工作班次', value: '工作班次' }, { text: '假期班次', value: '假期班次' }],
+                selected: '',
+                StartTimea: "",
+                LastTimea:""
+            },
+            mounted() {
+                //this.getClasserTypeList();
+
+            },
+            methods: {
+                add: function (ClassesColor, ClassesName, StartTime, LastTime, ClasserType, ValidClasses, Sort) {
+                    axios.post('@Url.Action("ClassesAdd", "Classes")', { Classes: { ClassesColor: ClassesColor, ClassesName: ClassesName, StartTime: StartTime, LastTime: LastTime, ClasserType: ClasserType, ValidClasses: ValidClasses.join(','), Sort: Sort} }).then(
+                        (response) => {
+                            if (response.data > 0) {
+                                alert("保存成功")
+                            }
+                            else {
+                                alert("已有该用户")
+                            }
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },               
+            },
+        });
+</script>
