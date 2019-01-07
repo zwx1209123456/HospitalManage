@@ -61,8 +61,6 @@
                     axios.post('@Url.Action("DutyAdd", "Duty")', { Duty: { TierID: TierID, PowerID: PowerID, DutyName: DutyName } }).then(
                         (response) => {
                             alert("添加成功")
-
-
                         },
                         (response) => {
                             alert(response.status);
@@ -71,9 +69,6 @@
                         alert(response);
                     });
                 },
-
-
             },
-
         });
 </script>
