@@ -67,18 +67,5 @@ namespace Services
             int res = conn.Execute("Department_update", parameters, commandType: System.Data.CommandType.StoredProcedure);
             return res;
         }
-        /// <summary>
-        /// 获取单个科室
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        public int GetDepartment(int Id)
-        {
-            MySqlConnection conn = dapper.GetConnection();
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("_Id", Id);
-            return conn.Execute("Department_GetDeparrment", parameters, commandType: System.Data.CommandType.StoredProcedure);
-            throw new NotImplementedException();
-        }
     }
 }

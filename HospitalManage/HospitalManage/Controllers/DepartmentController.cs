@@ -74,11 +74,6 @@ namespace HospitalManage.Controllers
             return View();
         }
 
-        public int GetDepartment(int Id)
-        {
-            var result = DepartmentServices.GetDepartment(Id);
-            return result;
-        }
         [HttpPost]
         public int Update(Department department)
         {
