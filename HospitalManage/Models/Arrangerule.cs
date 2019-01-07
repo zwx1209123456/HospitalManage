@@ -16,6 +16,10 @@ namespace Services
         /// </summary>
         public int Id { get; set; }
         /// <summary>
+        /// 班次id
+        /// </summary>
+        public int ClassesId { get; set; }
+        /// <summary>
         /// 是否生效
         /// </summary>
         public int IsEnabled { get; set; }
@@ -43,5 +47,9 @@ namespace Services
         /// 班次2
         /// </summary>
         public string ClassesTwo { get; set; }
+        /// <summary>
+        /// 班次名称
+        /// </summary>
+        public string ClassesName { get; set; }
     }
 }
