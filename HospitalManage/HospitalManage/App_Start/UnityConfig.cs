@@ -45,7 +45,7 @@ namespace HospitalManage
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<IDepartmentServices, DepartmentServices>();
-            //container.RegisterType<IDutyServices, DutyServices>();
+            container.RegisterType<IDutyServices, DutyServices>();
             container.RegisterType<IUsersServices, UsersServices>();
             container.RegisterType<ITierService, TierService>();
         }
