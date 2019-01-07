@@ -7,77 +7,125 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width" charset="utf-8" />
     <title>Show</title>
     <script src="~/Scripts/axios.js"></script>
     <script src="~/Scripts/vue.js"></script>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+
+    <link href="~/css/pag.css" rel="stylesheet" media="all"/>
+    <link href="~/css/css.css" rel="stylesheet" media="all" />
+    <link href="~/css/x-admin.css" rel="stylesheet" media="all" />
 </head>
 <body>
-    <div id="app">
-        <table>
-            <tr>
-                <th>序号</th>
-                <th>姓名</th>
-                <th>工号</th>
-                <th>科室</th>
-                <th>职务</th>
-                <th>层级</th>
-                <th>年假天数</th>
-                <th>入职时间</th>
-            </tr>
-            <tr v-for="(contact,key,index) in UserList">
+    <div id="app" class="x-body">
+        <div class="tools">
+            <ul class="toolbar">
+                <li><span><img src="~/images/t03.png" /></span>批量删除</li>
+                <li><span><img src="~/images/t02.png" /></span>编辑</li>
+                <li><span><img src="~/images/t09.png" /></span>批量导出</li>
+            </ul>
+            <span class="x-right" style="line-height:25px">共有数据：88 条</span>
+        </div>
+        <table class="tablelist" >
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>工号</th>
+                    <th>科室</th>
 
-                <td><input id="Text1" type="text" v-model="contact.Id" /></td>
+                    <th>层级</th>
+                    <th>职务</th>
+                    <th>年假天数</th>
+                    <th>入职时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="x-link">
+                <tr v-for="(contact,key,index) in UserList" class="odd" style="background-color:#ffffff">
 
-                <td><input id="Text1" type="text" v-model="contact.UserName" /></td>
+                    <td><input id="Text1" type="text" v-model="contact.Id" style="border:0" /></td>
+                    <td>
+                        <select id="Select1" v-model="contact.DepartmentID" style="border:0">
+                            <option value="请选择">--请选择--</option>
+                            <option v-for="contact in DepartmentList" v-bind:value="contact.Id">
+                                {{contact.DepartmentName}}
+                            </option>
+                        </select>
 
-                <td><input id="Text1" type="text" v-model="contact.UserNumber" /></td>
+                    </td>
 
-                <td>
-                    <select id="Select1" v-model="contact.DepartmentID">
-                        <option value="请选择">--请选择--</option>
-                        <option v-for="contact in DepartmentList" v-bind:value="contact.Id">
-                            {{contact.DepartmentName}}
-                        </option>
-                    </select>
+                    <td><input id="Text1" type="text" v-model="contact.UserName" style="border:0" /></td>
 
-                </td>
+                    <td><input id="Text1" type="text" v-model="contact.UserNumber" style="border:0" /></td>
 
-                <td>
-                  
-                    <select id="Select1" v-model="contact.DutyID">
-            <option value="请选择">--请选择--</option>
-            <option v-for="contact in DutyList" v-bind:value="contact.Id">
-                {{contact.DutyName}}
-            </option>
-        </select>
-                </td>
+                    <td>
 
-                <td>
-                  
-                    <select id="Select1" v-model="contact.TierID">
-                        <option value="请选择">--请选择--</option>
-                        <option v-for="contact in TierList" v-bind:value="contact.Id">
-                            {{contact.TierName}}
-                        </option>
-                    </select>
-                </td>
+                        <select id="Select1" v-model="contact.DutyID" style="border:0">
+                            <option value="请选择">--请选择--</option>
+                            <option v-for="contact in DutyList" v-bind:value="contact.Id">
+                                {{contact.DutyName}}
+                            </option>
+                        </select>
+                    </td>
 
-                <td><input id="Text1" type="text" v-model="contact.AnnualDay" /></td>
 
-                <td><input id="Text1" type="text" v-model="contact.EntryTime" /></td>
-                <td>
-                    <div v-if="contact.Id!=''">
-                        <a href="javascript:void(0)" v-on:click="UpdateUsers(contact.Id,contact.DepartmentID,contact.DutyID,contact.TierID,contact.UserName, contact.UserNumber, contact.AnnualDay, contact.EntryTime)">修改</a>
-                        <a href="javascript:void(0)" v-on:click="DeleteUsers(contact.Id)">删除</a>
-                    </div>
-                    <div v-else>
-                        <a href="javascript:void(0)" v-on:click="addUser(contact.DutyName,contact.DepartmentName, contact.TierName,contact.UserName, contact.UserNumber, contact.AnnualDay, contact.EntryTime)">添加</a>
-                    </div>
-                </td>
-            </tr>
+
+                    <td>
+
+                        <select id="Select1" v-model="contact.TierID" style="border:0">
+                            <option value="请选择">--请选择--</option>
+                            <option v-for="contact in TierList" v-bind:value="contact.Id">
+                                {{contact.TierName}}
+                            </option>
+                        </select>
+                    </td>
+
+
+                    <td><input id="Text1" type="text" v-model="contact.AnnualDay" style="border:0" /></td>
+
+                    <td><input id="Text1" type="text" v-model="contact.EntryTime" style="border:0" /></td>
+                    <td>
+                        <div v-if="contact.Id!=''">
+                            <a href="javascript:void(0)" v-on:click="UpdateUsers(contact.Id,contact.DepartmentID,contact.UserName, contact.UserNumber,contact.DutyID,contact.TierID, contact.AnnualDay, contact.EntryTime)">修改</a>
+                            <a href="javascript:void(0)" v-on:click="DeleteUsers(contact.Id)">删除</a>
+                        </div>
+                        <div v-else>
+                            <a href="javascript:void(0)" v-on:click="addUser(contact.DepartmentName, contact.UserName, contact.UserNumber,contact.DutyName,contact.TierName, contact.AnnualDay, contact.EntryTime)">添加</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
+
+    <script src="~/js/x-layui.js" charset="utf-8"></script>
+    <script src="~/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="~/js/jquery2.js" charset="utf-8"></script>
+    <script src="~/js/js.js" charset="utf-8"></script>
+    <script>
+        layui.use(['element', 'laypage', 'layer', 'form'], function () {
+            $ = layui.jquery;//jquery
+            lement = layui.element();//面包导航
+            laypage = layui.laypage;//分页
+            layer = layui.layer;//弹出层
+            form = layui.form();//弹出层
+        });
+        // 编辑
+        function data_management_look(title, url, id, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
     <script>
             var vm = new Vue({
                 el: "#app",
@@ -105,7 +153,7 @@
                         axios.get('@Url.Action("Shows", "Users")').then(
                             (response) => {
                                 console.log(response)
-                                this.UserList = response.data;                      
+                                this.UserList = response.data;
                             },
                             (response) => {
                                 alert(response.status);
@@ -115,15 +163,15 @@
                         });
                     },
                     ///修改用户信息
-                    UpdateUsers: function (Id, DepartmentID, TierID, DutyID, UserName, UserNumber, AnnualDay, EntryTime) {
-                        axios.post('@Url.Action("Update", "Users")', { users: { Id: Id, DutyID: DutyID, DepartmentID: DepartmentID, TierID: TierID, UserName: UserName, UserNumber: UserNumber, AnnualDay: AnnualDay, EntryTime: EntryTime } }).then(
+                    UpdateUsers: function (Id, DepartmentID, UserName, UserNumber, DutyID, TierID, AnnualDay, EntryTime) {
+                        axios.post('@Url.Action("Update", "Users")', { users: { Id: Id, DepartmentID: DepartmentID, UserName: UserName, UserNumber: UserNumber, DutyID: DutyID, TierID: TierID, AnnualDay: AnnualDay, EntryTime: EntryTime } }).then(
                             (response) => {
                                 if (response.data > 0) {
                                     alert("修改成功");
                                     this.ShowUsers();
                                 }
-                           
-                         
+
+
                         },
                         (response) => {
                             alert(response.status);
@@ -153,7 +201,7 @@
                     axios.get('@Url.Action("GetDepartments", "Users")').then(
                         (response) => {
                             console.log(response)
-                            this.DepartmentList = response.data;                    
+                            this.DepartmentList = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -167,7 +215,7 @@
                     axios.get('@Url.Action("GetDuties", "Users")').then(
                         (response) => {
                             console.log(response)
-                            this.DutyList = response.data;                    
+                            this.DutyList = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -181,7 +229,7 @@
                     axios.get('@Url.Action("SelectTier", "Users")').then(
                         (response) => {
                             console.log(response)
-                            this.TierList = response.data;                    
+                            this.TierList = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -191,9 +239,9 @@
                     });
                 },
             },
-                       
-                  
-    
+
+
+
     })
     </script>
 </body>

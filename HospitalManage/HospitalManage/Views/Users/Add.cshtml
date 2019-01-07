@@ -17,7 +17,19 @@
     <div id="app">
         <table>
             <tr>
-                
+                <td>所属科室：</td>
+                <td>
+                    <select id="Select1" v-model="DepartmentName">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="item in DepartmentList" v-bind:value="item.Id">
+                            {{item.DepartmentName}}
+                        </option>
+                    </select>
+
+                </td>
+            </tr>
+            <tr>
+
                 <td>姓名；</td>
                 <td>
                     <input id="Text1" type="text" v-model="UserName" />
@@ -30,12 +42,12 @@
                 </td>
             </tr>
             <tr>
-                <td>所属科室：</td>
+                <td>层级：</td>
                 <td>
-                    <select id="Select1" v-model="DepartmentName">
+                    <select id="Select1" v-model="DutyName">
                         <option value="请选择">--请选择--</option>
-                        <option v-for="item in DepartmentList" v-bind:value="item.Id">
-                            {{item.DepartmentName}}
+                        <option v-for="item in DutyList" v-bind:value="item.Id">
+                            {{item.DutyName}}
                         </option>
                     </select>
 
@@ -50,7 +62,7 @@
                             {{item.TierName}}
                         </option>
                     </select>
-                    
+
                 </td>
             </tr>
             <tr>
@@ -65,21 +77,10 @@
                     <input id="Text1" type="text" v-model="EntryTime" />
                 </td>
             </tr>
-            <tr>
-                <td>层级：</td>
-                <td>
-                    <select id="Select1" v-model="DutyName">
-                        <option value="请选择">--请选择--</option>
-                        <option v-for="item in DutyList" v-bind:value="item.Id">
-                            {{item.DutyName}}
-                        </option>
-                    </select>
-                  
-                </td>
-            </tr>
+
             <tr>
                 <td>
-                    <a href="#" v-on:click="addUser(DutyName,DepartmentName, TierName,UserName, UserNumber, AnnualDay, EntryTime)">保存</a>
+                    <a href="#" v-on:click="addUser(DepartmentName, UserName, UserNumber, DutyName, TierName, AnnualDay, EntryTime)">保存</a>
                 </td>
                 <td>
                     <a href="#" v-on:click="addUser()">取消</a>
@@ -111,8 +112,8 @@
                 this.getTierList();
             },
             methods: {
-                addUser: function (DutyName,DepartmentName, TierName,UserName, UserNumber, AnnualDay, EntryTime) {
-                    axios.post('@Url.Action("Add", "Users")', { users: { DutyID:DutyName,DepartmentID: DepartmentName, TierID: TierName, UserName: UserName, UserNumber: UserNumber, AnnualDay: AnnualDay, EntryTime: EntryTime} }).then(
+                addUser: function (DepartmentName, UserName, UserNumber, DutyName, TierName, AnnualDay, EntryTime) {
+                    axios.post('@Url.Action("Add", "Users")', { users: { DepartmentID: DepartmentName, UserName: UserName, UserNumber: UserNumber, DutyID: DutyName, TierID: TierName, AnnualDay: AnnualDay, EntryTime: EntryTime} }).then(
                         (response) => {
                             if (response.data > 0) {
                                 alert("保存成功")
