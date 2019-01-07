@@ -10,7 +10,9 @@ namespace HospitalManage.Controllers
     using IServices;
     using Models;
     using System.Web.Helpers;
-
+    /// <summary>
+    /// 该控制器对职务层级进行曾删改查
+    /// </summary>
     public class TierController : Controller
     {
         [Dependency]

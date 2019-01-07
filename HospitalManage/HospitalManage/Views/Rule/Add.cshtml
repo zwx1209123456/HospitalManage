@@ -1,0 +1,162 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/axios.js"></script>
+</head>
+<body>
+    <div id="app">
+        <table>
+            <tr><td>固定相连班次设置（一个班次带出令一个班次的设置）</td></tr>
+            <tr>
+                <td>序号：</td>
+                <td>
+                    <input type="text" v-model="Name" />
+                </td>
+            </tr>
+            <tr>
+                <td>时间1</td>
+                <td>
+                    <select id="Select1" v-model="TimeOne">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="TimeOne in TimeOneList" v-bind:value="TimeOne">
+                            {{TimeOne}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>班次1</td>
+                <td>
+                    <select id="Select1" v-model="ClassesOne">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="ClassesOne in ClassesOneList" v-bind:value="ClassesOne">
+                            {{ClassesOne}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>时间2</td>
+                <td>
+                    <select id="Select1" v-model="TimeTwo">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="TimeTwo in TimeTwoList" v-bind:value="TimeTwo">
+                            {{TimeTwo}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>时间3</td>
+                <td>
+                    <select id="Select1" v-model="TimeThree">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="TimeThree in TimeThreeList" v-bind:value="TimeThree">
+                            {{TimeThree}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>班次2</td>
+                <td>
+                    <select id="Select1" v-model="ClassesTwo">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="ClassesTwo in ClassesTwoList" v-bind:value="ClassesTwo">
+                            {{ClassesTwo}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>+</tr>
+        </table>
+        <table>
+            <tr><td>固定不相连班次设置（判断是否符合排班规则）</td></tr>
+            <tr>
+                <td>序号：</td>
+                <td>
+                    <input type="text" v-model="Name" />
+                </td>
+            </tr>
+            <tr>
+                <td>时间1</td>
+                <td>
+                    <select id="Select1" v-model="TimeOne">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="TimeOne in TimeOneList" v-bind:value="TimeOne">
+                            {{TimeOne}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>班次1</td>
+                <td>
+                    <select id="Select1" v-model="ClassesOne">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="ClassesOne in ClassesOneList" v-bind:value="ClassesOne">
+                            {{ClassesOne}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>时间2</td>
+                <td>
+                    <select id="Select1" v-model="TimeTwo">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="TimeTwo in TimeTwoList" v-bind:value="TimeTwo">
+                            {{TimeTwo}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>时间3</td>
+                <td>
+                    <select id="Select1" v-model="TimeThree">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="TimeThree in TimeThreeList" v-bind:value="TimeThree">
+                            {{TimeThree}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>班次2</td>
+                <td>
+                    <select id="Select1" v-model="ClassesTwo">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="ClassesTwo in ClassesTwoList" v-bind:value="ClassesTwo">
+                            {{ClassesTwo}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>+</tr>
+        </table>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                TimeOneList: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                ClassesOneList: [],
+                TimeTwoList: ['第二天', '隔日', '下周'],
+                TimeThreeList: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                ClassesTwoList:[],
+            }
+        })
+         
+    </script>
+</body>
+</html>
