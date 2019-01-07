@@ -52,6 +52,7 @@
     <Compile Include="DutyServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecialtyServices.cs" />
+    <Compile Include="RuleServices.cs" />
     <Compile Include="TierService.cs" />
     <Compile Include="UsersServices.cs" />
   </ItemGroup>

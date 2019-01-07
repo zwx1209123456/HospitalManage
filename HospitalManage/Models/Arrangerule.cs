@@ -23,6 +23,25 @@ namespace Services
         /// 排班规则设置
         /// </summary>
         public string ArrangeRuleSet { get; set; }
-
+        /// <summary>
+        /// 时间1
+        /// </summary>
+        public string TimeOne { get; set; }
+        /// <summary>
+        /// 班次1
+        /// </summary>
+        public string ClassesOne { get; set; }
+        /// <summary>
+        /// 时间2
+        /// </summary>
+        public string TimeTwo { get; set; }
+        /// <summary>
+        /// 时间3
+        /// </summary>
+        public string TimeThree { get; set; }
+        /// <summary>
+        /// 班次2
+        /// </summary>
+        public string ClassesTwo { get; set; }
     }
 }

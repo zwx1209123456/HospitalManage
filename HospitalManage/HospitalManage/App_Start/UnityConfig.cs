@@ -46,8 +46,11 @@ namespace HospitalManage
             // container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<IDepartmentServices, DepartmentServices>();
             container.RegisterType<IDutyServices, DutyServices>();
+            ///用户
             container.RegisterType<IUsersServices, UsersServices>();
             container.RegisterType<ITierService, TierService>();
+            ///排班规则
+            container.RegisterType<IRuleServices, RuleServices>();
         }
     }
 }
