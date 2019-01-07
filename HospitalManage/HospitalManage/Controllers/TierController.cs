@@ -50,5 +50,7 @@ namespace HospitalManage.Controllers
             var list = tierService.SelectTier();
             return Json(list);
         }
+
+        //-----vue所有方法请求返回javascript的json对象格式，默认json请求方式post，get需指定
     }
 }
