@@ -1,0 +1,133 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/axios.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+</head>
+<body>
+    @*<div id="app">
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>工号</th>
+                <th>科室</th>
+                <th>职务</th>
+                <th>层级</th>
+                <th>年假天数</th>
+                <th>入职时间</th>
+            </tr>
+            <tr v-for="(contact,index) in UserList">
+                <td>{{contact.Id}}</td>
+                <td><input id="Text1" type="text" v-model="contact.UserName" /></td>
+                <td><input id="Text1" type="text" v-model="contact.UserNumber" /></td>
+                <td>
+                    <select id="Select1" v-model="DepartmentName">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="contact in DepartmentList" v-bind:value="contact.Id">
+                            {{contact.DepartmentName}}
+                        </option>
+                    </select>
+                </td>
+                <td><input id="Text1" type="text" v-model="contact.DutyName" /></td>
+                <td>
+                    <select id="Select1" v-model="TierName">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="contact in TierList" v-bind:value="contact.Id">
+                            {{contact.TierName}}
+                        </option>
+                    </select>
+                </td>
+                <td><input id="Text1" type="text" v-model="contact.AnnualDay" /></td>
+                <td><input id="Text1" type="text" v-model="contact.EntryTime" /></td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+
+                UserList: [],
+            },
+            mounted() {
+                this.ShowUsers();
+                this.getDepartmentList();
+                //this.getDutyList();
+                this.getTierList();
+            },
+            methods: {
+                ShowUsers: function () {
+                    axios.get('@Url.Action("Index", "Users")').then(
+                        (response) => {
+                            console.log(response)
+                            this.UserList = response.data;
+
+
+                            //for (var i = 0; i < response.data.length; i++) {
+                            //    this.UserList.push(response.data[i]);
+                            //}
+                            //this.UserList.push({ Id: "", UserName: "", UserNumber: "", DepartmentName: "", DutyName: "", TierName: "", AnnualDay: "", EntryTime: ""});
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                    ///获取科室的下拉菜单
+                getDepartmentList: function () {
+                    axios.get('@Url.Action("GetDepartments", "Users")').then(
+                        (response) => {
+                            console.log(response)
+                            this.DepartmentList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                ///获取职务的下拉菜单
+                @*getDutyList: function () {
+                    axios.get('@Url.Action("GetDuties", "Users")').then(
+                        (response) => {
+                            console.log(response)
+                            this.DutyList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },*@
+                ///获取层级的下拉菜单
+                getTierList: function () {
+                    axios.get('@Url.Action("SelectTier", "Users")').then(
+                        (response) => {
+                            console.log(response)
+                            this.TierList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+            }
+        })
+    </script>*@
+</body>
+</html>

@@ -8,16 +8,22 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title></title>
+    <title>Update</title>
     <script src="~/Scripts/axios.js"></script>
     <script src="~/Scripts/vue.js"></script>
-   
 </head>
 <body>
     <div id="app">
         <table>
             <tr>
-                
+
+                <td>序号；</td>
+                <td>
+                    <input id="Text1" type="text" v-model="Id" />
+                </td>
+            </tr>
+            <tr>
+
                 <td>姓名；</td>
                 <td>
                     <input id="Text1" type="text" v-model="UserName" />
@@ -44,13 +50,13 @@
             <tr>
                 <td>职务：</td>
                 <td>
-                    <select id="Select1" v-model="TierName">
-                        <option value="请选择">--请选择--</option>
-                        <option v-for="item in TierList" v-bind:value="item.Id">
-                            {{item.TierName}}
-                        </option>
-                    </select>
-                    
+                    @*<select id="Select1" v-model="DutyName"></select>*@
+                    @*<select id="Select1" v-model="DutyName">
+                    <option value="请选择">--请选择--</option>
+                    <option v-for="item in DutyList" v-bind:value="item.Id">
+                        {{item.DutyName}}
+                    </option>
+                </select>*@
                 </td>
             </tr>
             <tr>
@@ -68,18 +74,18 @@
             <tr>
                 <td>层级：</td>
                 <td>
-                    <select id="Select1" v-model="DutyName">
+                    @*<select id="Select1" v-model="TierName"></select>*@
+                    <select id="Select1" v-model="TierName">
                         <option value="请选择">--请选择--</option>
-                        <option v-for="item in DutyList" v-bind:value="item.Id">
-                            {{item.DutyName}}
+                        <option v-for="item in TierList" v-bind:value="item.Id">
+                            {{item.TierName}}
                         </option>
                     </select>
-                  
                 </td>
             </tr>
             <tr>
                 <td>
-                    <a href="#" v-on:click="addUser(DutyName,DepartmentName, TierName,UserName, UserNumber, AnnualDay, EntryTime)">保存</a>
+                    <a href="#" v-on:click="addUser(DepartmentName, TierName,UserName, UserNumber, AnnualDay, EntryTime)">修改</a>
                 </td>
                 <td>
                     <a href="#" v-on:click="addUser()">取消</a>
@@ -93,13 +99,13 @@
             data: {
                 //科室
                 DepartmentList: [],
-                DepartmentName:"请选择",
+               
                 //职务
-                DutyList: [],
-                DutyName: "请选择",
+                //DutyList: [],
+                //DutyName: "请选择",
                 //层级
                 TierList: [],
-                TierName: "请选择",
+               
                 UserName:"",
                 UserNumber: "",
                 AnnualDay: "",
@@ -107,21 +113,16 @@
             },
             mounted() {
                 this.getDepartmentList();
-                this.getDutyList();
+                //this.getDutyList();
                 this.getTierList();
             },
             methods: {
-                addUser: function (DutyName,DepartmentName, TierName,UserName, UserNumber, AnnualDay, EntryTime) {
-                    axios.post('@Url.Action("Add", "Users")', { users: { DutyID:DutyName,DepartmentID: DepartmentName, TierID: TierName, UserName: UserName, UserNumber: UserNumber, AnnualDay: AnnualDay, EntryTime: EntryTime} }).then(
+                addUser: function (DepartmentName, TierName,UserName, UserNumber, AnnualDay, EntryTime) {
+                    axios.post('@Url.Action("Add", "Users")', { users: { DepartmentID: DepartmentName, TierID: TierName, UserName: UserName, UserNumber: UserNumber, AnnualDay: AnnualDay, EntryTime: EntryTime} }).then(
                         (response) => {
-                            if (response.data > 0) {
-                                alert("保存成功")
-                            }
-                            else {
-                                alert("已有该用户")
-                            }
-                          
-                         
+                            alert("修改成功")
+
+
                         },
                         (response) => {
                             alert(response.status);
@@ -135,7 +136,7 @@
                     axios.get('@Url.Action("GetDepartments", "Users")').then(
                         (response) => {
                             console.log(response)
-                            this.DepartmentList = response.data;                    
+                            this.DepartmentList = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -145,11 +146,11 @@
                     });
                 },
                 ///获取职务的下拉菜单
-                getDutyList: function () {
+                @*getDutyList: function () {
                     axios.get('@Url.Action("GetDuties", "Users")').then(
                         (response) => {
                             console.log(response)
-                            this.DutyList = response.data;                    
+                            this.DutyList = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -157,13 +158,13 @@
                     ).catch(function (response) {
                         alert(response);
                     });
-                },
+                },*@
                 ///获取层级的下拉菜单
                 getTierList: function () {
                     axios.get('@Url.Action("SelectTier", "Users")').then(
                         (response) => {
                             console.log(response)
-                            this.TierList = response.data;                    
+                            this.TierList = response.data;
                         },
                         (response) => {
                             alert(response.status);

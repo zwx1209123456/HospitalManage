@@ -23,15 +23,15 @@ namespace Services
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                conn.Open();
+                
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("DepartmentID", users.DepartmentID);
-                parameters.Add("UserName", users.UserName);
-                parameters.Add("UserNumber", users.UserNumber);
-                parameters.Add("DutyID", users.DutyID);
-                parameters.Add("TierID", users.TierID);
-                parameters.Add("AnnualDay", users.AnnualDay);
-                parameters.Add("EntryTime", users.EntryTime);
+                parameters.Add("@_DepartmentID", users.DepartmentID);
+                parameters.Add("@_UserName", users.UserName);
+                parameters.Add("@_UserNumber", users.UserNumber);
+                parameters.Add("@_DutyID", users.DutyID);
+                parameters.Add("@_TierID", users.TierID);
+                parameters.Add("@_AnnualDay", users.AnnualDay);
+                parameters.Add("@_EntryTime", users.EntryTime);
                 int res = conn.Execute("Users_Add", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 return res;
             }
@@ -44,7 +44,7 @@ namespace Services
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                conn.Open();
+                
                 DynamicParameters parameters = new DynamicParameters();
 
                 return conn.Query<Users>("Users_Show", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
@@ -59,9 +59,9 @@ namespace Services
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                conn.Open();
+                
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("_Id", Id);
+                parameters.Add("@_Id", Id);
                 return conn.Execute("Users_Delete", parameters, commandType: System.Data.CommandType.StoredProcedure);
             }
         }
@@ -74,9 +74,9 @@ namespace Services
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                conn.Open();
+              
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("_Id", Id);
+                parameters.Add("@_Id", Id);
                 return conn.Execute("Users_Get", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 throw new NotImplementedException();
             }
@@ -90,17 +90,18 @@ namespace Services
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                conn.Open();
+              
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("Id", users.Id);
-                parameters.Add("DepartmentID", users.DepartmentID);
-                parameters.Add("UserName", users.UserName);
-                parameters.Add("UserNumber", users.UserNumber);
-                parameters.Add("DutyID", users.DutyID);
-                parameters.Add("TierID", users.TierID);
-                parameters.Add("AnnualDay", users.AnnualDay);
-                parameters.Add("EntryTime", users.EntryTime);
+                parameters.Add("@_Id", users.Id);
+                parameters.Add("@_DepartmentID", users.DepartmentID);
+                parameters.Add("@_UserName", users.UserName);
+                parameters.Add("@_UserNumber", users.UserNumber);
+                parameters.Add("@_DutyID", users.DutyID);
+                parameters.Add("@_TierID", users.TierID);
+                parameters.Add("@_AnnualDay", users.AnnualDay);
+                parameters.Add("@_EntryTime", users.EntryTime);
                 int res = conn.Execute("Users_Update", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                //var res = conn.Execute("Users_Update", parameters );
                 return res;
             }
         }

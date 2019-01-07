@@ -23,22 +23,20 @@
         <table v-show="tierList.length" class="table-condensed" border="1">
             <thead class="navbar-header">
                 <tr>
-                    <th>姓名</th>
-                    <th>电话号码</th>
-                    <th>Email地址</th>
+                    <th>层级名称</th>
+               
                     <th>操作</th>
                 </tr>
-                <tr v-for="(contact,index) in tierList">
-                    <td><input type="text" v-model="contact.Name" /></td>
-                    <td><input type="text" v-model="contact.PhoneNo" /></td>
-                    <td><input type="text" v-model="contact.EmailAddress" /></td>
+                <tr v-for="(tier,index) in tierList">
+                    <td><input type="text" v-model="tier.TierName" /></td>
+               
                     <td>
-                        <div v-if="contact.Id!=''">
-                            <a href="#" v-on:click="updateContact(contact.Id,contact.Name,contact.PhoneNo,contact.EmailAddress)">修改</a>
-                            <a href="#" v-on:click="deleteContactById(contact.Id)">删除</a>
+                        <div v-if="tier.Id!=''">
+                            <a href="#" v-on:click="updatetier(tier.Id,tier.TierName)">修改</a>
+                            <a href="#" v-on:click="deletetierById(tier.Id)">删除</a>
                         </div>
                         <div v-else>
-                            <a href="#" v-on:click="addContact(contact.Name,contact.PhoneNo,contact.EmailAddress)">添加</a>
+                            <a href="#" v-on:click="addtier(tier.TierName)">添加</a>
                         </div>
                     </td>
                 </tr>
@@ -52,18 +50,18 @@
                 tierList:[]
             },
             mounted() {
-                this.getAllContacts();
+                this.getAlltiers();
             },
             methods: {
-                getAllContacts: function () {
-                    axios.get('@Url.Action("Get", "HospitalManageDL")'
+                getAlltiers: function () {
+                    axios.get('@Url.Action("SelectTier", "Tier")'
                     ).then(
                         (response) => {
                             this.tierList = [];
                             for (var i = 0; i < response.data.length; i++) {
                                 this.tierList.push(response.data[i]);
                             }
-                            this.tierList.push({ Id:"", Name: "", PhoneNo: "", EmailAddress: "" });
+                            this.tierList.push({ Id: "", TierName: "" });
                         },
                         (response) => {
                             alert(response.status);
@@ -72,14 +70,14 @@
                         alert(response);
                     });
                 },
-                addContact: function (name, phoneno, emailaddress) {
-                    axios.post('@Url.Action("Add", "HospitalManageDL")', { contact: { Name: name, PhoneNo: phoneno, EmailAddress: emailaddress } }).then(
+                addtier: function (name) {
+                    axios.post('@Url.Action("AddTier", "Tier")', { tier: { TierName: name} }).then(
                         (response) => {
                             this.tierList = [];
                             for (var i = 0; i < response.data.length; i++) {
                                 this.tierList.push(response.data[i]);
                             }
-                            this.tierList.push({ Id: "", Name: "", PhoneNo: "", EmailAddress: "" });
+                            this.tierList.push({ Id: "", TierName: "" });
                         },
                         (response) => {
                             alert(response.status);
@@ -88,14 +86,14 @@
                         alert(response);
                     });
                 },
-                updateContact: function (id, name, phoneno, emailaddress) {
-                    axios.post('@Url.Action("Update", "HospitalManageDL")', { contact: { Id: id, Name: name, PhoneNo: phoneno, EmailAddress: emailaddress} }).then(
+                updatetier: function (id, name) {
+                    axios.post('@Url.Action("UpdateTier", "Tier")', { tier: { Id: id, TierName: name} }).then(
                         (response) => {
                             this.tierList = [];
                             for (var i = 0; i < response.data.length; i++) {
                                 this.tierList.push(response.data[i]);
                             }
-                            this.tierList.push({ Id: "", Name: "", PhoneNo: "", EmailAddress: "" });
+                            this.tierList.push({ Id: "", TierName: ""});
                         },
                         (response) => {
                             alert(response.status);
@@ -104,14 +102,14 @@
                         alert(response);
                     });
                 },
-                deleteContactById: function (id) {
-                    axios.post('@Url.Action("Delete", "HospitalManageDL")', { id: id }).then(
+                deletetierById: function (id) {
+                    axios.post('@Url.Action("DelTier", "Tier")', { id: id }).then(
                         (response) => {
                             this.tierList = [];
                             for (var i = 0; i < response.data.length; i++) {
                                 this.tierList.push(response.data[i]);
                             }
-                            this.tierList.push({ Id: "", Name: "", PhoneNo: "", EmailAddress: "" });
+                            this.tierList.push({ Id: "", TierName: "" });
                         },
                         (response) => {
                             alert(response.status);

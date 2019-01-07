@@ -39,5 +39,9 @@ namespace Models
         /// 有效排班日
         /// </summary>
         public string ValidClasses { get; set; }
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public int Sort { get; set; }
     }
 }
