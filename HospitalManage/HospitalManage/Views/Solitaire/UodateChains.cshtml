@@ -1,0 +1,99 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>接龙设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="~/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="~/css/pag.css" media="all">
+
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/axios.js"></script>
+</head>
+
+<body>
+    <div id="app" class="x-body">
+        <div style="margin:0 auto">
+            <div>
+                <span style="float:left;margin-right:20px">接龙班次</span>
+                <select lay-verify="required" name="cid" class="layui-input" style="width:66px;float:left">
+                    <option value="1">早班</option>
+                    <option value="2">二线</option>
+                </select>
+            </div>
+            <div style="margin-left:500px">
+                <span style="float:left;margin-right:20px">接龙班次</span>
+                <div style="float:left">
+                    <div><span style="background-color:darkviolet">开始时间</span></div>
+                    <div><span style="background-color:aquamarine">结束时间</span></div>
+
+                </div>
+            </div>
+        </div>
+        <div style="margin-top:150px">
+            <table class="tablelist" border="1">
+                <thead>
+                    <tr>  <th colspan="4" style="text-align:center">组员设置</th></tr>
+                    <tr>
+
+                        <th>组序</th>
+                        <th> 人员 </th>
+                        <th> 组长</th>
+                        <th> </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td onclick="user_management_edit('人员设置','/Solitaire/AddMember','800','500')"></td>
+                        <td v-if="">
+
+                            <select lay-verify="required" name="cid" class="layui-input">
+                                <option value="1">早班</option>
+                                <option value="2">二线</option>
+                            </select>
+                        </td>
+                        <td>+</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="width:200px;margin:50px auto">
+            <button class="layui-btn"> 保存 </button>
+            <button class="layui-btn" style="float:right"> 取消 </button>
+        </div>
+    </div>
+    <script src="~/lib/layui/layui.js" charset="utf-8">
+    </script>
+    <script src="~/js/x-layui.js" charset="utf-8">
+    </script>
+    <script>
+        layui.use(['form', 'layer'], function () {
+            $ = layui.jquery;
+            var form = layui.form()
+                , layer = layui.layer;
+        });
+        function user_management_edit(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+    </script>
+
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app"
+        })
+    </script>
+</body>
+</html>

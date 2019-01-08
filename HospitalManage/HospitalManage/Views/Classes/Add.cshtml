@@ -1,0 +1,184 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/axios.js"></script>
+    <script src="~/js/My97DatePicker/My97DatePicker/WdatePicker.js"></script>
+    <title>Add</title>
+</head>
+<body>
+
+    <div id="app" class="x-body">
+        <form class="layui-form">
+            <div class="layui-form-item">
+
+                <div class="layui-form-item">
+                    <label for="link" class="layui-form-label">
+                        <span class="x-red">*</span>班次颜色
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="color" id="link" class="layui-input" v-model="ClassesColor">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="link" class="layui-form-label">
+                        <span class="x-red">*</span>班次名称
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="link" class="layui-input" v-model="ClassesName">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="link" class="layui-form-label">
+                        <span class="x-red">*</span>上班时间
+                    </label>
+                    <div class="layui-input-inline">
+                        <select v-model="StartTimea">
+                            <option v-for="StartTime in StartTimeList" v-bind:value="StartTime">
+                                {{StartTime}}
+                            </option>
+                        </select>
+                        <select v-model="StartTimea1">
+                            <option v-for="StartTime1 in StartTimeList1" v-bind:value="StartTime1">
+                                {{StartTime1}}
+                            </option>
+
+                        </select>
+
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="link" class="layui-form-label">
+                        <span class="x-red">*</span>下班时间
+                    </label>
+                    <div class="layui-input-inline">
+                        <select v-model="LastTime">
+                            <option v-for="LastTime in LastTimeaList" v-bind:value="LastTime">
+                                {{LastTime}}
+                            </option>
+                        </select>
+                        <select v-model="LastTime1">
+                            <option v-for="LastTime1 in LastTimeaList1" v-bind:value="LastTime1">
+                                {{LastTime1}}
+                            </option>
+
+                        </select>
+                        <select v-model="LastTimea2">
+                            <option v-for="LastTime2 in LastTimeaList2" v-bind:value="LastTime2">
+                                {{LastTime2}}
+                            </option>
+
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="link" class="layui-form-label">
+                        <span class="x-red">*</span>班次类型
+                    </label>
+                    <div class="layui-input-inline">
+                        <select v-model="ClasserType">
+                            <option v-for="item in items" v-bind:value="item.value">{{item.text}}</option>
+                        </select>
+                        <span>已选:{{selected}}</span>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="link" class="layui-form-label">
+                        <span class="x-red">*</span>有效排班日
+                    </label>
+                    <div class="layui-input-inline">
+                        <label>周一<input type="checkbox" v-model="ValidClasses" value="周一" /></label>
+                        <label>周二<input type="checkbox" v-model="ValidClasses" value="周二" /></label>
+                        <label>周三 <input type="checkbox" v-model="ValidClasses" value="周三" /></label>
+                        <label>周四<input type="checkbox" v-model="ValidClasses" value="周四" /></label>
+                        <label>周五<input type="checkbox" v-model="ValidClasses" value="周五" /></label>
+                        <label>周六 <input type="checkbox" v-model="ValidClasses" value="周六" /></label>
+                        <label>周日<input type="checkbox" v-model="ValidClasses" value="周日" /></label>
+                        <label>工作日<input type="checkbox" v-model="ValidClasses" value="工作日" /></label>
+                        <label>公共假日 <input type="checkbox" v-model="ValidClasses" value="公共假日" /></label>
+                        <label>法定节假日 <input type="checkbox" v-model="ValidClasses" value="法定节假日" /></label>
+                        <p>已选:{{ValidClasses.join('|')}}</p>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label for="link" class="layui-form-label">
+                            <span class="x-red">*</span>排序
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="link" class="layui-input" v-model="Sort">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_repass" class="layui-form-label">
+                        </label>
+                        <a href="#" v-on:click="add(ClassesColor,ClassesName,StartTimea + ':' +StartTimea1,LastTime1+':'+LastTimea2,ClasserType,ValidClasses,Sort)">添加</a>
+
+                    </div>
+
+                </div>
+            </div>
+        </form>
+            </div>
+       
+</body>
+</html>
+<script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                ClassesColor:"",
+                ClassesName: "",
+                StartTime: "",
+                LastTime: "",
+                ClasserType: "请选择",
+                ValidClasses: [],
+                Sort: "",
+                whom: [],
+                items: [{ text: '请选择', value: '请选择' }, { text: '工作班次', value: '工作班次' }, { text: '假期班次', value: '假期班次' }],
+                selected: '',
+                StartTimea: "",
+                StartTimea1: "",
+               // LastTimea: "",
+                LastTime1: "",
+                 LastTimea2: "",
+                StartTimeList: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', 0],
+                StartTimeList1: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59'],
+                 LastTimeaList: ['当日','明日'],
+                 LastTimeaList1: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', 0],
+                 LastTimeaList2: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59']
+            },
+            mounted() {
+                //this.getClasserTypeList();    
+                
+            },
+            methods: {
+                add: function (ClassesColor, ClassesName, StartTime, LastTime, ClasserType, ValidClasses, Sort) {
+                    var date = new Date();
+                    console.log(date.toLocaleDateString() + ' ' + StartTime)
+                    console.log(date.toLocaleDateString() + ' ' + ' ' + LastTime)
+                    axios.post('@Url.Action("ClassesAdd", "Classes")', { Classes: { ClassesColor: ClassesColor, ClassesName: ClassesName, StartTime:StartTime , LastTime: LastTime, ClasserType: ClasserType, ValidClasses: ValidClasses.join(','), Sort: Sort} }).then(
+                        (response) => {
+                            if (response.data > 0) {
+                                alert("保存成功")
+                            }
+                            else {
+                                alert("已有该用户")
+                            }
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },               
+            },
+        });
+</script>

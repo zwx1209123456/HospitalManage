@@ -168,9 +168,17 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="App_Start\UnityWebApiActivator.cs" />
+    <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DutyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+
+    <Compile Include="Controllers\SpecialtyController.cs" />
+    <Compile Include="Controllers\RuleController.cs" />
+
+
+    <Compile Include="Controllers\SolitaireController.cs" />
+
     <Compile Include="Controllers\SpecialtyController.cs" />
     <Compile Include="Controllers\RuleController.cs" />
     <Compile Include="Controllers\TierController.cs" />
@@ -303,6 +311,30 @@
     <Content Include="js\jquery2.js" />
     <Content Include="js\js.js" />
     <Content Include="js\jsapi.js" />
+    <Content Include="js\My97DatePicker\demo.htm" />
+    <Content Include="js\My97DatePicker\My97DatePicker\calendar.js" />
+    <Content Include="js\My97DatePicker\My97DatePicker\lang\en.js" />
+    <Content Include="js\My97DatePicker\My97DatePicker\lang\zh-cn.js" />
+    <Content Include="js\My97DatePicker\My97DatePicker\lang\zh-tw.js" />
+    <Content Include="js\My97DatePicker\My97DatePicker\skin\datePicker.gif" />
+    <Content Include="js\My97DatePicker\My97DatePicker\skin\default\datepicker.css" />
+    <Content Include="js\My97DatePicker\My97DatePicker\skin\default\img.gif" />
+    <Content Include="js\My97DatePicker\My97DatePicker\skin\WdatePicker.css" />
+    <Content Include="js\My97DatePicker\My97DatePicker\skin\whyGreen\bg.jpg" />
+    <Content Include="js\My97DatePicker\My97DatePicker\skin\whyGreen\datepicker.css" />
+    <Content Include="js\My97DatePicker\My97DatePicker\skin\whyGreen\img.gif" />
+    <Content Include="js\My97DatePicker\My97DatePicker\WdatePicker.js" />
+    <Content Include="js\My97DatePicker\My97DatePicker\开发包\lang\en.js" />
+    <Content Include="js\My97DatePicker\My97DatePicker\开发包\lang\zh-cn.js" />
+    <Content Include="js\My97DatePicker\My97DatePicker\开发包\lang\zh-tw.js" />
+    <Content Include="js\My97DatePicker\My97DatePicker\开发包\readme.txt" />
+    <Content Include="js\My97DatePicker\My97DatePicker\开发包\skin\datePicker.gif" />
+    <Content Include="js\My97DatePicker\My97DatePicker\开发包\skin\default\datepicker.css" />
+    <Content Include="js\My97DatePicker\My97DatePicker\开发包\skin\default\img.gif" />
+    <Content Include="js\My97DatePicker\My97DatePicker\开发包\skin\WdatePicker.css" />
+    <Content Include="js\My97DatePicker\My97DatePicker\开发包\skin\whyGreen\bg.jpg" />
+    <Content Include="js\My97DatePicker\My97DatePicker\开发包\skin\whyGreen\datepicker.css" />
+    <Content Include="js\My97DatePicker\My97DatePicker\开发包\skin\whyGreen\img.gif" />
     <Content Include="js\pc.js" />
     <Content Include="js\public.js" />
     <Content Include="js\x-admin.js" />
@@ -467,8 +499,29 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Show.cshtml" />
     <Content Include="Views\Users\Update.cshtml" />
+<<<<<<< HEAD
+=======
+
+
+
+    <Content Include="Views\Solitaire\Index.cshtml" />
+    <Content Include="Views\Solitaire\AddChains.cshtml" />
+    <Content Include="Views\Solitaire\UodateChains.cshtml" />
+    <Content Include="Views\Solitaire\AddMember.cshtml" />
+
+
+
+    <Content Include="Views\Classes\Index.cshtml" />
+    <Content Include="Views\Classes\Add.cshtml" />
+>>>>>>> 56382e9eba707f199ea5f6e2e7fa72fec570ce61
     <Content Include="Views\Specialty\Add.cshtml" />
     <Content Include="Views\Rule\Add.cshtml" />
+
+    <Content Include="Views\Classes\Update.cshtml" />
+
+
+
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
