@@ -28,7 +28,7 @@ namespace Models
         /// <summary>
         /// 接龙小组Id
         /// </summary>
-     public int ChainsGroupIds { get; set; }
+     public string  ChainsGroupIds { get; set; }
 
 
     }

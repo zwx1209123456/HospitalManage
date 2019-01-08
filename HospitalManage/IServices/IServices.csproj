@@ -41,9 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IChainsGroupService.cs" />
     <Compile Include="IClassesService.cs" />
     <Compile Include="IDepartmentServices.cs" />
     <Compile Include="IDutyServices.cs" />
+    <Compile Include="ISolitaireService.cs" />
     <Compile Include="ISpecialtyServices.cs" />
     <Compile Include="IRuleServices.cs" />
     <Compile Include="ITierService.cs" />
