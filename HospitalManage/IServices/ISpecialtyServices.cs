@@ -10,6 +10,6 @@ namespace IServices
    public interface ISpecialtyServices
     {
         int Add(Specialty specialty);
-        List<Specialty> GetSpecialties();
+        List<Users> GetSpecialties(int DepartmentID);
     }
 }
