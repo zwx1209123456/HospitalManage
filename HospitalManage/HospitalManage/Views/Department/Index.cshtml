@@ -15,82 +15,74 @@
     <script src="~/Scripts/axios.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <script src="~/Scripts/bootstrap.min.js"></script>
-    <style>
-        .page-bar {
-            margin: 40px;
-        }
+    <link href="~/css/x-admin.css" rel="stylesheet" />
+    <link href="~/css/pag.css" rel="stylesheet" />
 
-        ul, li {
-            margin: 0px;
-            padding: 0px;
-        }
-
-        li {
-            list-style: none
-        }
-
-        .page-bar li:first-child > a {
-            margin-left: 0px
-        }
-
-        .page-bar a {
-            border: 1px solid #ddd;
-            text-decoration: none;
-            position: relative;
-            float: left;
-            padding: 6px 12px;
-            margin-left: -1px;
-            line-height: 1.42857143;
-            color: #337ab7;
-            cursor: pointer
-        }
-
-            .page-bar a:hover {
-                background-color: #eee;
-            }
-
-            .page-bar a.banclick {
-                cursor: not-allowed;
-            }
-
-        .page-bar .active a {
-            color: #fff;
-            cursor: default;
-            background-color: #337ab7;
-            border-color: #337ab7;
-        }
-
-        .page-bar i {
-            font-style: normal;
-            color: #d44950;
-            margin: 0px 4px;
-            font-size: 12px;
-        }
-    </style>
 </head>
 <body>
-    <div id="app">
-        <table class="table table-bordered">
-            <tr>
-                <td>编号</td>
-                <td>科室名称</td>
-                <td>编辑</td>
-            </tr>
-            <tr v-for="(department,key,index) in DepartmentList">
-                <td>{{department.Id}}</td>
-                <td><input type="text" v-model="department.DepartmentName" /></td>
-                <td>
-                    <div v-if="department.Id!=''">
-                        <a href="#" v-on:click="UpdateDepartment(department.Id,department.DepartmentName)">修改</a>
-                        <a href="#" v-on:click="DeleteDepartment(department.Id)">删除</a>
-                    </div>
-                    <div v-else>
-                        <a href="#" v-on:click="AddDepartment(department.DepartmentName)">添加</a>
-                    </div>
-                </td>
-            </tr>
+   
+    <div class="x-body" id="app">
+        <form class="layui-form x-center" action="" style="width:500px">       
+        </form>
+        <div class="tools">
+            <ul class="toolbar">
+                <li><a href="#" onclick="location.href='/Department/Add'"><span><img src="~/images/t01.png" /></span>添加</a></li>            
+            </ul>
+        </div>
+        <table class="tablelist">
+            <thead>
+                <tr>
+                    <th width="7%">科室编号</th>
+                    <th width="8%">科室名称</th>
+                    <th width="6%">编辑</th>
+                </tr>
+            </thead>
+            <tbody id="x-img">
+                <tr v-for="(department,key,index) in DepartmentList">
+                    <td>{{department.Id}}</td>
+                    <td><input type="text" v-model="department.DepartmentName" style="border:0"/></td>
+                    <td class="td-manage">
+                        <div v-if="department.Id!=''">
+                            <a href="#" v-on:click="UpdateDepartment(department.Id,department.DepartmentName)">修改</a>
+                            <a href="#" v-on:click="DeleteDepartment(department.Id)">删除</a>
+                        </div>
+                        <div v-else>
+                            <a href="#" v-on:click="AddDepartment(department.DepartmentName)">添加</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
+    <br />
+    <br />
+    <br />
+    <script src="~/js/x-layui.js"></script>
+    <script src="~/lib/layui/layui.js"></script>
+    <script src="~/js/jquery2.js"></script>
+    <script src="~/js/js.js"></script>
+    <script>
+        layui.use(['laydate', 'element', 'laypage', 'layer'], function () {
+            $ = layui.jquery;
+            lement = layui.element();//面包导航
+            laypage = layui.laypage;//分页
+            layer = layui.layer;//弹出层
+        });
+
+
+        /*添加*/
+        function new_add(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+
+
+        // 编辑
+        function new_edit(title, url, id, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+        $('.tablelist tbody tr:odd').addClass('odd');
+
+    </script>
 </body>
 </html>
 <script type="text/javascript">
@@ -162,3 +154,27 @@
             },
         });
 </script>
+@*<body>
+    <div id="app">
+        <table class="table table-bordered">
+            <tr>
+                <td>编号</td>
+                <td>科室名称</td>
+                <td>编辑</td>
+            </tr>
+            <tr v-for="(department,key,index) in DepartmentList">
+                <td>{{department.Id}}</td>
+                <td><input type="text" v-model="department.DepartmentName" /></td>
+                <td>
+                    <div v-if="department.Id!=''">
+                        <a href="#" v-on:click="UpdateDepartment(department.Id,department.DepartmentName)">修改</a>
+                        <a href="#" v-on:click="DeleteDepartment(department.Id)">删除</a>
+                    </div>
+                    <div v-else>
+                        <a href="#" v-on:click="AddDepartment(department.DepartmentName)">添加</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>*@

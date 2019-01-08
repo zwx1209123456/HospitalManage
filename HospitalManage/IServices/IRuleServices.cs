@@ -7,34 +7,32 @@ using System.Threading.Tasks;
 namespace IServices
 {
     using Models;
-    public interface IDepartmentServices
+    using Services;
+
+    public interface IRuleServices
     {
         /// <summary>
-        /// 添加科室
+        /// 添加排班规则
         /// </summary>
-        /// <param name="department"></param>
+        /// <param name="arrangerule"></param>
         /// <returns></returns>
-        int Add(Department department);
+        int Add(Arrangerule arrangerule);
         /// <summary>
-        /// 显示科室
+        /// 显示排班规则
         /// </summary>
         /// <returns></returns>
-
-        List<Department> GetDepartments();
+        List<Arrangerule> Show();
         /// <summary>
-        /// 删除科室
+        /// 删除排班规则
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-
         int Delete(int Id);
         /// <summary>
-        /// 修改科室
+        /// 修改排班规则
         /// </summary>
-        /// <param name="department"></param>
+        /// <param name="arrangerule"></param>
         /// <returns></returns>
-
-        int Update(Department department);
-
+        int Update(Arrangerule arrangerule);
     }
 }

@@ -11,36 +11,55 @@
     <title>Add</title>
     <script src="~/Scripts/vue.js"></script>
     <script src="~/Scripts/axios.min.js"></script>
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    @*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Content/bootstrap.css" rel="stylesheet" />*@
+    <link href="~/css/x-admin.css" rel="stylesheet" />
 </head>
 <body>
-    <div id="app">
-        <table class="table table-bordered">
-            <tr>
-                <td>科室名称</td>
-                <td>
-                    <input type="text" v-model="DepartmentName" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="#" v-on:click="AddDepartment(DepartmentName)">添加</a>
-                </td>
-            </tr>
-        </table>
+    <div id="app" class="x-body">
+        <form class="layui-form">
+            <div class="layui-form-item">
+
+                <div class="layui-form-item">
+                    <label for="link" class="layui-form-label">
+                        <span class="x-red">*</span>科室名称
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="link" class="layui-input" v-model="DepartmentName">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_repass" class="layui-form-label" >
+                    </label>
+                    <button class="layui-btn" v-on:click="AddDepartment(DepartmentName)" type="button">
+                        增加
+                    </button>
+                    <button class="layui-btn" onclick="location.href='/Department/Index'" type="button">
+                       显示
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </body>
 </html>
+
 <script type="text/javascript">
-        var vm = new Vue({
-            el: "#app",
-            
+            var vm = new Vue({
+                el: "#app",
+                data:{
+                    DepartmentName: "",
+                },
             methods: {
                 AddDepartment: function (departmentName) {
                     axios.post('@Url.Action("Add", "Department")', { department: { DepartmentName: departmentName} }).then(
                         (response) => {
-                            alert("添加成功")
+                            if (response.data > 0) {
+                                alert("添加成功")
+                            }
+                            else{
+                                alert("该用户已存在")
+                            }
                         },
                         (response) => {
                             alert(response.status);
@@ -49,8 +68,6 @@
                         alert(response);
                     });
                 },
-
-
             },
 
         });

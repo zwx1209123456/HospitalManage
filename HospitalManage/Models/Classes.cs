@@ -12,7 +12,7 @@ namespace Models
     public class Classes
     {
         /// <summary>
-        /// 主键ID1111
+        /// 主键ID
         /// </summary>
         public int Id { get; set; }
         /// <summary>
