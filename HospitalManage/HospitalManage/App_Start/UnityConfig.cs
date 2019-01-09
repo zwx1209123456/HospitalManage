@@ -55,6 +55,8 @@ namespace HospitalManage
             ///≈≈∞‡πÊ‘Ú
             container.RegisterType<IRuleServices, RuleServices>();
             container.RegisterType<ISpecialtyServices, SpecialtyServices>();
+            container.RegisterType<ISolitaireService, SolitaireService>();
+            container.RegisterType<IChainsGroupService, ChainsGroupService>();
 
         }
     }

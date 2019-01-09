@@ -15,37 +15,50 @@
 
 </head>
 <body>
-    <div>
-        <div id="app">
-            <table class="table-bordered">
-                <tr>
-                    <td>职务名称</td>
-                    <td>
-                        <input type="text" v-model="DutyName" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>层级ID</td>
-                    <td>
-                        <input type="text" v-model="TierID" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>权限ID</td>
-                    <td>
-                        <input type="text" v-model="PowerID" />
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <a href="#" v-on:click="add(DutyName,TierID,PowerID)">添加</a>
-                    </td>
-                </tr>
 
-            </table>
-        </div>
-    </div>
+    <div id="app" class="x-body">
+        <form class="layui-form">
+            <div class="layui-form-item">
+
+                <div class="layui-form-item">
+                    <label for="link" class="layui-form-label">
+                        <span class="x-red">*</span>职务名称
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="link" class="layui-input" v-model="DutyName">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label for="link" class="layui-form-label">
+                        <span class="x-red">*</span>层级ID
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="link" class="layui-input" v-model="TierID">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label for="link" class="layui-form-label">
+                        <span class="x-red">*</span>权限ID
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="link" class="layui-input" v-model="PowerID">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_repass" class="layui-form-label">
+                    </label>
+                    <button class="layui-btn" v-on:click="add(DutyName,TierID,PowerID)" type="button">
+                        增加
+                    </button>
+                    <button class="layui-btn" onclick="location.href='/Duty/Index'" type="button">
+                        显示
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>         
 </body>
 </html>
 <script type="text/javascript">

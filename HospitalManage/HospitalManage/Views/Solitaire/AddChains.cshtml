@@ -19,6 +19,7 @@
 
     <script src="~/Scripts/vue.js"></script>
     <script src="~/Scripts/axios.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
 </head>
 
 <body>
@@ -26,9 +27,9 @@
         <div  style="margin:0 auto">
             <div >
                 <span style="float:left;margin-right:20px">接龙班次</span>
-                <select lay-verify="required" name="cid" class="layui-input" style="width:66px;float:left">
-                    <option value="1">早班</option>
-                    <option value="2">二线</option>
+                <select lay-verify="required" name="cid" class="layui-input" style="width:66px;float:left" >>
+                    <option v-for="classes in ClassesList" value="classes.Id">{{classes.ClassesName}}</option>
+
                 </select>
             </div>
             <div style="margin-left:500px">
@@ -92,7 +93,99 @@
 
     <script type="text/javascript">
         var vm = new Vue({
-            el: "#app"
+            el: "#app",
+             data: {
+                 SolitaireList: [],
+                 ClassesList:[]
+            },
+            mounted() {
+                this.getAllSolitaires();
+                this.getClassesList();
+            },
+            methods: {
+                getClassesList: function () {
+                     axios.get('@Url.Action("ClassesList", "Solitaire")'
+                    ).then(
+                        (response) => {
+                            this.SolitaireList = [];
+                            for (var i = 0; i < response.data.length; i++) {
+                                this.ClassesList.push(response.data[i]);
+                            }
+                           
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                getAllSolitaires: function () {
+                    axios.get('@Url.Action("SelectSolitaire", "Solitaire")'
+                    ).then(
+                        (response) => {
+                            this.SolitaireList = [];
+                            for (var i = 0; i < response.data.length; i++) {
+                                this.SolitaireList.push(response.data[i]);
+                            }
+                            this.SolitaireList.push({ Id: "", SolitaireName: "" });
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                addSolitaire: function (name) {
+                    axios.post('@Url.Action("AddSolitaire", "Solitaire")', { Solitaire: { SolitaireName: name} }).then(
+                        (response) => {
+                            this.SolitaireList = [];
+                            for (var i = 0; i < response.data.length; i++) {
+                                this.SolitaireList.push(response.data[i]);
+                            }
+                            this.SolitaireList.push({ Id: "", SolitaireName: "" });
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                updateSolitaire: function (id, name) {
+                    axios.post('@Url.Action("UpdateSolitaire", "Solitaire")', { Solitaire: { Id: id, SolitaireName: name} }).then(
+                        (response) => {
+                            this.SolitaireList = [];
+                            for (var i = 0; i < response.data.length; i++) {
+                                this.SolitaireList.push(response.data[i]);
+                            }
+                            this.SolitaireList.push({ Id: "", SolitaireName: ""});
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                deleteSolitaireById: function (id) {
+                    axios.post('@Url.Action("DelSolitaire", "Solitaire")', { id: id }).then(
+                        (response) => {
+                            this.SolitaireList = [];
+                            for (var i = 0; i < response.data.length; i++) {
+                                this.SolitaireList.push(response.data[i]);
+                            }
+                            this.SolitaireList.push({ Id: "", SolitaireName: "" });
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                }
+            }
         })
     </script>
 </body>
