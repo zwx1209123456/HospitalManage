@@ -23,18 +23,12 @@ namespace Services
         /// 是否生效
         /// </summary>
         public int IsEnabled { get; set; }
-        /// <summary>
-        /// 排班规则设置
-        /// </summary>
-        public string ArrangeRuleSet { get; set; }
+        
         /// <summary>
         /// 时间1
         /// </summary>
         public string TimeOne { get; set; }
-        /// <summary>
-        /// 班次1
-        /// </summary>
-        public string ClassesOne { get; set; }
+        
         /// <summary>
         /// 时间2
         /// </summary>
@@ -43,13 +37,13 @@ namespace Services
         /// 时间3
         /// </summary>
         public string TimeThree { get; set; }
-        /// <summary>
-        /// 班次2
-        /// </summary>
-        public string ClassesTwo { get; set; }
+        
         /// <summary>
         /// 班次名称
         /// </summary>
         public string ClassesName { get; set; }
+        public string ClassesName1 { get; set; }
+        public int ClassesIds { get; set; }
+        public string Number { get; set; }
     }
 }

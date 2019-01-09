@@ -25,12 +25,12 @@ namespace Services
             {
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@_IsEnabled", arrangerule.IsEnabled);
-                parameters.Add("@_ArrangeRuleSet", arrangerule.ArrangeRuleSet);
                 parameters.Add("@_TimeOne", arrangerule.TimeOne);
-                parameters.Add("@_ClassesOne", arrangerule.ClassesOne);
+                parameters.Add("@_ClassesId", arrangerule.ClassesId);
                 parameters.Add("@_TimeTwo", arrangerule.TimeTwo);
                 parameters.Add("@_TimeThree", arrangerule.TimeThree);
-                parameters.Add("@_ClassesTwo", arrangerule.ClassesTwo);
+                parameters.Add("@_ClassesIds", arrangerule.ClassesIds);
+                parameters.Add("@_Number", arrangerule.Number);
                 int res = conn.Execute("RuleAdd", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 return res;
             }
@@ -58,7 +58,7 @@ namespace Services
             using (MySqlConnection conn = dapper.GetConnection())
             {
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@_Id", Id);
+                parameters.Add("@_Id",Id);
                 return conn.Execute("RuleDelete", parameters, commandType: System.Data.CommandType.StoredProcedure);
             }
         }
@@ -74,12 +74,12 @@ namespace Services
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@_Id", arrangerule.Id);
                 parameters.Add("@_IsEnabled", arrangerule.IsEnabled);
-                parameters.Add("@_ArrangeRuleSet", arrangerule.ArrangeRuleSet);
                 parameters.Add("@_TimeOne", arrangerule.TimeOne);
-                parameters.Add("@_ClassesOne", arrangerule.ClassesOne);
+                parameters.Add("@_ClassesId", arrangerule.ClassesId);
                 parameters.Add("@_TimeTwo", arrangerule.TimeTwo);
                 parameters.Add("@_TimeThree", arrangerule.TimeThree);
-                parameters.Add("@_ClassesTwo", arrangerule.ClassesTwo);
+                parameters.Add("@_ClassesIds", arrangerule.ClassesIds);
+                parameters.Add("@_Number", arrangerule.Number);
                 int res = conn.Execute("RuleUpdate", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 return res;
             }
