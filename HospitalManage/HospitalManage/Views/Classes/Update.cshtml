@@ -118,15 +118,15 @@
                     <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label">
                         </label>
-                        <a href="#" v-on:click="add(ClassesColor,ClassesName,StartTimea + ':' +StartTimea1,LastTime1+':'+LastTimea2,ClasserType,ValidClasses,Sort)">添加</a>
+                        <a href="#" v-on:click="ClassesUpdate(item.Id,item.ClassesColor,item.ClassesName,item.StartTime,item.LastTime,item.ClasserType,item.ValidClasses,item.Sort)">修改</a>
 
                     </div>
 
                 </div>
             </div>
         </form>
-            </div>
-       
+    </div>
+
 </body>
 </html>
 <script type="text/javascript">
@@ -155,8 +155,8 @@
                  LastTimeaList2: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59']
             },
             mounted() {
-                //this.getClasserTypeList();    
-                
+                //this.getClasserTypeList();
+
             },
             methods: {
                 add: function (ClassesColor, ClassesName, StartTime, LastTime, ClasserType, ValidClasses, Sort) {
@@ -166,11 +166,8 @@
                     axios.post('@Url.Action("ClassesAdd", "Classes")', { Classes: { ClassesColor: ClassesColor, ClassesName: ClassesName, StartTime:StartTime , LastTime: LastTime, ClasserType: ClasserType, ValidClasses: ValidClasses.join(','), Sort: Sort} }).then(
                         (response) => {
                             if (response.data > 0) {
-                                alert("保存成功")
-                            }
-                            else {
-                                alert("已有该用户")
-                            }
+                                alert("修改成功")
+                            }                            
                         },
                         (response) => {
                             alert(response.status);
@@ -178,7 +175,7 @@
                     ).catch(function (response) {
                         alert(response);
                     });
-                },               
+                },
             },
         });
 </script>

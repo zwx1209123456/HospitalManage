@@ -173,9 +173,11 @@
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DutyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+
     <Compile Include="Controllers\SolitaireController.cs" />
     <Compile Include="Controllers\SpecialtyController.cs" />
     <Compile Include="Controllers\RuleController.cs" />
+
     <Compile Include="Controllers\TierController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -494,18 +496,29 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Show.cshtml" />
     <Content Include="Views\Users\Update.cshtml" />
+
     <Content Include="Views\Solitaire\Index.cshtml" />
     <Content Include="Views\Solitaire\AddChains.cshtml" />
     <Content Include="Views\Solitaire\UodateChains.cshtml" />
     <Content Include="Views\Solitaire\AddMember.cshtml" />
+
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Classes\Add.cshtml" />
     <Content Include="Views\Specialty\Add.cshtml" />
     <Content Include="Views\Rule\Add.cshtml" />
+
     <Content Include="Views\Case\Index.cshtml" />
     <Content Include="Views\Case\HeadPage.cshtml" />
     <Content Include="Views\Case\LeftMenu.cshtml" />
     <Content Include="Views\Case\HomePage.cshtml" />
+
+
+    <Content Include="Views\Classes\Update.cshtml" />
+
+
+
+
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

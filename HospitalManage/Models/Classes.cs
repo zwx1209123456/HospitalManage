@@ -26,11 +26,11 @@ namespace Models
         /// <summary>
         /// 上班时间
         /// </summary>
-        public DateTime StartTime { get; set; }
+        public string StartTime { get; set; }
         /// <summary>
         /// 下班时间
         /// </summary>
-        public DateTime LastTime { get; set; }
+        public string LastTime { get; set; }
         /// <summary>
         /// 班次类型
         /// </summary>

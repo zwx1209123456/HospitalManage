@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,8 @@ namespace HospitalManage.Controllers
 {
     public class SolitaireController : Controller
     {
+        [Unity.Attributes.Dependency]
+        public IClassesService ClassesServices { get; set; }
         // GET: Solitaire
         public ActionResult Index()
         {
@@ -15,6 +18,13 @@ namespace HospitalManage.Controllers
         
             ViewBag.y = w;
             return View();
+        }
+        [HttpGet]
+        public JsonResult ClassesList()
+        {
+            ///获得所有班次信息
+            var clasees = ClassesServices.GetClasses();
+            return Json(clasees.ToList(), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AddChains()
