@@ -28,11 +28,12 @@ namespace Services
             int res = conn.Execute("Specialty_Add", parameters, commandType: System.Data.CommandType.StoredProcedure);
             return res;
         }
-        public List<Specialty> GetSpecialties()
+        public List<Users> GetSpecialties(int DepartmentID)
         {
             MySqlConnection conn = dapper.GetConnection();
             DynamicParameters parameters = new DynamicParameters();
-            return conn.Query<Specialty>("Specialty_Show", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
+            parameters.Add("DepartmentID", DepartmentID);
+            return conn.Query<Users>("Specialty_Show", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
         }
     }
 }

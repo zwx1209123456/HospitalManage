@@ -11,11 +11,12 @@ namespace HospitalManage.Controllers
     using Models;   
     public class RuleController : Controller
     {
-
+        IClassesService iclassesService = null;
         IRuleServices iruleServices = null;
-        public RuleController(IRuleServices ruleServices)
+        public RuleController(IRuleServices ruleServices, IClassesService classesService)
         {
             iruleServices = ruleServices;
+            iclassesService = classesService;
         }
         // GET: Rule
         public ActionResult Index()
@@ -26,11 +27,12 @@ namespace HospitalManage.Controllers
         /// 添加排班规则
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        
         public ActionResult Add()
         {
             return View();
         }
+        [HttpPost]
         public int Add(Arrangerule arrangerule)
         {
             return iruleServices.Add(arrangerule);
@@ -52,14 +54,16 @@ namespace HospitalManage.Controllers
         /// 删除排班规则
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        
         public ActionResult Delete()
         {
             return View();
         }
-        public int Delete(int Id)
+        [HttpPost]
+        public int Delete(string Id)
         {
-            return iruleServices.Delete(Id);
+            return iruleServices.Delete(Convert.ToInt32(Id));
+            //return Json(SpecialtyServices.GetSpecialties(Convert.ToInt32(DepartmentID)), JsonRequestBehavior.AllowGet);
         }
         /// <summary>
         /// 修改排班规则
@@ -73,6 +77,17 @@ namespace HospitalManage.Controllers
         public int Update(Arrangerule arrangerule)
         {
             return iruleServices.Update(arrangerule);
+        }
+        /// <summary>
+        /// 班次显示
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        // GET: Users
+        public JsonResult GetClasses()
+        {
+            //return idepartmentServices.GetDepartments();
+            return Json(iclassesService.GetClasses(), JsonRequestBehavior.AllowGet);
         }
     }
 }

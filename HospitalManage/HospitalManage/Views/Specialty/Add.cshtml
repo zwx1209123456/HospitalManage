@@ -9,16 +9,54 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Add</title>
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+    <style>
+        .searchBox {
+            width: 100px;
+            height: 20px;
+            position: relative;
+        }
+
+        .select {
+            width: 98%;
+            height: 100%;
+        }
+
+        .down {
+            position: absolute;
+            width: 0;
+            border: 9px solid transparent;
+            border-top: 11px solid black;
+            top: 10px;
+            right: 7px;
+            cursor: pointer;
+        }
+
+        .list {
+            width: 100%;
+        }
+            .list > li {
+                height: 20px;
+                background: white;
+                border: 1px solid lightgray;
+                border-top: none;
+            }
+        #aaa {
+            list-style-type: none;
+        }
+    </style>
+
 </head>
 <body>
-    <div> 
+    <div id="app">
         <table>
             <tr>
                 <td>
                     专业组名称
                 </td>
                 <td>
-                    <input id="Text1" type="text" />
+                    <input id="Text1" type="text" v-model="SpecialtyName" />
                 </td>
             </tr>
             <tr>
@@ -26,7 +64,7 @@
                     颜色设置
                 </td>
                 <td>
-                    <input id="Text1" type="text" />
+                    <input id="Text1" type="color" style="width:60px;height:20px" v-model="SpecialtyColor" />
                 </td>
             </tr>
             <tr>
@@ -34,13 +72,163 @@
                     关联科室
                 </td>
                 <td>
-                    <select id="Select1">
-                        <option></option>
 
+                    <select v-model="DepartmentID">
+                        <option value="0">--请选择--</option>
+                        <option v-for="orgMaInfo in DepartmentList" v-bind:value="orgMaInfo.Id">
+                            {{orgMaInfo.DepartmentName}}
+                        </option>
                     </select>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    组员设置
+                </td>
+                <td>
+                    <select v-model="GropCrew" multiple style="width: 70px;">
+                        <option value="">--请选择--</option>
+                        <option v-for="orgMaInfo in TierList" v-bind:value="orgMaInfo.DepartmentID">
+
+                            {{orgMaInfo.UserName}}
+                        </option>
+                    </select>
+                </td>
+
+            </tr>
         </table>
+        <div class="searchBox">
+            <input type="text" class="select" v-model="GropCrew">
+            <div class="down" v-on:click="show"></div>
+            <div v-show="listShow">
+                <ul class="list" v-for="(item,index) in TierList">
+                    <li id="aaa">
+                        <input type="checkbox" :id="item" class="checkItem" :value="item.UserName" v-model="GropCrew">
+                        <label :for="item">{{item.UserName}}</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </body>
 </html>
+<script type="text/javascript">
+
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            DepartmentList: [],
+            TierList: [],
+            DepartmentID: 0,
+            GropCrew: [],
+            UserName: "",
+            SpecialtyName: "",
+            SpecialtyColor: "",
+            listShow: false,
+            search: '',
+            items: [],//下拉列表的选项数据，此数据可以从父组件传过来，通过props接收，接收到props数据后赋值给该数据即可
+            data1: {
+                type: Array,
+                default: []
+            },
+        },
+        mounted() {
+            this.getAllUser();
+        },
+        watch: {
+            DepartmentID: function (newvalue, oldvalue) {
+                this.getTierList(newvalue);
+            },
+            GropCrew: {
+                handler() { // 数据数组有变化将触发此函数
+                    var checkObj1 = document.querySelectorAll('.checkItem'); // 获取所有checkbox项
+                },
+                deep: true // 深度监视
+            },
+            search: {
+                handler() {//搜索框输入变化触发
+                    this.listShow = true;
+                },
+                deep: true // 深度监视
+            }
+        },
+        methods: {
+            AddDepartment: function (SpecialtyName, SpecialtyColor, DepartmentID, GropCrew) {
+                axios.post('@Url.Action("Add", "Specialty")', { specialty: { SpecialtyName: SpecialtyName, SpecialtyColor: SpecialtyColor, DepartmentID: DepartmentID, GropCrew: GropCrew } }).then(
+                    (response) => {
+                        if (response.data > 0) {
+                            alert("添加成功")
+                        }
+                        else {
+                            alert("该用户已存在")
+                        }
+                    },
+                    (response) => {
+                        alert(response.status);
+                    }
+                ).catch(function (response) {
+                    alert(response);
+                });
+            },
+            //获取部门
+            getAllUser: function () {
+                axios.get('@Url.Action("GetDepartments", "Department")').then(
+                    (response) => {
+                        this.DepartmentList = response.data;
+                    },
+                    (response) => {
+                        alert(response.status);
+                    }
+                ).catch(function (response) {
+                    alert(response);
+                });
+            },
+            //获取人员
+            getTierList: function () {
+                axios.post('@Url.Action("GetSpecialties", "Specialty")', { DepartmentID: this.DepartmentID }).then(
+                    (response) => {
+                        console.log(response.data)
+                        this.TierList = response.data;
+                    },
+                    (response) => {
+                        alert(response.status);
+                    }
+                ).catch(function (response) {
+                    alert(response);
+                });
+            },
+            checkAll(e) { // 点击全选事件函数
+                var checkObj = document.querySelectorAll('.checkItem'); // 获取所有checkbox项
+                if (e.target.checked) { // 判定全选checkbox的勾选状态
+                    for (var i = 0; i < checkObj.length; i++) {
+                        if (!checkObj[i].checked) { // 将未勾选的checkbox选项push到绑定数组中
+                            this.GropCrew.push(checkObj[i].value);
+                        }
+                    }
+                } else { // 如果是去掉全选则清空checkbox选项绑定数组
+                    this.TierList = [];
+                }
+            },
+            show() {
+                this.listShow = !this.listShow;
+                if (this.listShow == true) {
+                    this.GropCrew = [];
+                }
+
+            },
+        },
+        computed: {
+            searchData: function () {
+                var search1 = this.search;
+                if (search1) {
+                    return this.items.filter(function (product) {
+                        return Object.keys(product).some(function (key) {
+                            return String(product[key]).toLowerCase().indexOf(search1) > -1
+                        })
+                    })
+                }
+                return this.items;
+            }
+        },
+        });
+</script>
