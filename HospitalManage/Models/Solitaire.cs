@@ -16,7 +16,7 @@ namespace Models
         /// <summary>
         /// 接龙班次ID
         /// </summary>
-     public int SolitaireClassID { get; set; }
+     public int ClassesId { get; set; }
         /// <summary>
         /// 接龙开始时间
         /// </summary>

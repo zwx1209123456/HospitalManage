@@ -9,7 +9,7 @@ namespace IServices
 {
    public  interface IChainsGroupService
     {
-        int AddChainsGroup(ChainsGroup chainsGroup);
+        int AddChainsGroup(List<ChainsGroup> chainsGroupList);
         int DelChainsGroup(int id);
         int UpdateChainsGroup(ChainsGroup chainsGroup);
         List<ChainsGroup> SelectChainsGroup();
