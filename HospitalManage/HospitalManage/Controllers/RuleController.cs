@@ -54,14 +54,16 @@ namespace HospitalManage.Controllers
         /// 删除排班规则
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        
         public ActionResult Delete()
         {
             return View();
         }
-        public int Delete(int Id)
+        [HttpPost]
+        public int Delete(string Id)
         {
-            return iruleServices.Delete(Id);
+            return iruleServices.Delete(Convert.ToInt32(Id));
+            //return Json(SpecialtyServices.GetSpecialties(Convert.ToInt32(DepartmentID)), JsonRequestBehavior.AllowGet);
         }
         /// <summary>
         /// 修改排班规则
