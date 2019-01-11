@@ -14,6 +14,11 @@ namespace HospitalManage.Controllers
         [Dependency]
         public ISpecialtyServices SpecialtyServices { get; set; }
         // GET: Specialty
+
+        /// <summary>
+        /// 添加专业分组
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Add()
         {
             return View();
@@ -25,18 +30,31 @@ namespace HospitalManage.Controllers
             return result;
         }
 
+
+        /// <summary>
+        /// 根据科室获取用户
+        /// </summary>
+        /// <param name="DepartmentID"></param>
+        /// <returns></returns>
         [HttpPost]
-        public JsonResult GetSpecialties(string DepartmentID)
+        public JsonResult GetUsers(string DepartmentID)
         {
-            return Json(SpecialtyServices.GetSpecialties(Convert.ToInt32( DepartmentID)),JsonRequestBehavior.AllowGet);
+            return Json(SpecialtyServices.GetUsers(Convert.ToInt32( DepartmentID)),JsonRequestBehavior.AllowGet);
         }
+
+
+        /// <summary>
+        /// 显示专业分组
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             return View();
         }
-        public ActionResult SelectChange()
+        [HttpGet]
+        public JsonResult GetSpecialties()
         {
-            return View();
+            return Json(SpecialtyServices.GetSpecialties(), JsonRequestBehavior.AllowGet);
         }
     }
 }
