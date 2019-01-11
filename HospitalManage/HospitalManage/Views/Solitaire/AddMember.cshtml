@@ -1,14 +1,13 @@
-﻿@{
+﻿
+@{
     Layout = null;
 }
 <!DOCTYPE html>
+@model List<Models.Users>
 <html>
-
 <head>
     <meta charset="utf-8">
-    <title>
-        用户查看
-    </title>
+    <title>人员设置</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -16,109 +15,132 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="~/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="~/css/pag.css" media="all">
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
 </head>
-
-<body>
+<body style="margin:0 auto">
     <div class="x-body">
-        <form class="layui-form layui-form-pane">
-            <div>
-                <div class="layui-input-inline" style="width:200px;float:left">
-                    <input type="text" name="link" placeholder="拼音搜索" autocomplete="off" class="layui-input">
-                </div>
-                <button class="layui-btn" style="float:left;margin-top:5px;margin-left:20px"> 查询 </button>
+        <form class="layui-form x-center" action="" style="width:85%"></form>
+        <div>
+            <div class="layui-input-inline" style="width:200px;float:left">
+                <input type="text" name="link" placeholder="拼音搜索" autocomplete="off" class="layui-input">
             </div>
-            <br style="border:solid" />
-            <div style="margin:10px 0;float:right">
-                shangye
+            <button class="layui-btn" style="float:left;margin-top:5px;margin-left:20px"> 查询 </button>
+        </div>
+        <br style="border:solid" />
+        <div class="page" v-show="show" style="margin:10px 0;float:right">
+            <div class="pagelist">
+                <span class="jump">上一页</span> <span class="jump">1</span> <span class="jump">2</span> <span class="jump">3</span> <span class="jump">4</span> <span class="jump">5</span> <span class="jump">6</span> <span class="ellipsis">...</span> <span class="jump">下一页</span>
+                <span class="jumppoint">跳转到：</span>
+                <span class="jumpinp">
+                    <input type="text">
+                </span>
+                <span class="jump gobtn">GO</span>
+                <span class="jumppoint" style="line-height:25px">共有数据：88 条</span>
             </div>
-            <div class="layui-form-item"  style="margin-top:20px">
-                <label for="L_title" class="layui-form-label">
-                    姓名
-                </label>
-                <div class="layui-input-block">
-                    <input type="text" id="L_title" name="title" required lay-verify="title" value="张三"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
+        </div>
+        <table class="tablelist" style="align-content:center">
+            <thead>
+                <tr>
+                    <th>
+                        <input onclick="selectAll()" type="checkbox" name="controlAll" style="controlAll" id="controlAll">
+                    </th>
+                    <th>序号</th>
+                    <th style="width:70%"> 姓名 </th>
 
-            <div class="layui-form-item">
-                <label for="L_title" class="layui-form-label">
-                    性别
-                </label>
-                <div class="layui-input-block">
-                    <input type="text" id="L_title" name="title" required lay-verify="title" value="男"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><input type="checkbox" value="@item.UserName" name="chk_list" class="selected" id="@item.Id" ></td>
+                        <td>@(Model.IndexOf(item) + 1)</td>
+                        <td>@item.UserName</td>
 
-            <div class="layui-form-item">
-                <label for="L_title" class="layui-form-label">
-                    籍贯
-                </label>
-                <div class="layui-input-block">
-                    <input type="text" id="L_title" name="title" required lay-verify="title" value="安徽"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
+                    </tr>
+                }
 
-            <div class="layui-form-item">
-                <label for="L_title" class="layui-form-label">
-                    年龄
-                </label>
-                <div class="layui-input-block">
-                    <input type="text" id="L_title" name="title" required lay-verify="title" value="23"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
-
-            <div class="layui-form-item">
-                <label for="L_title" class="layui-form-label">
-                    文化程度
-                </label>
-                <div class="layui-input-block">
-                    <input type="text" id="L_title" name="title" required lay-verify="title" value="初中"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
-
-            <div class="layui-form-item">
-                <label for="L_title" class="layui-form-label">
-                    宗教信仰
-                </label>
-                <div class="layui-input-block">
-                    <input type="text" id="L_title" name="title" required lay-verify="title" value="佛教"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
-
-            <div class="layui-form-item">
-                <label for="L_title" class="layui-form-label">
-                    联系电话
-                </label>
-                <div class="layui-input-block">
-                    <input type="text" id="L_title" name="title" required lay-verify="title" value="15812345678"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <button class="layui-btn">
-                    更改
-                </button>
-            </div>
-        </form>
+            </tbody>
+        </table>
+        <div style="width:200px;margin:50px auto">
+            <button class="layui-btn" onclick="keep()"> 保存 </button>
+            <button class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"> 保存 </button>
+            <span class="layui-layer-setwin">
+                <a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"> qq</a>
+            </span>
+          
+            <button class="layui-btn" style="float:right"> 取消 </button>
+        </div>
     </div>
-    <script src="~/lib/layui/layui.js" charset="utf-8">
+    <br />
+    <br />
+    <br />
+    <script src="~/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="~/js/x-layui.js" charset="utf-8"></script>
+    <script src="~/js/jquery2.js" charset="utf-8"></script>
+    <script src="~/js/js.js" charset="utf-8"></script>
+    <script>
+        layui.use(['laydate', 'element', 'laypage', 'layer'], function () {
+            $ = layui.jquery;
+            lement = layui.element();//面包导航
+            laypage = layui.laypage;//分页
+            layer = layui.layer;//弹出层
+
+        });
+        /*用户-添加*/
+        function user_management_add(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+        /*用户-查看*/
+        function user_management_show(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+        // 用户-编辑
+        function user_management_edit(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
     </script>
-    <script src="~/js/x-layui.js" charset="utf-8">
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
     </script>
     <script>
-        layui.use(['form', 'layer', 'layedit'], function () {
-            $ = layui.jquery;
-            var form = layui.form()
-                , layer = layui.layer
-                , layedit = layui.layedit;
-        });
+        $(function () {
+
+        })
+        function keep() {
+            var userIds = "";
+            //在jquery1.6版本便对此做出了修改： 
+
+            //【checked属性在页面初始化的时候已经初始化好了，不会随着状态的改变而改变。
+
+            //也就是说如果checkbox在页面加载完毕是选中的，那么返回的永远都是checked
+
+            //如果一开始没被选中，则返回的永远是undefined ！】
+
+            //1-所以这里 $(".selected input：checked")找不到元素，要获取checked属性值可用动态属性prop
+            //2-遍历到的元素不能直接操作属性，还需jQuery获取元素
+            $(".selected").each(function () {
+                if ($(this).prop("checked")) {
+                    userIds += $(this).val() + ",";
+                }
+ 
+            })
+            //var  arrChk = $("input[name='chk_list]:checked");
+            ////遍历得到每个checkbox的value值
+            //for  (var  i = 0; i < arrChk.length; i++) {
+            //    userIds += arrChk[i].value + ",";
+            //}
+
+            var url = "?ids=" + userIds.substring(0,userIds.length - 2);
+           
+           
+               location.href = "/Solitaire/AddChains" + url;
+
+       
+           // x_admin_close();
+        }
     </script>
 </body>
-
 </html>

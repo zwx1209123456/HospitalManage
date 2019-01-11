@@ -9,6 +9,9 @@ namespace HospitalManage.Controllers
     using Services;
     using IServices;
     using Models;   
+    /// <summary>
+    /// 排班规则
+    /// </summary>
     public class RuleController : Controller
     {
         IClassesService iclassesService = null;

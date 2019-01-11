@@ -25,20 +25,22 @@
 
 <body>
     <div id="app" class="x-body">
-        <div  style="margin:0 auto">
-            <div >
+        <div style="margin:0 auto">
+            <div>
                 <span style="float:left;margin-right:20px">接龙班次</span>
-                <select v-model="id"  lay-verify="required" name="cid" class="layui-input" style="width:66px;float:left" >
-                    <option v-for="classes in classesList" v-bind:value="id" v-on:input="id=$event.target.value">{{classes.ClassesName}}</option>
-
+                <select v-model="id" lay-verify="required" name="cid" class="layui-input" style="width:66px;float:left">
+                    <option v-for="classes in classesList" v-bind:value="classes.Id">{{classes.ClassesName}}</option>
+                    @*//v-bind:value="classes.id" v-on:input="id=$event.target.value"*@
                 </select>
             </div>
             <div style="margin-left:500px">
                 <span style="float:left;margin-right:20px">接龙周期</span>
                 <div style="float:left">
-                    <div><span style="background-color:darkviolet">开始时间</span><input id="Text1" type="text" onclick="WdatePicker()"  v-model="startTime"/></div>
-                    <div><span style="background-color:aquamarine">结束时间</span><input id="Text1" type="text" onclick="WdatePicker()"  v-model="endTime"/></div>
-                    
+                    @*<div><span style="background-color:darkviolet">开始时间</span><input id="Text1" type="text" onclick="WdatePicker()" v-on:change="getstartTime()" v-model="startTime" /></div>
+        <div><span style="background-color:aquamarine">结束时间</span><input id="Text1" type="text" onclick="WdatePicker()" v-on:change="getendTime()" v-model="endTime" /></div>*@
+                    <div><span style="background-color:darkviolet">开始时间</span><input id="startTime" type="text" onclick="WdatePicker()" /></div>
+                    <div><span style="background-color:aquamarine">结束时间</span><input id="endTime" type="text" onclick="WdatePicker()" /></div>
+
                 </div>
             </div>
         </div>
@@ -55,27 +57,30 @@
 
                     </tr>
                 </thead>
-                <tbody>
-                    <tr id="groupInfo" v-for="(chainsGroup,index) in chainsGroupList">
-            <td ><input ref="q1" type="text" v-model="chainsGroup.SortNumber" /></td>
-            <td onclick="user_management_edit('人员设置','/Solitaire/AddMember','800','500')">
-                <input ref="q2" type="text" v-model="chainsGroup.GropCrew" />
-            </td>
-            <td v-if="gropCrewList.length!=0">
+                <tbody id="tbl">
+                    <tr class="groupInfo" v-for="(chainsGroup,index) in chainsGroupList">
+                        <td><input  type="text" v-model="chainsGroup.SortNumber" value="chainsGroup.SortNumber" /></td>
+                        <td v-if="GropCrew!=0" onclick="user_management_edit('人员设置','/Solitaire/AddMember?id='+0,'800','500')">
+                            <input id="index"  type="text" v-model="index" value="index" />
+                        </td>
+                        <td v-else onclick="user_management_edit('人员设置','/Solitaire/AddMember?id='+0,'800','500')">
+                            <input id="Hidden1" type="text"   v-model="chainsGroup.GropCrew" value="chainsGroup.GropCrew" />
+                        </td>
+                        <td v-if="chainsGroup.GropCrew!=''">
 
-                <select ref="q3" lay-verify="required" name="cid" class="layui-input" v-model="chainsGroup.GroupLeader" >
-                    <option v-for="gropCrewx in gropCrewList" v-bind:value="gropCrewx">{{gropCrewx}}</option>
-                </select>
-            </td>
-            <td v-else></td>
-            <td v-on:click="addRow(id)">+</td>
-        </tr>
-                    
+                            <select  lay-verify="required" name="cid" class="layui-input" v-model="chainsGroup.GroupLeader">
+                                <option v-for="gropCrewx in gropCrewList" value="gropCrewx">{{gropCrewx}}</option>
+                            </select>
+                        </td>
+                        <td v-else ><input id="Hidden1" type="hidden" v-model="chainsGroup.GroupLeader" value="chainsGroup.GroupLeader"/></td>
+                        <td v-on:click="addRow(id)">+</td>
+                    </tr>
+
                 </tbody>
             </table>
         </div>
-        <div style="width:200px;margin:50px auto" >
-            <button class="layui-btn" v-on:click="addChains(id,startTime,endTime)"> 保存 </button>
+        <div style="width:200px;margin:50px auto">
+            <button class="layui-btn" v-on:click="addChains()"> 保存 </button>
             <button class="layui-btn" style="float:right"> 取消 </button>
         </div>
     </div>
@@ -96,30 +101,44 @@
 
 
     <script type="text/javascript">
+       
         var vm = new Vue({
             el: "#app",
             data: {
+                start:"",
                 sortNumber:1,
-                
+
                 classesList: [],
+                //{ Id: "", GroupLeader: this.GroupLeader, GropCrew: this.GropCrew, ClassesId: this.id, SortNumber: this.SortNumber }
                 chainsGroupList: [{ Id: "", GroupLeader: "", GropCrew: "", ClassesId: 0, SortNumber: 1 }],
                 gropCrewList: [],
                 groupList: [],
-                SortNumber: 0,
-                GropCrew: "",
+                SortNumber: 1,         
+                GropCrew: "@ViewBag.ids",
                 GroupLeader: "",
-                id: "",
-                startTime: "",
-                endTime:""
+                id: 1
+                //startTime: "2017-01-12",
+                //endTime:""
             },
             mounted() {
-            
+                this.load();
                 this.getClassesList();
             },
             methods: {
                 //addChainsGroupList:function () {
                 //    this.chainsGroupList.push({ Id: "", GroupLeader: "", GropCrew: "", ClassesId: 0, SortNumber: 1});
                 //},
+                //getstartTime: function () {
+                //    startTime = this.startTime;
+                //},
+                //getendTime: function () {
+                //    endTime = this.endTime;
+                //},
+                load: function () {
+                    if (this.GropCrew!=0) {
+                         $("#" +@ViewBag.index).val(@ViewBag.ids);
+                    }
+                },
                 addRow: function (classesId) {
                     this.sortNumber += 1;
                     this.chainsGroupList.push({ Id: "", GroupLeader: "", GropCrew: "", ClassesId: classesId, SortNumber: this.sortNumber });
@@ -132,7 +151,7 @@
                             for (var i = 0; i < response.data.length; i++) {
                                 this.classesList.push(response.data[i]);
                             }
-                           
+
                         },
                         (response) => {
                             alert(response.status);
@@ -141,22 +160,23 @@
                         alert(response);
                     });
                 },
-                addChains: function (id, startTime, endTime) {
+                addChains: function () {
                     var _this = this;
-                    $("#groupInfo").each(function () {
+                    $(".groupInfo").each(function () {//注意不能id选择器，因为只会选中一个
 
-                        for (var j = 0; j < this.cells.length; j++) {
-                            var groupLeader = "";
-
-                            if (false) {
-                                groupLeader = _this.$refs.q3[j].value;
-                            }
-                            _this.groupList.push({ SortNumber: _this.$refs.q1[j].value, GropCrew: _this.$refs.q2[j].value, GroupLeader: groupLeader  });
-                        }
-                      
+                        _this.groupList.push({ SortNumber: this.cells[0].firstElementChild.value, ClassesId: _this.id, GropCrew: this.cells[1].firstElementChild.value, GroupLeader: this.cells[2].firstElementChild.value });
+                
                     });
-                    axios.post('@Url.Action("AddSolitaire", "Solitaire")', {
-                        solitaire: { ClassesId: id, StartSolitaire: startTime, LastStartSolitaire: endTime },
+                    var startTime = $("#startTime").val();
+                    var endTime = $("#endTime").val();
+                    //var tab = document.getElementById("tbl");
+                    //var rows = tab.rows;
+
+                    //for (var i = 0; i < rows.length; i++) { //遍历表格tbody的行
+                    //    _this.groupList.push({ SortNumber: _this.SortNumber, ClassesId: _this.id, GropCrew: _this.GropCrew, GroupLeader: _this.GroupLeader });
+                    //}
+                    axios.post('@Url.Action("AddChains", "Solitaire")', {
+                        solitaire: { ClassesId: _this.id, StartSolitaire: startTime, LastStartSolitaire: endTime },
                         chainsGroups: this.groupList
                     }).then(
                         (response) => {
@@ -190,7 +210,7 @@
                         alert(response);
                     });
                 },
-            
+
                 updateSolitaire: function (id, name) {
                     axios.post('@Url.Action("UpdateSolitaire", "Solitaire")', { Solitaire: { Id: id, SolitaireName: name} }).then(
                         (response) => {
