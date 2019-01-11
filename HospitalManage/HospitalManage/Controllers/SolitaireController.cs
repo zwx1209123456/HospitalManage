@@ -16,6 +16,9 @@ namespace HospitalManage.Controllers
         public ISolitaireService solitaireService { get; set; }
         [Unity.Attributes.Dependency]
         public IChainsGroupService chainsGroupService { get; set; }
+        [Unity.Attributes.Dependency]
+        public IUsersServices usersServices { get; set; }
+        static int index = 0;
         // GET: Solitaire
         public ActionResult Index()
         {
@@ -46,11 +49,36 @@ namespace HospitalManage.Controllers
             var clasees = chainsGroupService.SelectChainsGroup();
             return Json(clasees.ToList(), JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// 获取用户列表
+        /// </summary>
+        /// <returns></returns>
+
+        public List<Users> UsersList()
+        {
+
+            //var users =   Json(usersServices.ShowUsers(), JsonRequestBehavior.AllowGet);
+            //return users;
+            var users = usersServices.ShowUsers().ToList();
+            return users;
+        }
         public ActionResult AddChains()
         {
+            ViewBag.ids = 0;
+            string  ids= Request.QueryString["ids"];//获取传过来的值
+            if (ids!=null)
+            {
+                ViewBag.ids = ids;
+            }
+            ViewBag.index = index;
             return View();
         }
-
+        /// <summary>
+        /// 添加接龙组
+        /// </summary>
+        /// <param name="solitaire"></param>
+        /// <param name="chainsGroups"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult AddChains(Solitaire solitaire, ChainsGroup[] chainsGroups)
         {
@@ -64,9 +92,10 @@ namespace HospitalManage.Controllers
             return View();
         }
 
-        public ActionResult AddMember()
+        public ActionResult AddMember(int id)
         {
-            return View();
+            index = id;
+            return View(UsersList());
         }
     }
 }
