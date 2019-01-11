@@ -1,4 +1,5 @@
 ﻿using IServices;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,10 @@ namespace HospitalManage.Controllers
     {
         [Unity.Attributes.Dependency]
         public IClassesService ClassesServices { get; set; }
+        [Unity.Attributes.Dependency]
+        public ISolitaireService solitaireService { get; set; }
+        [Unity.Attributes.Dependency]
+        public IChainsGroupService chainsGroupService { get; set; }
         // GET: Solitaire
         public ActionResult Index()
         {
@@ -19,6 +24,10 @@ namespace HospitalManage.Controllers
             ViewBag.y = w;
             return View();
         }
+        /// <summary>
+        /// 班次
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public JsonResult ClassesList()
         {
@@ -26,10 +35,28 @@ namespace HospitalManage.Controllers
             var clasees = ClassesServices.GetClasses();
             return Json(clasees.ToList(), JsonRequestBehavior.AllowGet);
         }
-
+        /// <summary>
+        /// 接龙小组
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public JsonResult ChainsGroupList()
+        {
+            
+            var clasees = chainsGroupService.SelectChainsGroup();
+            return Json(clasees.ToList(), JsonRequestBehavior.AllowGet);
+        }
         public ActionResult AddChains()
         {
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult AddChains(Solitaire solitaire, ChainsGroup[] chainsGroups)
+        {
+            int j = chainsGroupService.AddChainsGroup(chainsGroups.ToList());
+            int i = solitaireService.AddSolitaire(solitaire);
+            return Json("");
         }
 
         public ActionResult UodateChains()

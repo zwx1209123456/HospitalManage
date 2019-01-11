@@ -16,16 +16,24 @@ namespace Services
     using System.Data;
     public class ChainsGroupService : IChainsGroupService
     {
-        public int AddChainsGroup(ChainsGroup chainsGroup)
+        public int AddChainsGroup(List<ChainsGroup> chainsGroupList)
         {
-            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            List<DynamicParameters> parametersList = new List<DynamicParameters>();
+            foreach (var chainsGroup in chainsGroupList)
             {
+
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("GroupLeader", chainsGroup.GroupLeader);
                 parameters.Add("GropCrew", chainsGroup.GropCrew);
                 parameters.Add("ClassesId", chainsGroup.ClassesId);
                 parameters.Add("SortNumber", chainsGroup.SortNumber);
-                int i = conn.Execute("up_AddChainsGroup", parameters, commandType: CommandType.StoredProcedure);
+
+                parametersList.Add(parameters);
+            }
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            {
+
+                int i = conn.Execute("up_AddChainsGroup", parametersList, commandType: CommandType.StoredProcedure);
                 return i;
             }
         }
@@ -37,7 +45,12 @@ namespace Services
 
         public List<ChainsGroup> SelectChainsGroup()
         {
-            throw new NotImplementedException();
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            {
+
+                List<ChainsGroup> i = conn.Query<ChainsGroup>("up_SelectChainsGroup", null, commandType: CommandType.StoredProcedure).ToList();
+                return i;
+            }
         }
 
         public int UpdateChainsGroup(ChainsGroup chainsGroup)
