@@ -124,7 +124,7 @@
             UpdateDepartment: function (id, departmentName) {
                     axios.post('@Url.Action("Update", "Department")', { department: { Id: id, DepartmentName: departmentName} }).then(
                         (response) => {
-                            alert("添加成功")
+                            alert("修改成功")
                             console.log(response);
                             if (response.data > 0) {
                                 this.getAllUser();

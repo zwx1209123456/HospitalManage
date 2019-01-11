@@ -34,5 +34,11 @@ namespace IServices
         /// <param name="arrangerule"></param>
         /// <returns></returns>
         int Update(Arrangerule arrangerule);
+        /// <summary>
+        /// 根据id，反填排班规则
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        int Get(int Id);
     }
 }

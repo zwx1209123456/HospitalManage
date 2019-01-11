@@ -1,0 +1,67 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <table>
+            <tr>
+                <td>序号</td>
+                <td>专业组颜色</td>
+                <td>名称</td>
+                <td>相关科室</td>
+                <td>带教</td>
+                <td>组长</td>
+                <td>组员</td>
+            </tr>
+            <tr v-for="specialty in SpecialtiesList">
+                <td>{{specialty.Id}}</td>
+                <td>{{specialty.SpecialtyColor}}</td>
+                <td>{{specialty.SpecialtyName}}</td>
+                <td>{{specialty.DepartmentName}}</td>
+                <td>{{specialty.TeachingName}}</td>
+                <td>{{specialty.GroupLeaderName}}</td>
+                <td>{{specialty.GropCrewName}}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+        //表格
+        var vm = new Vue({
+            //提供一个在页面上已存在的 DOM 元素作为 Vue 实例的挂载目标。可以是 CSS 选择器，也可以是一个 HTMLElement 实例。
+            el: "#app",
+            data: {
+                SpecialtiesList: [],
+            },
+            //el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用该钩子。如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$el 也在文档内。
+            mounted() {
+                this.GetSpecialtie();
+            },
+            methods: {
+                GetSpecialtie: function () {
+                    axios.get('@Url.Action("GetSpecialties", "Specialty")').then(
+                        (response) => {
+                            this.SpecialtiesList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+            },
+        });
+</script>

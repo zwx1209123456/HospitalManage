@@ -9,6 +9,9 @@ namespace HospitalManage.Controllers
     using Services;
     using IServices;
     using Models;
+    /// <summary>
+    /// 用户管理
+    /// </summary>
     public class UsersController : Controller
     {
         IDepartmentServices idepartmentServices = null;

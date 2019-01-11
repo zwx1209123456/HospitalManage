@@ -63,6 +63,21 @@ namespace Services
             }
         }
         /// <summary>
+        /// 根据id，反填排班规则
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public int Get(int Id)
+        {
+            using (MySqlConnection conn = dapper.GetConnection())
+            {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@_Id", Id);
+                return conn.Execute("RuleGet", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                throw new NotImplementedException();
+            }
+        }
+        /// <summary>
         /// 修改排班规则
         /// </summary>
         /// <param name="arrangerule"></param>

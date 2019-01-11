@@ -510,6 +510,8 @@
     <Content Include="Views\Case\LeftMenu.cshtml" />
     <Content Include="Views\Case\HomePage.cshtml" />
     <Content Include="Views\Classes\Update.cshtml" />
+    <Content Include="Views\Specialty\Index.cshtml" />
+    <Content Include="Views\Rule\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -9,6 +9,9 @@ namespace HospitalManage.Controllers
     using Services;
     using IServices;
     using Models;   
+    /// <summary>
+    /// 排班规则
+    /// </summary>
     public class RuleController : Controller
     {
         IClassesService iclassesService = null;
@@ -69,11 +72,12 @@ namespace HospitalManage.Controllers
         /// 修改排班规则
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        
         public ActionResult Update()
         {
             return View();
         }
+        [HttpPost]
         public int Update(Arrangerule arrangerule)
         {
             return iruleServices.Update(arrangerule);
@@ -88,6 +92,17 @@ namespace HospitalManage.Controllers
         {
             //return idepartmentServices.GetDepartments();
             return Json(iclassesService.GetClasses(), JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult RuleGet()
+        {
+            return View();
+        }
+        [HttpGet]
+        // GET: Users
+        public JsonResult RuleGets(int Id)
+        {
+            //return idepartmentServices.GetDepartments();
+            return Json(iruleServices.Get(Id), JsonRequestBehavior.AllowGet);
         }
     }
 }
