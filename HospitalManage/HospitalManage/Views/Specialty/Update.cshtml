@@ -1,0 +1,310 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Update</title>
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+    <style>
+        .searchBox {
+            width: 220px;
+            height: 18px;
+            position: relative;
+        }
+
+        .select {
+            width: 60%;
+            height: 100%;
+        }
+
+        .down {
+            position: absolute;
+            width: 0;
+            border: 9px solid transparent;
+            border-top: 11px solid black;
+            top: 8px;
+            right: 7px;
+            cursor: pointer;
+        }
+
+        .list {
+            width: 100%;
+        }
+
+            .list > li {
+                height: 30px;
+                background: white;
+                border: 1px solid lightgray;
+                border-top: none;
+            }
+
+        #aaa {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <table>
+            <tr>
+                <td>
+                    专业组名称
+                </td>
+                <td>
+                    <input id="Text1" type="text" v-model="entity.SpecialtyName" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    颜色设置
+                </td>
+                <td>
+                    <input id="Text1" type="color" style="width:60px;height:20px" v-model="entity.SpecialtyColor" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    关联科室
+                </td>
+                <td>
+
+                    <select v-model="entity.DepartmentID">
+                        <option value="0">--请选择--</option>
+                        <option v-for="orgMaInfo in DepartmentList" v-bind:value="orgMaInfo.Id">
+                            {{orgMaInfo.DepartmentName}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <div class="searchBox">
+            组员设置 &nbsp;&nbsp;<input type="text" class="select">
+            <div class="down" v-on:click="show"></div>
+            <div v-show="listShow">
+                <ul class="list" v-for="(item,index) in TierList">
+                    <li id="aaa">
+                        <input type="checkbox" :id="item" class="checkItem" :value="item" v-model="GropCrew">
+                        <label :for="item">{{item.UserName}}</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div calss="bbb" style="margin-top:50px;text-align:center">
+            <table border="1" cellspacing="0" cellpadding="0" style="width:500px;">
+                <tr>
+                    <td width="5%">序号</td>
+                    <td width="8%">姓名</td>
+                    <td width="7%">是否带教</td>
+                    <td width="7%">是否组长</td>
+                    <td width="6%">操作</td>
+                </tr>
+                <tr v-for="(item,index) in GropCrew">
+                    <td width="5%">{{index+1}}</td>
+                    <td width="8%">{{item.UserName}}</td>
+
+                    <td width="7%">
+                        <div v-if="item.DutyID==2">
+                            <input id="Radio1" type="radio" checked="checked" /> 是
+                        </div>
+                        <div v-else>
+                            <input id="Radio1" type="radio" value="否" /> 否
+                        </div>
+                    </td>
+                    <td width="7%">
+                        <div v-if="item.DutyID==3">
+                            <input id="Radio1" type="radio" checked="checked" /> 是
+                        </div>
+                        <div v-else>
+                            <input id="Radio1" type="radio" value="否" /> 否
+                        </div>
+                    </td>
+                    <td width="6%"><button v-on:click="removeTodo(index)">X</button></td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <input id="Button1" type="button" value="确定" v-on:click="AddSpecialty(SpecialtyName, SpecialtyColor, DepartmentID, GropCrew, GroupLeader, Teaching)" />
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            GroupLeader: "",
+            Teaching:"",
+            DepartmentList: [],
+            TierList: [],
+            DepartmentID: 0,
+            GropCrew: [],
+            UserName: "",
+            SpecialtyName: "",
+            SpecialtyColor: "",
+            listShow: false,
+            search: '',
+            items: [],//下拉列表的选项数据，此数据可以从父组件传过来，通过props接收，接收到props数据后赋值给该数据即可
+            data1: {
+                type: Array,
+                default: []
+            },
+            entity: {
+                DepartmentID: null,
+                DepartmentName: null,
+                GropCrew: null,
+                GropCrewName: null,
+                GroupLeader: null,
+                GroupLeaderName: null,
+                Id: null,
+                SpecialtyColor: null,
+                SpecialtyName: null,
+                Teaching: null,
+                TeachingName: null
+            },
+        },
+        mounted() {
+            //加载部门
+            this.getAllUser();
+            //删除
+            this.removeTodo();
+            this.GetSpecialty(@Request.QueryString["Id"]);
+        },
+        watch: {
+            DepartmentID: function (newvalue, oldvalue) {
+                this.getTierList(newvalue);
+            },
+            search: {
+                handler() {//搜索框输入变化触发
+                    this.listShow = true;
+                },
+                deep: true // 深度监视
+            }
+        },
+        methods: {
+            AddSpecialty: function (Id,SpecialtyName, SpecialtyColor, DepartmentID, GropCrew, GroupLeader, Teaching) {
+                var a = GropCrew;
+                var Teaching = [];
+                var GroupLeader = [];
+                var GropCrew1 = [];
+                var GropCrewName = [];
+                var GroupLeaderName = [];
+                var TeachingName = [];
+                for (var i = 0; i < a.length; i++) {
+                    if (a[i].DutyID == 2) {
+                        TeachingName.push(a[i].UserName)
+                        Teaching.push(a[i].Id);
+                    }
+                    else if (a[i].DutyID == 3) {
+                        GroupLeaderName.push(a[i].UserName)
+                        GroupLeader.push(a[i].Id);
+                    }
+
+                    else {
+                        GropCrewName.push(a[i].UserName)
+                        GropCrew1.push(a[i].Id)
+                    }
+                };
+                var param = new URLSearchParams();
+                param.append("Id",Id);
+                param.append("SpecialtyName", SpecialtyName);
+                param.append("SpecialtyColor", SpecialtyColor);
+                param.append("DepartmentID", DepartmentID);
+                param.append("GropCrew", GropCrew1);
+                param.append("GroupLeader", GroupLeader);
+                param.append("Teaching", Teaching);
+                param.append("GropCrewName", GropCrewName);
+                param.append("GroupLeaderName", GroupLeaderName);
+                param.append("TeachingName", TeachingName);
+                console.log(param);
+                axios.post('@Url.Action("Update", "Specialty")',param).then(
+                    (response) => {
+                        if (response.data > 0) {
+                            alert("修改成功")
+                        }
+                        else {
+                            alert("该用户已存在")
+                        }
+                    },
+                    (response) => {
+                        alert(response.status);
+                    }
+                ).catch(function (response) {
+                    alert(response);
+                });
+            },
+            //获取部门
+            getAllUser: function () {
+                axios.get('@Url.Action("GetDepartments", "Department")').then(
+                    (response) => {
+                        this.DepartmentList = response.data;
+                    },
+                    (response) => {
+                        alert(response.status);
+                    }
+                ).catch(function (response) {
+                    alert(response);
+                });
+            },
+            //获取人员
+            getTierList: function () {
+                console.log(this.DepartmentID)
+                axios.post('@Url.Action("GetUsers", "Specialty")', { DepartmentID: this.DepartmentID }).then(
+                    (response) => {
+                        console.log(response.data)
+                        this.TierList = response.data;
+
+                    },
+                    (response) => {
+                        alert(response.status);
+                    }
+                ).catch(function (response) {
+                    alert(response);
+                });
+            },
+            show() {
+                this.listShow = !this.listShow;
+                if (this.listShow == true) {
+                    this.GropCrew = [];
+                }
+            },
+            removeTodo: function (index) {
+                this.GropCrew.splice(index, 1);
+            },
+            GetSpecialty: function (Id) {
+                var that = this;
+                console.log(Id)
+                var param = new URLSearchParams();
+                param.append("Id", Id);
+                axios.get('@Url.Action("GetSpecialty", "Specialty")', { params: {Id:Id} }).then(
+                    (response) => {
+                        console.log(response.data)
+                        if (response.data) {
+                            that.entity=response.data;
+                            that.DepartmentID = response.data.DepartmentID;
+                            this.getTierList();
+                            this.GropCrew = response.data.GropCrew.split(',');
+                            
+                                console.log(this.GropCrew)
+                            //that.getTierList();
+                        }
+                    },
+                    (response) => {
+                        alert(response.status);
+                    }
+                ).catch(function (response) {
+                    alert(response);
+                });
+            },
+
+        },
+
+
+        });
+</script>

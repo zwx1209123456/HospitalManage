@@ -26,5 +26,23 @@ namespace IServices
         /// </summary>
         /// <returns></returns>
         List<Specialty> GetSpecialties();
+        /// <summary>
+        /// 删除专业组
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        int Delete(int Id);
+        /// <summary>
+        /// 修改专业组
+        /// </summary>
+        /// <param name="specialty"></param>
+        /// <returns></returns>
+        int Update(Specialty specialty);
+        /// <summary>
+        /// 查询单个分组
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        Specialty GetSpecialty(int Id);
     }
 }
