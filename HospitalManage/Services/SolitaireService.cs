@@ -21,7 +21,7 @@ namespace Services
             using (MySqlConnection conn=DapperHelper.Instance().GetConnection())
             {
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("SolitaireClassID", solitaire.SolitaireClassID);
+                parameters.Add("SolitaireClassID", solitaire.ClassesId);
                 parameters.Add("StartSolitaire", solitaire.StartSolitaire);
                 parameters.Add("LastStartSolitaire", solitaire.LastStartSolitaire);
                 parameters.Add("ChainsGroupIds", solitaire.ChainsGroupIds);
