@@ -101,7 +101,7 @@
 
 
     <script type="text/javascript">
-        var a = "@ViewBag.ids";
+       
         var vm = new Vue({
             el: "#app",
             data: {
@@ -113,8 +113,7 @@
                 chainsGroupList: [{ Id: "", GroupLeader: "", GropCrew: "", ClassesId: 0, SortNumber: 1 }],
                 gropCrewList: [],
                 groupList: [],
-                SortNumber: 1,
-               // GropCrew: @ViewBag.ids ,
+                SortNumber: 1,         
                 GropCrew: "@ViewBag.ids",
                 GroupLeader: "",
                 id: 1
