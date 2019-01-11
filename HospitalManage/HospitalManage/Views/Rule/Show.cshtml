@@ -14,7 +14,12 @@
 </head>
 <body>
     <div id="app">
-        <table>
+        <div class="tools">
+            <ul class="toolbar">
+                <li><a href="#" onclick="location.href='/Rule/Add'"><span><img src="~/images/t01.png" /></span>添加</a></li>
+            </ul>
+        </div>
+        <table border="1" cellspacing="0" cellpadding="0" style="width:500px;">
             <tr>
                 <th>编号</th>
                 <th>序号</th>
@@ -34,9 +39,9 @@
                     {{contact.TimeThree}}
                     {{contact.ClassesName1}}
                     @*<input id="Text1" type="text" v-model="contact.ClassesOne" style="border:0" />
-        <input id="Text1" type="text" v-model="contact.TimeTwo" style="border:0" />
-        <input id="Text1" type="text" v-model="contact.TimeThree" style="border:0" />
-        <input id="Text1" type="text" v-model="contact.ClassesTwo" style="border:0" />*@
+                    <input id="Text1" type="text" v-model="contact.TimeTwo" style="border:0" />
+                    <input id="Text1" type="text" v-model="contact.TimeThree" style="border:0" />
+                    <input id="Text1" type="text" v-model="contact.ClassesTwo" style="border:0" />*@
                 </td>
                 <td>
                     @*<input id="Text1" type="text" v-model="contact.IsEnabled" style="border:0" />*@
