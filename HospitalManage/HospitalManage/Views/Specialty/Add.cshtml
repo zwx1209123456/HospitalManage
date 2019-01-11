@@ -130,7 +130,7 @@
                         </div>
                     </td>                   
                     <td width="7%">
-                        <div v-if="item.DutyID==17">
+                        <div v-if="item.DutyID==3">
                             <input id="Radio1" type="radio" checked="checked" /> 是
                         </div>
                         <div v-else>
@@ -196,11 +196,11 @@
                 var GroupLeaderName = [];
                 var TeachingName = [];
                 for (var i = 0; i < a.length; i++) {
-                    if (a[i].DutyID == 16) {
+                    if (a[i].DutyID == 2) {
                         TeachingName.push(a[i].UserName)
                         Teaching.push(a[i].Id);
                     }                   
-                    else if (a[i].DutyID == 17) {
+                    else if (a[i].DutyID == 3) {
                         GroupLeaderName.push(a[i].UserName)
                         GroupLeader.push(a[i].Id);
                     }
