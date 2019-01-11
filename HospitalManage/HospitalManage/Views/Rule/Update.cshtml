@@ -8,63 +8,29 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Add</title>
-    <script src="~/Scripts/vue.js"></script>
+    <title>Show</title>
     <script src="~/Scripts/axios.js"></script>
-    <style>
-        .searchBox {
-            width: 200px;
-            height: 26px;
-            position: relative;
-        }
-
-        .select {
-            width: 98%;
-            height: 100%;
-        }
-
-        .down {
-            position: absolute;
-            width: 0;
-            border: 9px solid transparent;
-            border-top: 11px solid black;
-            top: 10px;
-            right: 7px;
-            cursor: pointer;
-        }
-
-        .list {
-            width: 100%;
-        }
-
-            .list > li {
-                height: 20px;
-                background: white;
-                border: 1px solid lightgray;
-                border-top: none;
-            }
-    </style>
+    <script src="~/Scripts/vue.js"></script>
 </head>
 <body>
     <div id="app">
-        
-        <table>
+        <table class="table-bordered border:1px">
             <tr>
-                <td>固定相连班次设置（一个班次带出令一个班次的设置）</td>
-            </tr>
-            <tr>
-
+                <td>编号</td>
                 <td>时间1</td>
                 <td>班次1</td>
                 <td>时间2</td>
                 <td>时间3</td>
                 <td>班次2</td>
-                <td>序号：</td>
+                <td>是否生效</td>
+                <td>序号</td>
+                <td>操作</td>
             </tr>
-            <tr>
+            <tr v-for="(contact,key,index) in RuleList">
+                <td><input id="Text1" type="text" v-model="contact.Id" style="border:0" /></td>
                 <td>
                     <div class="searchBox">
-                        <input type="text" class="select" v-model="TimeOne">
+                        <input type="text" class="select" v-model="contact.TimeOne">
                         <div class="down" v-on:click="show"></div>
                         <div v-show="listShow">
                             <ul class="list" v-for="(item,index) in TimeOneList">
@@ -77,10 +43,9 @@
                         </div>
 
                     </div>
-
                 </td>
                 <td>
-                    <select id="Select1" v-model="ClassesName">
+                    <select id="Select1" v-model="contact.ClassesId">
                         <option value="请选择">--请选择--</option>
                         <option v-for="item in ClassesOneList" v-bind:value="item.Id">
                             {{item.ClassesName}}
@@ -88,7 +53,7 @@
                     </select>
                 </td>
                 <td>
-                    <select id="Select1" v-model="TimeTwo">
+                    <select id="Select1" v-model="contact.TimeTwo">
                         <option value="请选择">--请选择--</option>
                         <option v-for="TimeTwo in TimeTwoList" v-bind:value="TimeTwo">
                             {{TimeTwo}}
@@ -96,7 +61,7 @@
                     </select>
                 </td>
                 <td>
-                    <select id="Select1" v-model="TimeThree">
+                    <select id="Select1" v-model="contact.TimeThree">
                         <option value="请选择">--请选择--</option>
                         <option v-for="TimeThree in TimeThreeList" v-bind:value="TimeThree">
                             {{TimeThree}}
@@ -104,7 +69,7 @@
                     </select>
                 </td>
                 <td>
-                    <select id="Select1" v-model="ClassesName1">
+                    <select id="Select1" v-model="contact.ClassesIds">
                         <option value="请选择">--请选择--</option>
                         <option v-for="item in ClassesTwoList" v-bind:value="item.Id">
                             {{item.ClassesName}}
@@ -112,41 +77,39 @@
                     </select>
                 </td>
                 <td>
-                    <input id="Text1" type="text" v-model="Number" />
+                    <input id="Text1" type="text" v-model="contact.IsEnabled" style="border:0" />
+
                 </td>
                 <td>
-                    <a href="#" v-on:click="AddRule(TimeOne, ClassesName, TimeTwo, TimeThree, ClassesName1,Number)">保存</a>
+                    <input id="Text1" type="text" v-model="contact.Number" style="border:0" />
+
+                </td>
+                <td>
+                    <div v-if="contact.Id!=''">
+                        <a href="javascript:void(0)" v-on:click="UpdateUsers(contact.Id,contact.DepartmentID,contact.UserName, contact.UserNumber,contact.DutyID,contact.TierID, contact.AnnualDay, contact.EntryTime)">修改</a>
+
+                    </div>
 
                 </td>
             </tr>
         </table>
-
-       
-
     </div>
     <script>
         var vm = new Vue({
             el: "#app",
             data: {
-                listShow: false,
-                search: '',
-                data1: {
-                    type: Array,
-                    default: []
-                },
-                firstName: 'Fred',
-                lastName:'Flintstone',
+               Id:"",
+                RuleList: [],
                 TimeOneList: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                TimeOne:"请选择",
+                TimeOne: "请选择",
                 ClassesOneList: [],
                 ClassesName: "请选择",
                 TimeTwoList: ['第二天', '隔日', '下周'],
-                TimeTwo: "请选择",
+               
                 TimeThreeList: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
                 TimeThree: "请选择",
                 ClassesTwoList: [],
                 ClassesName1: "请选择",
-                Number:"",
             },
             created() {
                 console.log(this.data1)
@@ -173,27 +136,30 @@
             mounted() {
                 this.GetClassesOneList();
                 this.GetClassesTwoList();
-                
+                this.ShowRule();
             },
             methods: {
-                AddRule: function (TimeOne, ClassesName, TimeTwo, TimeThree, ClassesName1, Number) {
-                    var param = new URLSearchParams();
-                    param.append("TimeOne", TimeOne);
-                    param.append("ClassesId", ClassesName);
-                    param.append("TimeTwo", TimeTwo);
-                    param.append("TimeThree", TimeThree);
-                    param.append("ClassesIds", ClassesName1);
-                    param.append("Number", Number);
-                    //console.log(param.getAll())
-                    alert(ClassesName)
-                    alert(ClassesName1)
-                    axios.post("http://localhost:50484/Rule/Add", param).then(
+                ShowRule: function () {
+                    axios.get('@Url.Action("Shows", "Rule")').then(
+                       
+                        (response) => {
+                            
+                            console.log(response.data)
+                            this.RuleList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                DeleteRule: function (Id) {
+                        axios.post('@Url.Action("Delete", "Rule")', { Id: Id }).then(
                         (response) => {
                             if (response.data > 0) {
-                                alert("保存成功")
-                            }
-                            else {
-                                alert("已有该条规则")
+                                alert("删除成功")
+                                this.ShowRule();
                             }
                         },
                         (response) => {
@@ -202,14 +168,12 @@
                     ).catch(function (response) {
                         alert(response);
                     });
-                        
                 },
-                ///获取班次名称
+                  ///获取班次名称
                 GetClassesOneList: function () {
                      axios.get('@Url.Action("GetClasses", "Rule")').then(
-                        (response) => {
-                            console.log(response)
-                            this.ClassesOneList = response.data;                    
+                        (response) => {                           
+                            this.ClassesOneList = response.data;                            
                         },
                         (response) => {
                             alert(response.status);
@@ -221,9 +185,8 @@
                 ///获取班次名称
                 GetClassesTwoList: function () {
                      axios.get('@Url.Action("GetClasses", "Rule")').then(
-                        (response) => {
-                            console.log(response)
-                            this.ClassesTwoList = response.data;                    
+                        (response) => {                            
+                            this.ClassesTwoList = response.data;                                  
                         },
                         (response) => {
                             alert(response.status);
@@ -232,8 +195,6 @@
                         alert(response);
                     });
                 },
-
-
 
                 checkAll(e) { // 点击全选事件函数
                     var checkObj = document.querySelectorAll('.checkItem'); // 获取所有checkbox项
@@ -254,25 +215,9 @@
                     }
 
                 },
-           
-            //computed: {
-            //    TimeOneList: function () {
-            //        var search1 = this.search;
-            //        if (search1) {
-            //            return this.TimeOneList.filter(function (product) {
-            //                return Object.keys(product).some(function (key) {
-            //                    return String(product[key]).toLowerCase().indexOf(search1) > -1
-            //                })
-            //            })
-            //        }
-            //        return this.TimeOneList;
-            //    }
 
-
-            //    }
-            },
+            }
         })
-         
     </script>
 </body>
 </html>
