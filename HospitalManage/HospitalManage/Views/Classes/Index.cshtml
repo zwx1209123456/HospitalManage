@@ -175,7 +175,7 @@
             LoadData: function () {
                 var classes=[];
                 axios.get('@Url.Action("IndexShow", "Classes")').then(
-                    (response) => {
+                    (response) => { 
                         for (var i = 0; i < response.data.length; i++) {
                             console.log(response.data)
                             var str = response.data[i].ValidClasses;
