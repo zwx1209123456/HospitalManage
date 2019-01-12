@@ -70,15 +70,15 @@ namespace Services
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public int GetUsers(int Id)
+        public Users GetUsers(int Id)
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
               
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@_Id", Id);
-                return conn.Execute("Users_Get", parameters, commandType: System.Data.CommandType.StoredProcedure);
-                throw new NotImplementedException();
+                return conn.QueryFirst<Users>("Users_Get", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                
             }
         }
         /// <summary>

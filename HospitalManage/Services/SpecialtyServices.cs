@@ -22,7 +22,7 @@ namespace Services
         /// <returns></returns>
         public int Add(Specialty specialty)
         {
-             MySqlConnection conn = dapper.GetConnection();
+            MySqlConnection conn = dapper.GetConnection();
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@_SpecialtyName", specialty.SpecialtyName);
             parameters.Add("@_SpecialtyColor", specialty.SpecialtyColor);
@@ -33,8 +33,8 @@ namespace Services
             parameters.Add("@_GropCrewName", specialty.GropCrewName);
             parameters.Add("@_GroupLeaderName", specialty.GroupLeaderName);
             parameters.Add("@_TeachingName", specialty.TeachingName);
-            int res = conn.Execute("Specialty_Add", parameters, commandType: System.Data.CommandType.StoredProcedure);
-            return res;
+            int result = conn.Execute("Specialty_Add", parameters, commandType: System.Data.CommandType.StoredProcedure);
+            return result;
         }
         /// <summary>
         /// 获取用户表
@@ -57,6 +57,37 @@ namespace Services
             MySqlConnection conn = dapper.GetConnection();
             DynamicParameters parameters = new DynamicParameters();
             return conn.Query<Specialty>("Specialty_Shows", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
+        }
+        public int Delete(int Id)
+        {
+            MySqlConnection conn = dapper.GetConnection();
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@_Id", Id);
+            return conn.Execute("Specialty_Delete", parameters, commandType: System.Data.CommandType.StoredProcedure);
+        }
+        public int Update(Specialty specialty)
+        {
+            MySqlConnection conn = dapper.GetConnection();
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@_Id", specialty.Id);
+            parameters.Add("@_SpecialtyName", specialty.SpecialtyName);
+            parameters.Add("@_SpecialtyColor", specialty.SpecialtyColor);
+            parameters.Add("@_DepartmentID", specialty.DepartmentID);
+            parameters.Add("@_GropCrew", specialty.GropCrew);
+            parameters.Add("@_GroupLeader", specialty.GroupLeader);
+            parameters.Add("@_Teaching", specialty.Teaching);
+            parameters.Add("@_GropCrewName", specialty.GropCrewName);
+            parameters.Add("@_GroupLeaderName", specialty.GroupLeaderName);
+            parameters.Add("@_TeachingName", specialty.TeachingName);
+            int result = conn.Execute("Specialty_Add", parameters, commandType: System.Data.CommandType.StoredProcedure);
+            return result;
+        }
+       public Specialty GetSpecialty(int Id)
+        {
+            MySqlConnection conn = dapper.GetConnection();
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@_Id",Id);
+            return conn.QueryFirst<Specialty>("Specialty_GetSpecialty", parameters, commandType: System.Data.CommandType.StoredProcedure);
         }
     }
 }

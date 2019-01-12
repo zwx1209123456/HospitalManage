@@ -23,6 +23,18 @@
                 </td>
             </tr>
             <tr>
+                <td>所属科室：</td>
+                <td>
+                    <select id="Select1" v-model="DepartmentName">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="item in DepartmentList" v-bind:value="item.Id">
+                            {{item.DepartmentName}}
+                        </option>
+                    </select>
+
+                </td>
+            </tr>
+            <tr>
 
                 <td>姓名；</td>
                 <td>
@@ -36,27 +48,27 @@
                 </td>
             </tr>
             <tr>
-                <td>所属科室：</td>
+                <td>职务：</td>
                 <td>
-                    <select id="Select1" v-model="DepartmentName">
+                    <select id="Select1" v-model="DutyName">
                         <option value="请选择">--请选择--</option>
-                        <option v-for="item in DepartmentList" v-bind:value="item.Id">
-                            {{item.DepartmentName}}
+                        <option v-for="item in DutyList" v-bind:value="item.Id">
+                            {{item.DutyName}}
                         </option>
                     </select>
 
                 </td>
             </tr>
             <tr>
-                <td>职务：</td>
+                <td>层级：</td>
                 <td>
-                    @*<select id="Select1" v-model="DutyName"></select>*@
-                    @*<select id="Select1" v-model="DutyName">
-                    <option value="请选择">--请选择--</option>
-                    <option v-for="item in DutyList" v-bind:value="item.Id">
-                        {{item.DutyName}}
-                    </option>
-                </select>*@
+                    <select id="Select1" v-model="TierName">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="item in TierList" v-bind:value="item.Id">
+                            {{item.TierName}}
+                        </option>
+                    </select>
+
                 </td>
             </tr>
             <tr>
@@ -66,26 +78,15 @@
                 </td>
             </tr>
             <tr>
-                <td>入职时间：</td>
+                <td>入职时间：</td>  
                 <td>
                     <input id="Text1" type="text" v-model="EntryTime" />
                 </td>
             </tr>
-            <tr>
-                <td>层级：</td>
-                <td>
-                    @*<select id="Select1" v-model="TierName"></select>*@
-                    <select id="Select1" v-model="TierName">
-                        <option value="请选择">--请选择--</option>
-                        <option v-for="item in TierList" v-bind:value="item.Id">
-                            {{item.TierName}}
-                        </option>
-                    </select>
-                </td>
-            </tr>
+
             <tr>
                 <td>
-                    <a href="#" v-on:click="addUser(DepartmentName, TierName,UserName, UserNumber, AnnualDay, EntryTime)">修改</a>
+                    <a href="javascript:void(0)" v-on:click="UpdateUsers(Id, DepartmentName, UserName, UserNumber, DutyName, TierName, AnnualDay, EntryTime )">修改</a>
                 </td>
                 <td>
                     <a href="#" v-on:click="addUser()">取消</a>
@@ -97,30 +98,64 @@
         var vm = new Vue({
             el: "#app",
             data: {
+                Id: "",
+                
                 //科室
                 DepartmentList: [],
-               
+                DepartmentName: "请选择",
                 //职务
-                //DutyList: [],
-                //DutyName: "请选择",
+                DutyList: [],
+                DutyName: "请选择",
                 //层级
                 TierList: [],
-               
-                UserName:"",
+                TierName: "请选择",
+                UserName: "",
                 UserNumber: "",
                 AnnualDay: "",
-                EntryTime:"",
+                EntryTime: "",
             },
             mounted() {
+                this.GetUsers(@Request.QueryString["Id"]);
                 this.getDepartmentList();
-                //this.getDutyList();
+                this.getDutyList();
                 this.getTierList();
             },
             methods: {
-                addUser: function (DepartmentName, TierName,UserName, UserNumber, AnnualDay, EntryTime) {
-                    axios.post('@Url.Action("Add", "Users")', { users: { DepartmentID: DepartmentName, TierID: TierName, UserName: UserName, UserNumber: UserNumber, AnnualDay: AnnualDay, EntryTime: EntryTime} }).then(
-                        (response) => {
-                            alert("修改成功")
+                GetUsers: function (Id) {
+                    var that = this;
+                    console.log(Id)
+                    var param = new URLSearchParams();
+                    param.append("Id", Id);
+                    axios.get('@Url.Action("GetUsers", "Users")', { params:{ Id: Id }}).then(
+                            (response) => {
+                                if (response.data) {
+                                    that.Id = response.data.Id;
+                                    that.DepartmentName = response.data.DepartmentID;
+                                    that.UserName = response.data.UserName;
+                                    that.UserNumber = response.data.UserNumber;
+                                    that.DutyName = response.data.DutyID;
+                                    that.TierName = response.data.TierID;
+                                    that.AnnualDay = response.data.AnnualDay;
+                                    that.EntryTime = response.data.EntryTime;
+                                   
+                                }
+
+                            },
+                            (response) => {
+                                alert(response.status);
+                            }
+                        ).catch(function (response) {
+                            alert(response);
+                        });
+                },
+                ///修改用户信息
+                UpdateUsers: function (Id, DepartmentName, UserName, UserNumber, DutyName, TierName, AnnualDay, EntryTime) {
+                        axios.post('@Url.Action("Update", "Users")', { users: { Id: Id, DepartmentID: DepartmentName, UserName: UserName, UserNumber: UserNumber, DutyID: DutyName, TierID: TierName, AnnualDay: AnnualDay, EntryTime: EntryTime} }).then(
+                            (response) => {
+                                if (response.data > 0) {
+                                    alert("修改成功");
+                                   
+                                }
 
 
                         },
@@ -130,7 +165,7 @@
                     ).catch(function (response) {
                         alert(response);
                     });
-                },
+                    },
                 ///获取科室的下拉菜单
                 getDepartmentList: function () {
                     axios.get('@Url.Action("GetDepartments", "Users")').then(
@@ -146,7 +181,7 @@
                     });
                 },
                 ///获取职务的下拉菜单
-                @*getDutyList: function () {
+                getDutyList: function () {
                     axios.get('@Url.Action("GetDuties", "Users")').then(
                         (response) => {
                             console.log(response)
@@ -158,7 +193,7 @@
                     ).catch(function (response) {
                         alert(response);
                     });
-                },*@
+                },
                 ///获取层级的下拉菜单
                 getTierList: function () {
                     axios.get('@Url.Action("SelectTier", "Users")').then(

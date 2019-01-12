@@ -44,6 +44,6 @@ namespace Services
         public string ClassesName { get; set; }
         public string ClassesName1 { get; set; }
         public int ClassesIds { get; set; }
-        public string Number { get; set; }
+        
     }
 }

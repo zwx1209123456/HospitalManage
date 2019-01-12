@@ -42,7 +42,7 @@
                 </td>
             </tr>
             <tr>
-                <td>层级：</td>
+                <td>职务：</td>
                 <td>
                     <select id="Select1" v-model="DutyName">
                         <option value="请选择">--请选择--</option>
@@ -54,7 +54,7 @@
                 </td>
             </tr>
             <tr>
-                <td>职务：</td>
+                <td>层级：</td>
                 <td>
                     <select id="Select1" v-model="TierName">
                         <option value="请选择">--请选择--</option>
@@ -92,6 +92,7 @@
         var vm = new Vue({
             el: "#app",
             data: {
+
                 //科室
                 DepartmentList: [],
                 DepartmentName:"请选择",

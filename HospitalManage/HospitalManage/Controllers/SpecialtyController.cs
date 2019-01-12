@@ -1,5 +1,6 @@
 ﻿using IServices;
 using Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace HospitalManage.Controllers
         public ISpecialtyServices SpecialtyServices { get; set; }
         // GET: Specialty
 
+        private const int PAGECOUNT = 3;
         /// <summary>
         /// 添加专业分组
         /// </summary>
@@ -52,9 +54,57 @@ namespace HospitalManage.Controllers
             return View();
         }
         [HttpGet]
-        public JsonResult GetSpecialties()
+        public JsonResult GetSpecialties(string SpecialtyName,int Page = 1)
         {
-            return Json(SpecialtyServices.GetSpecialties(), JsonRequestBehavior.AllowGet);
+            List<Specialty> specialties = SpecialtyServices.GetSpecialties().ToList();
+            PageBox pageBox = new PageBox();
+            if (!string.IsNullOrWhiteSpace(SpecialtyName))
+            {
+                specialties = specialties.Where(r => r.SpecialtyName.Contains(SpecialtyName)).ToList();
+            }
+            pageBox.CurrentPage = Page;
+            pageBox.TotlePage = (specialties.Count / PAGECOUNT) + (specialties.Count % PAGECOUNT == 0 ? 0 : 1);
+            pageBox.Data = specialties.Skip((Page - 1) * PAGECOUNT).Take(PAGECOUNT);
+
+            //return pageBox;
+            return Json(pageBox, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 删除专业组
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public int Delete(int Id)
+        {
+            var result = SpecialtyServices.Delete(Id);
+            return result;
+        }
+        /// <summary>
+        /// 修改专业组
+        /// </summary>
+        /// <param name="specialty"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public int Update(Specialty specialty)
+        {
+            var result = SpecialtyServices.Update(specialty);
+            return result;
+        }
+        public ActionResult Update()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 获取单个分组
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public JsonResult GetSpecialty(int Id)
+        {
+            return Json(SpecialtyServices.GetSpecialty(Id), JsonRequestBehavior.AllowGet);
         }
     }
 }
