@@ -1,10 +1,13 @@
-﻿using IServices;
+﻿using CommHelps;
+using IServices;
 using Models;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Dapper;
 
 namespace HospitalManage.Controllers
 {
@@ -22,10 +25,23 @@ namespace HospitalManage.Controllers
         // GET: Solitaire
         public ActionResult Index()
         {
-            List<string []> w =new List<string[]> { new string[] { "1", "lkjlj", "khll", "ghg" }, new string[] { "jkh", "lkjlj", "khll", "ugjjhjg" }, new string[] { "jkh", "lkjlj", "khll", "ugjjg" } };
+            //List<string []> w =new List<string[]> { new string[] { "1", "lkjlj", "khll", "ghg" }, new string[] { "jkh", "lkjlj", "khll", "ugjjhjg" }, new string[] { "jkh", "lkjlj", "khll", "ugjjg" } };
         
-            ViewBag.y = w;
+            //ViewBag.y = w;
             return View();
+        }
+        /// <summary>
+        /// 接龙显示
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public JsonResult IndexShow()
+        {
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            {
+                List<SoChains> list = conn.Query<SoChains>("up_ChainsTable", null).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
         }
         /// <summary>
         /// 班次
@@ -64,13 +80,13 @@ namespace HospitalManage.Controllers
         }
         public ActionResult AddChains()
         {
-            ViewBag.ids = 0;
-            string  ids= Request.QueryString["ids"];//获取传过来的值
-            if (ids!=null)
-            {
-                ViewBag.ids = ids;
-            }
-            ViewBag.index = index;
+            //ViewBag.ids = 0;
+            //string  ids= Request.QueryString["ids"];//获取传过来的值
+            //if (ids!=null)
+            //{
+            //    ViewBag.ids = ids;
+            //}
+            
             return View();
         }
         /// <summary>
@@ -82,9 +98,21 @@ namespace HospitalManage.Controllers
         [HttpPost]
         public JsonResult AddChains(Solitaire solitaire, ChainsGroup[] chainsGroups)
         {
+            var ids = "";
             int j = chainsGroupService.AddChainsGroup(chainsGroups.ToList());
+            List<ChainsGroup> chainsGroupList= chainsGroupService.SelectChainsGroup().Where(m => m.ClassesId == solitaire.ClassesId).ToList();
+            foreach (var item in chainsGroupList)
+            {
+                ids += item.Id+",";
+            }
+            solitaire.ChainsGroupIds = ids.Substring(0,ids.Length-1);
             int i = solitaireService.AddSolitaire(solitaire);
-            return Json("");
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            {
+                List<SoChains> list = conn.Query<SoChains>("up_ChainsTable", null).ToList();
+                return Json(list);
+            }
+            
         }
 
         public ActionResult UodateChains()
@@ -95,6 +123,7 @@ namespace HospitalManage.Controllers
         public ActionResult AddMember(int id)
         {
             index = id;
+            ViewBag.index = index;
             return View(UsersList());
         }
     }

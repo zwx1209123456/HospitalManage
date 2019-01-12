@@ -37,7 +37,7 @@ namespace Services
 
         public List<Solitaire> SelectSolitaire()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public int UpdateSolitaire(Solitaire solitaire)

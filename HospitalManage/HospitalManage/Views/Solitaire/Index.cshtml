@@ -54,30 +54,29 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in @ViewBag.y)
-                {
-                    <tr>
-                        <td rowspan="3" v-if="@item[0]=='1'"><spam>1</spam></td>
-                        <td rowspan="3" v-if="@item[0]=='1'">er</td>
-                        <td rowspan="3" v-if="@item[0]=='1'">
-                            <span style="display:block">dsffsd</span>
-                            <span style="display:block">dsffsd</span>
-                        </td>
-                        <td>
-                            <span>@item[3]</span>
 
-                        </td>
-                        <td>hjg/hjgj/jgj</td>
-                        <td>hj</td>
-                        <td></td>
-                    </tr>
-                }
+                <tr v-for="(item,index) in chainsList">
+                    <td :rowspan="item.ChainsGroupIds.split(',').length" v-if="item.SortNumber==1">{{index+1}}</td>
+                    <td :rowspan="item.ChainsGroupIds.split(',').length" v-if="item.SortNumber==1">{{item.ClassesName}}</td>
+                    <td :rowspan="item.ChainsGroupIds.split(',').length" v-if="item.SortNumber==1">
+                        <span style="display:block">{{ Date.parse(item.StartSolitaire)}}</span>
+                        <span style="display:block">{{item.LastStartSolitaire}}</span>
+                    </td>
+                    <td>
+                        <span>{{item.SortNumber}}</span>
+
+                    </td>
+                    <td>{{item.GropCrew}}</td>
+                    <td>{{item.GroupLeader}}</td>
+                    <td></td>
+                </tr>
+
 
 
 
             </tbody>
         </table>
-        <div class="page" v-show="show">
+        <div class="page">
             <div class="pagelist">
                 <span class="jump">上一页</span> <span class="jump">1</span> <span class="jump">2</span> <span class="jump">3</span> <span class="jump">4</span> <span class="jump">5</span> <span class="jump">6</span> <span class="ellipsis">...</span> <span class="jump">下一页</span> <span class="jumppoint">跳转到：</span> <span class="jumpinp">
                     <input type="text">
@@ -89,7 +88,8 @@
     <br />
     <br />
     <script src="~/lib/layui/layui.js" charset="utf-8"></script>
-    <script src="~/js/x-layui.js" charset="utf-8"></script>
+
+    <script src="~/js/addChains-layui.js" charset="utf-8"></script>
     <script src="~/js/jquery2.js" charset="utf-8"></script>
     <script src="~/js/js.js" charset="utf-8"></script>
     <script>
@@ -112,15 +112,57 @@
         function user_management_edit(title, url, w, h) {
             x_admin_show(title, url, w, h);
         }
+        function setChainsList(chainsList) {
+            vm.getChainsList(chainsList);
+        }
     </script>
     <script type="text/javascript">
         $('.tablelist tbody tr:odd').addClass('odd');
     </script>
 
+
     <script type="text/javascript">
+
         var vm = new Vue({
-            el: "#app"
+            el: "#app",
+            data: {
+
+                chainsList:[]
+
+            },
+            mounted() {
+                this.showChainsList();
+            },
+            methods: {
+                getChainsList: function (chainss) {
+
+                    this.chainsList = [];
+                    for (var i = 0; i < chainss.length; i++) {
+                        this.chainsList.push(chainss[i]);
+                    }
+                },
+                showChainsList: function () {
+                    axios.get('@Url.Action("IndexShow", "Solitaire")'
+                    ).then(
+                        (response) => {
+                            this.chainsList = [];
+                            for (var i = 0; i < response.data.length; i++) {
+                                this.chainsList.push(response.data[i]);
+                            }
+                            //this.chainsList = response.data;
+                            //alert(this.chainsList);
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                }
+            }
+
         })
     </script>
-</body >
-</html >
+
+</body>
+</html>

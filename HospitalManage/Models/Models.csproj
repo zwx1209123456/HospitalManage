@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ChainsGroup.cs" />
     <Compile Include="Powerduty.cs" />
+    <Compile Include="SoChains.cs" />
     <Compile Include="Solitaire.cs" />
     <Compile Include="Specialty.cs" />
     <Compile Include="Tier.cs" />
