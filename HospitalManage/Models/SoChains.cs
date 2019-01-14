@@ -9,6 +9,9 @@ namespace Models
    public  class SoChains
     {
         public int Id { get; set; }
+        public int SolitaireId { get; set; }
+        public int SoSortNumber { get; set; }
+        
         /// <summary>
         /// 接龙班次ID
         /// </summary>

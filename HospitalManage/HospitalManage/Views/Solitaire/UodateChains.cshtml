@@ -1,9 +1,10 @@
 ﻿
-@*@{
+@{
     Layout = null;
 }
 
 <!DOCTYPE html>
+@model List<Models.SoChains>
 <html>
 <head>
     <meta charset="utf-8">
@@ -27,17 +28,21 @@
     <div id="app" class="x-body">
         <div style="margin:0 auto">
             <div>
+                <input id="Hidden1" type="hidden" v-bind:value="chainsGroupList[0].SolitaireId" />
+                <input id="Hidden2" type="hidden" v-bind:value="chainsGroupList[0].SoSortNumber" />
                 <span style="float:left;margin-right:20px">接龙班次</span>
-                <select lay-verify="required" name="cid" class="layui-input" style="width:66px;float:left" v-model="classesId">
-                    <option v-for="classes in ClassesList" v-bind:value="classes.Id">{{classes.ClassesName}}</option>
-
+                <select v-model="id" lay-verify="required" name="cid" class="layui-input" style="width:96px;float:left">
+                    <option v-for="classes in classesList" v-bind:value="classes.Id">{{classes.ClassesName}}</option>
+                    @*//v-bind:value="classes.id" v-on:input="id=$event.target.value"*@
                 </select>
             </div>
             <div style="margin-left:500px">
-                <span style="float:left;margin-right:20px">接龙班次</span>
+                <span style="float:left;margin-right:20px">接龙周期</span>
                 <div style="float:left">
-                    <div><span style="background-color:darkviolet">开始时间</span><input id="Text1" type="text" onclick="WdatePicker()" v-model="startTime" /></div>
-                    <div><span style="background-color:aquamarine">结束时间</span><input id="Text1" type="text" onclick="WdatePicker()" v-model="endTime" /></div>
+                    @*<div><span style="background-color:darkviolet">开始时间</span><input id="Text1" type="text" onclick="WdatePicker()" v-on:change="getstartTime()" v-model="startTime" /></div>
+                        <div><span style="background-color:aquamarine">结束时间</span><input id="Text1" type="text" onclick="WdatePicker()" v-on:change="getendTime()" v-model="endTime" /></div>*@
+                    <div><span style="background-color:darkviolet">开始时间</span><input id="startTime" type="text" onclick="WdatePicker()" /></div>
+                    <div><span style="background-color:aquamarine">结束时间</span><input id="endTime" type="text" onclick="WdatePicker()" /></div>
 
                 </div>
             </div>
@@ -55,27 +60,48 @@
 
                     </tr>
                 </thead>
-                <tbody>
-                    <tr v-for="(chainsGroup,index) in chainsGroupList">
-                        <td><input type="text" v-model="chainsGroup.SortNumber" /></td>
-                        <td onclick="user_management_edit('人员设置','/Solitaire/AddMember','800','500')">
-                            <input type="text" v-model="chainsGroup.GropCrew" />
+                <tbody id="tbl">
+                    @*<tr v-if="chainsGroupList" :id="chainsGroup.SortNumber" class="groupInfo" v-for="(chainsGroup,index) in chainsGroupList">
+                        <td>{{chainsGroup.SortNumber}}</td>
+                        <td v-if="chainsGroup.GropCrew!=''" v-on:click="user_management_edit('人员设置', '/Solitaire/AddMember?id='+chainsGroup.SortNumber, '800', '500')">
+                            {{chainsGroup.GropCrew}}
                         </td>
-                        <td v-if="gropCrewList!=''">
+                        <td v-else v-on:click="user_management_edit('人员设置', '/Solitaire/AddMember?id='+chainsGroup.SortNumber, '800', '500')">
+                            <img src="~/images/t06.png" />
+                        </td>
+                        <td v-if="chainsGroup.GropCrew!=''">
 
-                            <select lay-verify="required" name="cid" class="layui-input" v-model="chainsGroup.GroupLeader">
-                                <option v-for="gropCrewx in gropCrewList" v-bing:value="gropCrewx">{{gropCrewx}}</option>
+                            <select lay-verify="required" name="cid" class="layui-input">
+                                <option v-for="gropCrewx in chainsGroup.GropCrew.split(',')" v-bind:value="gropCrewx">{{gropCrewx}}</option>
                             </select>
                         </td>
-                        <td v-else></td>
-                        <td>+</td>
+                        <td v-else><input id="Hidden1" type="hidden" v-model="chainsGroup.GroupLeader" value="chainsGroup.GroupLeader" /></td>
+                        <td v-on:click="addRow(id)"><img src="~/images/t01.png" /></td>
+                    </tr>*@
+                    <tr  :id="chainsGroup.SortNumber" class="groupInfo" v-for="(chainsGroup,index) in chainsGroupList">
+                        <td :id="chainsGroup.GroupId">{{index+1}}</td>
+                        <td v-if="chainsGroup.GropCrew!=''" v-on:click="user_management_edit('人员设置', '/Solitaire/AddMember?id='+chainsGroup.SortNumber, '800', '500')">
+                            {{chainsGroup.GropCrew}}
+                        </td>
+                        <td v-else v-on:click="user_management_edit('人员设置', '/Solitaire/AddMember?id='+chainsGroup.SortNumber, '800', '500')">
+                            <img src="~/images/t06.png" />
+                        </td>
+                        <td v-if="chainsGroup.GropCrew!=''">
+
+                            <select lay-verify="required" name="cid" class="layui-input">
+                                <option v-for="gropCrewx in chainsGroup.GropCrew.split(',')" v-bind:value="gropCrewx">{{gropCrewx}}</option>
+                            </select>
+                        </td>
+                        <td v-else><input id="Hidden1" type="hidden" v-model="chainsGroup.GroupLeader" value="chainsGroup.GroupLeader" /></td>
+                        <td v-on:click="addRow(id)"><img src="~/images/t01.png" /></td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div style="width:200px;margin:50px auto">
-            <button class="layui-btn" v-onclick="addChains(classesId,startTime,endTime,)"> 保存 </button>
-            <button class="layui-btn" style="float:right"> 取消 </button>
+            <button class="layui-btn" v-on:click="updateChains()"> 保存 </button>
+            <button class="layui-btn" style="float:right" onclick="cancel()"> 取消 </button>
+
         </div>
     </div>
     <script src="~/lib/layui/layui.js" charset="utf-8">
@@ -88,35 +114,105 @@
             var form = layui.form()
                 , layer = layui.layer;
         });
-        function user_management_edit(title, url, w, h) {
-            x_admin_show(title, url, w, h);
+        //function user_management_edit(title, url, w, h) {
+        //    x_admin_show(title, url, w, h);
+        //}
+        function setChooseValues(ref, indexId) {
+
+            localStorage.ids = ref;
+            //alert(localStorage.ids);
+            //alert(indexId);
+            //$("#" + indexId).children("td").eq(1).children().eq(0).val(localStorage.ids);
+            //$("#" + indexId).children("td").eq(1).text(localStorage.ids);
+            vm.ChooseValues(indexId);
         }
+
+        function cancel() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
+        
+        function loadStart() {
+        
+            @*var list=@ViewBag.list;
+            alert(list);*@
+        }
+      
+        //window.onload = function () {
+        //    loadStart();
+        //    vm.show();
+        //}
+        @*$(document).ready(function () {
+            alert(@ViewBag.list);
+        });*@
     </script>
 
 
     <script type="text/javascript">
+
         var vm = new Vue({
             el: "#app",
-             data: {
-                 SolitaireList: [],
-                 ClassesList: [],
-                 chainsGroupList: [],
-                 gropCrewList:[]
+            data: {
+
+                sortNumber:1,
+                classesList: [],
+                chainsGroupList: [{ Id: 0, GroupLeader: "", GropCrew: "", ClassesId: 0, SortNumber: 1 }],
+                //gropCrewList: [],
+                groupList: [],
+                SortNumber: 1,
+                GropCrew: "",
+                GroupLeader: "",
+                id: 1
+              
             },
+            //computed: {//计算属性_——计算属性一定要return一个值，这个值存在属性里。计算属性和data属性可以简单的理解为数据的不同形式。
+            //    gropCrewList: function () {
+            //        return this.GropCrew.split(',')
+            //    }
+            //},
             mounted() {
-                this.getAllSolitaires();
+                this.load();
+                this.show();
                 this.getClassesList();
             },
             methods: {
-                getChainsGroupList:function () {
-                     axios.get('@Url.Action("ChainsGroupList", "Solitaire")'
+
+                user_management_edit(title, url, w, h) {
+                    console.log(url);
+                    x_admin_show(title, url, w, h);
+                },
+                load: function () {
+                    localStorage.ids = "";
+                    this.GropCrew = "";
+
+                    //alert(localStorage.ids);
+                    //alert(this.GropCrew);
+                },
+                ChangeDateFormat(cellval) {
+
+                    var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+
+                    var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+
+                    var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+
+                    return date.getFullYear() + "-" + month + "-" + currentDate;
+
+                },
+                show: function () {
+               
+                   
+               axios.get('@Url.Action("getUodateChains", "Solitaire")'
                     ).then(
                         (response) => {
-                            this.SolitaireList = [];
+                            this.chainsGroupList = [];
                             for (var i = 0; i < response.data.length; i++) {
-                                this.ClassesList.push(response.data[i]);
+                                this.chainsGroupList.push(response.data[i]);
                             }
-
+                            this.id = response.data[0].SolitaireClassID;
+                            $("#startTime").val(this.ChangeDateFormat(response.data[0].StartSolitaire));
+                            $("#endTime").val(this.ChangeDateFormat(response.data[0].LastStartSolitair));
+                            this.sortNumber = response.data.length;
                         },
                         (response) => {
                             alert(response.status);
@@ -124,14 +220,28 @@
                     ).catch(function (response) {
                         alert(response);
                     });
+                },
+                ChooseValues: function (rowNumber) {
+
+                    if (localStorage.ids != null) {
+                        this.GropCrew = localStorage.ids;
+                        var groupIndex = rowNumber-1;
+                        this.chainsGroupList[groupIndex].GropCrew = localStorage.ids;
+
+                    }
+
+                },
+                addRow: function (classesId) {
+                    this.sortNumber += 1;
+                    this.chainsGroupList.push({ Id:0, GroupLeader: "", GropCrew: "", ClassesId: classesId, SortNumber: this.sortNumber });
                 },
                 getClassesList: function () {
                      axios.get('@Url.Action("ClassesList", "Solitaire")'
                     ).then(
                         (response) => {
-                            this.SolitaireList = [];
+                            this.classesList = [];
                             for (var i = 0; i < response.data.length; i++) {
-                                this.ClassesList.push(response.data[i]);
+                                this.classesList.push(response.data[i]);
                             }
 
                         },
@@ -142,74 +252,34 @@
                         alert(response);
                     });
                 },
-                addChains: function (name) {
-                    axios.post('@Url.Action("AddSolitaire", "Solitaire")', { Solitaire: { SolitaireName: name} }).then(
-                        (response) => {
-                            this.SolitaireList = [];
-                            for (var i = 0; i < response.data.length; i++) {
-                                this.SolitaireList.push(response.data[i]);
-                            }
-                            this.SolitaireList.push({ Id: "", SolitaireName: "" });
-                        },
-                        (response) => {
-                            alert(response.status);
-                        }
-                    ).catch(function (response) {
-                        alert(response);
-                    });
-                },
-                getAllSolitaires: function () {
-                    axios.get('@Url.Action("SelectSolitaire", "Solitaire")'
-                    ).then(
-                        (response) => {
-                            this.SolitaireList = [];
-                            for (var i = 0; i < response.data.length; i++) {
-                                this.SolitaireList.push(response.data[i]);
-                            }
-                            this.SolitaireList.push({ Id: "", SolitaireName: "" });
-                        },
-                        (response) => {
-                            alert(response.status);
-                        }
-                    ).catch(function (response) {
-                        alert(response);
-                    });
-                },
 
-                updateSolitaire: function (id, name) {
-                    axios.post('@Url.Action("UpdateSolitaire", "Solitaire")', { Solitaire: { Id: id, SolitaireName: name} }).then(
+                updateChains: function () {
+                    var _this = this;
+                    _this.groupList = [];
+                    $(".groupInfo").each(function () {//注意不能id选择器，因为只会选中一个
+                        
+                        _this.groupList.push({ Id: this.cells[0].id, SortNumber: this.cells[0].innerText, ClassesId: _this.id, GropCrew: this.cells[1].innerText, GroupLeader: this.cells[2].firstElementChild.value });
+
+                    });
+                    var startTime = $("#startTime").val();
+                    var endTime = $("#endTime").val();
+
+                    axios.post('@Url.Action("UodateChains", "Solitaire")', {
+                        solitaire: { Id: $("#Hidden1").val(), SolitaireClassID: _this.id, StartSolitaire: startTime, LastStartSolitaire: endTime, SoSortNumber: $("#Hidden2").val()},
+                        chainsGroups: this.groupList
+                    }).then(
                         (response) => {
-                            this.SolitaireList = [];
-                            for (var i = 0; i < response.data.length; i++) {
-                                this.SolitaireList.push(response.data[i]);
-                            }
-                            this.SolitaireList.push({ Id: "", SolitaireName: ""});
-                        },
-                        (response) => {
-                            alert(response.status);
+                            parent.setChainsList(response.data)
                         }
                     ).catch(function (response) {
                         alert(response);
-                    });
-                },
-                deleteSolitaireById: function (id) {
-                    axios.post('@Url.Action("DelSolitaire", "Solitaire")', { id: id }).then(
-                        (response) => {
-                            this.SolitaireList = [];
-                            for (var i = 0; i < response.data.length; i++) {
-                                this.SolitaireList.push(response.data[i]);
-                            }
-                            this.SolitaireList.push({ Id: "", SolitaireName: "" });
-                        },
-                        (response) => {
-                            alert(response.status);
-                        }
-                    ).catch(function (response) {
-                        alert(response);
-                    });
+                        });
+
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
                 }
             }
         })
     </script>
 </body>
-</html>*@
+</html>

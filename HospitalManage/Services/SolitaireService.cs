@@ -18,31 +18,53 @@ namespace Services
     {
         public int AddSolitaire(Solitaire solitaire)
         {
-            using (MySqlConnection conn=DapperHelper.Instance().GetConnection())
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
             {
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("SolitaireClassID", solitaire.ClassesId);
+                parameters.Add("SolitaireClassID", solitaire.SolitaireClassID);
                 parameters.Add("StartSolitaire", solitaire.StartSolitaire);
                 parameters.Add("LastStartSolitaire", solitaire.LastStartSolitaire);
                 parameters.Add("ChainsGroupIds", solitaire.ChainsGroupIds);
-                int i = conn.Execute("up_AddSolitaire", parameters,commandType:CommandType.StoredProcedure);
+                parameters.Add("SoSortNumber", solitaire.SoSortNumber);
+                int i = conn.Execute("up_AddSolitaire", parameters, commandType: CommandType.StoredProcedure);
                 return i;
             }
         }
 
         public int DelSolitaire(int id)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("SolitaireClassID", id);
+                int i = conn.Execute("up_DelSolitaire", parameters, commandType: CommandType.StoredProcedure);
+                return i;
+            }
         }
 
         public List<Solitaire> SelectSolitaire()
         {
-            return null;
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            {
+                List<Solitaire> list = conn.Query<Solitaire>("up_SelectSolitaire", null, commandType: CommandType.StoredProcedure).ToList();
+                return list;
+            }
         }
 
         public int UpdateSolitaire(Solitaire solitaire)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("Id", solitaire.Id);
+                parameters.Add("SolitaireClassID", solitaire.SolitaireClassID);
+                parameters.Add("StartSolitaire", solitaire.StartSolitaire);
+                parameters.Add("LastStartSolitaire", solitaire.LastStartSolitaire);
+                parameters.Add("ChainsGroupIds", solitaire.ChainsGroupIds);
+                parameters.Add("SoSortNumber", solitaire.SoSortNumber);
+                int i = conn.Execute("up_UpdatecSolitaire", parameters, commandType: CommandType.StoredProcedure);
+                return i;
+            }
         }
     }
 }
