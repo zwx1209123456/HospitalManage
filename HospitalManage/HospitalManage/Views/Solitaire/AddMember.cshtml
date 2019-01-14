@@ -55,7 +55,7 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td><input type="checkbox" value="@item.UserName" name="chk_list" class="selected" id="@item.Id" ></td>
+                        <td><input type="checkbox" value="@item.UserName" name="chk_list" class="selected" id="@item.Id"></td>
                         <td>@(Model.IndexOf(item) + 1)</td>
                         <td>@item.UserName</td>
 
@@ -64,15 +64,11 @@
 
             </tbody>
         </table>
-        <div style="width:200px;margin:50px auto">
-            <button class="layui-btn" onclick="keep()"> 保存 </button>
-            <button class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"> 保存 </button>
-            <span class="layui-layer-setwin">
-                <a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"> qq</a>
-            </span>
-          
-            <button class="layui-btn" style="float:right"> 取消 </button>
-        </div>
+        @*<div style="width:200px;margin:50px auto">
+            <button class="layui-btn" onclick="keep()">确定</button>
+
+            <button class="layui-btn" style="float:right" onclick="cacel()">取消</button>
+        </div>*@@*——还可在layer.open里设置*@
     </div>
     <br />
     <br />
@@ -127,19 +123,26 @@
                 }
  
             })
+            var ref = userIds.substring(0, userIds.length - 1);
+            var indexId = @ViewBag.index;
+            parent.setChooseValues(ref, indexId);
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index); 
             //var  arrChk = $("input[name='chk_list]:checked");
             ////遍历得到每个checkbox的value值
             //for  (var  i = 0; i < arrChk.length; i++) {
             //    userIds += arrChk[i].value + ",";
             //}
 
-            var url = "?ids=" + userIds.substring(0,userIds.length - 2);
-           
-           
-               location.href = "/Solitaire/AddChains" + url;
+            //var url = "?ids=" + userIds.substring(0,userIds.length - 2);
+   
+            //location.href = "/Solitaire/AddChains" + url;
 
-       
            // x_admin_close();
+        }
+        function cacel() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index); 
         }
     </script>
 </body>

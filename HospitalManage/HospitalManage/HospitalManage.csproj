@@ -45,7 +45,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommHelps\DLL\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data, Version=8.0.13.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommHelps\DLL\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -295,6 +303,7 @@
     <Content Include="images\user.png" />
     <Content Include="images\void.jpg" />
     <Content Include="images\wc.png" />
+    <Content Include="js\addChains-layui.js" />
     <Content Include="js\cloud.js" />
     <Content Include="js\corechart.js" />
     <Content Include="js\external.js" />
@@ -534,6 +543,10 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommHelps\CommHelps.csproj">
+      <Project>{DB57A746-F133-499B-9007-2C38E4EBD6C3}</Project>
+      <Name>CommHelps</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IServices\IServices.csproj">
       <Project>{24bba5a3-3de4-423e-813f-52438032079e}</Project>
       <Name>IServices</Name>
