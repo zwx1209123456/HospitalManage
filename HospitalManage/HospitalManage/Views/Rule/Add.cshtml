@@ -34,12 +34,15 @@
         }
 
         .list {
+            position: absolute;
+            background: lightgray;
             width: 100%;
+            z-index: 9999;
         }
 
             .list > li {
-                height: 20px;
-                background: white;
+                height: 16.8px;
+                background: gray;
                 border: 1px solid lightgray;
                 border-top: none;
             }
@@ -47,40 +50,42 @@
 </head>
 <body>
     <div id="app">
-        
+
         <table>
             <tr>
-                <td>固定相连班次设置（一个班次带出令一个班次的设置）</td>
+                <td colspan="7">固定相连班次设置（一个班次带出令一个班次的设置）</td>
             </tr>
             <tr>
-
+                <td>序号：</td>
                 <td>时间1</td>
                 <td>班次1</td>
                 <td>时间2</td>
                 <td>时间3</td>
                 <td>班次2</td>
-                <td>序号：</td>
+
             </tr>
-            <tr>
+            <tr v-for="(items,index) in AddRuleList">
+                <td>{{index+1}}</td>
                 <td>
                     <div class="searchBox">
-                        <input type="text" class="select" v-model="TimeOne">
-                        <div class="down" v-on:click="show"></div>
-                        <div v-show="listShow">
-                            <ul class="list" v-for="(item,index) in TimeOneList">
+                        <input type="text" class="select" v-model="items.TimeOne">
+                        <div class="down" v-on:click="show(index)"></div>
+                        <div style="clear:both"></div>
+                        <div v-show="items.listShow" class="list">
+                            <ul v-for="(timeone,index) in TimeOneList">
                                 <li>
-                                    <input type="checkbox" :id="item" class="checkItem" :value="item" v-model="TimeOne">
-                                    <label :for="item">{{item}}</label>
+                                    <input type="checkbox" :value="timeone" v-model="items.TimeOne">
+                                    <label>{{timeone}}</label>
                                 </li>
                             </ul>
 
                         </div>
 
                     </div>
-
                 </td>
                 <td>
-                    <select id="Select1" v-model="ClassesName">
+                    <div style="clear:both"></div>
+                    <select id="Select1" v-model="items.ClassesName">
                         <option value="请选择">--请选择--</option>
                         <option v-for="item in ClassesOneList" v-bind:value="item.Id">
                             {{item.ClassesName}}
@@ -88,7 +93,7 @@
                     </select>
                 </td>
                 <td>
-                    <select id="Select1" v-model="TimeTwo">
+                    <select id="Select1" v-model="items.TimeTwo">
                         <option value="请选择">--请选择--</option>
                         <option v-for="TimeTwo in TimeTwoList" v-bind:value="TimeTwo">
                             {{TimeTwo}}
@@ -96,7 +101,7 @@
                     </select>
                 </td>
                 <td>
-                    <select id="Select1" v-model="TimeThree">
+                    <select id="Select1" v-model="items.TimeThree">
                         <option value="请选择">--请选择--</option>
                         <option v-for="TimeThree in TimeThreeList" v-bind:value="TimeThree">
                             {{TimeThree}}
@@ -104,26 +109,29 @@
                     </select>
                 </td>
                 <td>
-                    <select id="Select1" v-model="ClassesName1">
+                    <select id="Select1" v-model="items.ClassesName1">
                         <option value="请选择">--请选择--</option>
                         <option v-for="item in ClassesTwoList" v-bind:value="item.Id">
                             {{item.ClassesName}}
                         </option>
                     </select>
                 </td>
+
+                <td v-on:click="AddRow()">+</td>
+            </tr>
+            <tr>
                 <td>
-                    <input id="Text1" type="text" v-model="Number" />
-                </td>
-                <td>
-                    <a href="#" v-on:click="AddRule(TimeOne, ClassesName, TimeTwo, TimeThree, ClassesName1,Number)">保存</a>
+                    <a href="#" v-on:click="AddRule(AddRuleList)">保存</a>
 
                 </td>
+                
             </tr>
         </table>
 
-       
+
 
     </div>
+
     <script>
         var vm = new Vue({
             el: "#app",
@@ -134,10 +142,8 @@
                     type: Array,
                     default: []
                 },
-                firstName: 'Fred',
-                lastName:'Flintstone',
-                TimeOneList: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                TimeOne:"请选择",
+                TimeOneList: ['每天','周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                TimeOne: "请选择",
                 ClassesOneList: [],
                 ClassesName: "请选择",
                 TimeTwoList: ['第二天', '隔日', '下周'],
@@ -146,7 +152,7 @@
                 TimeThree: "请选择",
                 ClassesTwoList: [],
                 ClassesName1: "请选择",
-                Number:"",
+                AddRuleList: [{ listShow: false,TimeOne: [], ClassesId: "", TimeTwo: "", TimeThree: "", ClassesIds: ""}],
             },
             created() {
                 console.log(this.data1)
@@ -173,43 +179,44 @@
             mounted() {
                 this.GetClassesOneList();
                 this.GetClassesTwoList();
-                
+
             },
             methods: {
-                AddRule: function (TimeOne, ClassesName, TimeTwo, TimeThree, ClassesName1, Number) {
-                    var param = new URLSearchParams();
-                    param.append("TimeOne", TimeOne);
-                    param.append("ClassesId", ClassesName);
-                    param.append("TimeTwo", TimeTwo);
-                    param.append("TimeThree", TimeThree);
-                    param.append("ClassesIds", ClassesName1);
-                    param.append("Number", Number);
-                    //console.log(param.getAll())
-                    alert(ClassesName)
-                    alert(ClassesName1)
-                    axios.post("http://localhost:50484/Rule/Add", param).then(
-                        (response) => {
-                            if (response.data > 0) {
-                                alert("保存成功")
+                AddRule: function (dataList) {
+                    dataList.map(function (data, index) {
+                        var param = new URLSearchParams();
+                        param.append("TimeOne", data.TimeOne);
+                        param.append("ClassesId", data.ClassesName);
+                        param.append("TimeTwo", data.TimeTwo);
+                        param.append("TimeThree", data.TimeThree);
+                        param.append("ClassesIds", data.ClassesName1);
+                        axios.post("http://localhost:50484/Rule/Add", param).then(
+                            (response) => {
+                                if (response.data > 0) {
+                                    alert("保存成功")
+                                }
+                                else {
+                                    alert("已有该条规则")
+                                }
+                            },
+                            (response) => {
+                                alert(response.status);
                             }
-                            else {
-                                alert("已有该条规则")
-                            }
-                        },
-                        (response) => {
-                            alert(response.status);
-                        }
-                    ).catch(function (response) {
-                        alert(response);
+                        ).catch(function (response) {
+                            alert(response);
+                        });
                     });
-                        
+
+                },
+                AddRow: function () {
+                    this.AddRuleList.push({ listShow:false,TimeOne: [], ClassesId: "", TimeTwo: "", TimeThree: "", ClassesIds: ""});
                 },
                 ///获取班次名称
                 GetClassesOneList: function () {
                      axios.get('@Url.Action("GetClasses", "Rule")').then(
                         (response) => {
                             console.log(response)
-                            this.ClassesOneList = response.data;                    
+                            this.ClassesOneList = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -223,7 +230,7 @@
                      axios.get('@Url.Action("GetClasses", "Rule")').then(
                         (response) => {
                             console.log(response)
-                            this.ClassesTwoList = response.data;                    
+                            this.ClassesTwoList = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -247,32 +254,12 @@
                         this.TimeOneList = [];
                     }
                 },
-                show() {
-                    this.listShow = !this.listShow;
-                    if (this.listShow == true) {
-                        this.TimeOne = [];
-                    }
-
+                show: function (index) {
+                    this.AddRuleList[index].listShow = !this.AddRuleList[index].listShow;
                 },
-           
-            //computed: {
-            //    TimeOneList: function () {
-            //        var search1 = this.search;
-            //        if (search1) {
-            //            return this.TimeOneList.filter(function (product) {
-            //                return Object.keys(product).some(function (key) {
-            //                    return String(product[key]).toLowerCase().indexOf(search1) > -1
-            //                })
-            //            })
-            //        }
-            //        return this.TimeOneList;
-            //    }
-
-
-            //    }
             },
         })
-         
+
     </script>
 </body>
 </html>
