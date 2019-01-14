@@ -146,7 +146,7 @@
                 },
                          ///获取手术间的下拉菜单
                 getOperationList: function () {
-                    axios.get('@Url.Action("GetDepartments", "Arrangeoperation")').then(
+                    axios.get('@Url.Action("ShowOperation", "Arrangeoperation")').then(
                         (response) => {
                             console.log(response)
                             this.OperationList = response.data;                    

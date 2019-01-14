@@ -11,9 +11,13 @@ namespace HospitalManage.Controllers
     public class ArrangeoperationController : Controller
     {
         IArrangeoperationServices iarrangeoperationServices = null;
-        public ArrangeoperationController(IArrangeoperationServices arrangeoperationServices)
+        IDepartmentServices idepartmentServices = null;
+        IOperationServices ioperation = null;
+        public ArrangeoperationController(IArrangeoperationServices arrangeoperationServices, IDepartmentServices departmentServices, IOperationServices operation)
         {
+            idepartmentServices = departmentServices;
             iarrangeoperationServices = arrangeoperationServices;
+            ioperation = operation;
         }
         /// <summary>
         /// 显示手术申请
@@ -81,6 +85,26 @@ namespace HospitalManage.Controllers
             //return idepartmentServices.GetDepartments();
             return Json(iarrangeoperationServices.Get(Convert.ToInt32(Id)), JsonRequestBehavior.AllowGet);
 
+        }
+        /// <summary>
+        /// 科室显示
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        // GET: Users
+        public JsonResult GetDepartments()
+        {
+            return Json(idepartmentServices.GetDepartments(), JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 手术间
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        // GET: Users
+        public JsonResult ShowOperation()
+        {
+            return Json(ioperation.ShowOperation(), JsonRequestBehavior.AllowGet);
         }
     }
 }

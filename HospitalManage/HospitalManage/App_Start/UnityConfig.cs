@@ -59,6 +59,8 @@ namespace HospitalManage
             container.RegisterType<IChainsGroupService, ChainsGroupService>();
             ///手术间申请
             container.RegisterType<IArrangeoperationServices, ArrangeoperationServices>();
+            ///手术间
+            container.RegisterType<IOperationServices, OperationServices>();
 
         }
     }
