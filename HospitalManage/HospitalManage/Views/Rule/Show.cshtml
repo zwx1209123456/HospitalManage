@@ -22,34 +22,31 @@
         <table border="1" cellspacing="0" cellpadding="0" style="width:500px;">
             <tr>
                 <th>编号</th>
-                <th>序号</th>
+               
                 <th>排班规则</th>
                 <th>是否生效</th>
                 <th>操作</th>
             </tr>
             <tr v-for="(contact,key,index) in RuleList">
-                @*<td><input id="Text1" type="text" v-model="contact.Id" style="border:0" /></td>*@
+               
                 <td>{{contact.Id}}</td>
-                <td>{{contact.Number}}</td>
+               
                 <td>
-                    @*<input id="Text1" type="text" v-model="contact.TimeOne" style="border:0" />*@
+                   
                     {{contact.TimeOne}}
                     {{contact.ClassesName}},
                     {{contact.TimeTwo}}
                     {{contact.TimeThree}}
                     {{contact.ClassesName1}}
-                    @*<input id="Text1" type="text" v-model="contact.ClassesOne" style="border:0" />
-                    <input id="Text1" type="text" v-model="contact.TimeTwo" style="border:0" />
-                    <input id="Text1" type="text" v-model="contact.TimeThree" style="border:0" />
-                    <input id="Text1" type="text" v-model="contact.ClassesTwo" style="border:0" />*@
+                  
                 </td>
                 <td>
-                    @*<input id="Text1" type="text" v-model="contact.IsEnabled" style="border:0" />*@
+                   
                     {{contact.IsEnabled}}
                 </td>
                 <td>
                     <div v-if="contact.Id!=''">
-                        <a href="javascript:void(0)" v-on:click="UpdateUsers(contact.Id,contact.DepartmentID,contact.UserName, contact.UserNumber,contact.DutyID,contact.TierID, contact.AnnualDay, contact.EntryTime)">修改</a>
+                        <a href="#" v-on:click="GetRules(contact.Id)">修改</a>
                         <a href="javascript:void(0)" v-on:click="DeleteRule(contact.Id)">删除</a>
                     </div>
                     <div v-else>
@@ -84,6 +81,9 @@
                     ).catch(function (response) {
                         alert(response);
                     });
+                },
+                GetRules: function (Id) {
+                    location.href = "Update?Id=" + Id;
                 },
                 DeleteRule: function (Id) {
                         axios.post('@Url.Action("Delete", "Rule")', { Id: Id }).then(
