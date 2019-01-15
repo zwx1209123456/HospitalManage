@@ -187,6 +187,7 @@
     <Compile Include="Controllers\SolitaireController.cs" />
     <Compile Include="Controllers\RuleController.cs" />
     <Compile Include="Controllers\TierController.cs" />
+    <Compile Include="Controllers\ToArrOperationController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -526,6 +527,7 @@
     <Content Include="Views\Rule\Update.cshtml" />
     <Content Include="Views\Specialty\Update.cshtml" />
     <Content Include="Views\Arrangeoperation\Add.cshtml" />
+    <Content Include="Views\ToArrOperation\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
