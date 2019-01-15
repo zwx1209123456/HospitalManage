@@ -99,13 +99,31 @@ namespace HospitalManage.Controllers
         public JsonResult AddChains(Solitaire solitaire, ChainsGroup[] chainsGroups)
         {
             var ids = "";
-            int j = chainsGroupService.AddChainsGroup(chainsGroups.ToList());
-            List<ChainsGroup> chainsGroupList= chainsGroupService.SelectChainsGroup().Where(m => m.ClassesId == solitaire.ClassesId).ToList();
+            List<ChainsGroup> groupListToAdd = new List<ChainsGroup>();
+            foreach (var item in chainsGroups)
+            {
+                if (item.GropCrew!=null)
+                {
+                    groupListToAdd.Add(item);
+                }
+            }
+
+            int j = chainsGroupService.AddChainsGroup(groupListToAdd);
+            List<ChainsGroup> chainsGroupList= chainsGroupService.SelectChainsGroup().Where(m => m.ClassesId == solitaire.SolitaireClassID).ToList();
             foreach (var item in chainsGroupList)
             {
                 ids += item.Id+",";
             }
             solitaire.ChainsGroupIds = ids.Substring(0,ids.Length-1);
+            Solitaire solitaireModel = solitaireService.SelectSolitaire().LastOrDefault();
+            if (solitaireModel!=null)
+            {
+                solitaire.SoSortNumber = solitaireModel.SoSortNumber + 1;
+            }
+            else
+            {
+                solitaire.SoSortNumber = 1;
+            }
             int i = solitaireService.AddSolitaire(solitaire);
             using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
             {
@@ -114,17 +132,125 @@ namespace HospitalManage.Controllers
             }
             
         }
-
-        public ActionResult UodateChains()
+        static List<SoChains> list = new List<SoChains>();
+        public ActionResult UodateChains(string classesName)
         {
-            return View();
+            //string chainsClasses = Request.QueryString["classesName"].Trim();
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            {
+                list = conn.Query<SoChains>("up_ChainsTable", null).Where(m=>m.ClassesName== classesName).ToList();
+                //ViewBag.list = Json(list);
+                return View();
+            }
         }
-
+        /// <summary>
+        /// 修改反填
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public JsonResult getUodateChains()
+        {
+            return Json(list,JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 修改接龙
+        /// </summary>
+        /// <param name="solitaire"></param>
+        /// <param name="chainsGroups"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult UodateChains(Solitaire solitaire, ChainsGroup[] chainsGroups)
+        {
+            var ids = "";
+            List<ChainsGroup> chainsGroupsToAdd = new List<ChainsGroup>();
+            List<ChainsGroup> chainsGroupsToUpdate = new List<ChainsGroup>();
+            List<ChainsGroup> chainsGroupsToDel = new List<ChainsGroup>();
+            foreach (var item in chainsGroups)
+            {
+                if (item.Id==0)
+                {
+                    if (item.GropCrew!=null)
+                    {
+                        chainsGroupsToAdd.Add(item);
+                    }                             
+                }
+                else
+                {
+                    if (item.GropCrew !=null)
+                    {
+                        chainsGroupsToUpdate.Add(item);
+                    }
+                    else
+                    {
+                        chainsGroupsToDel.Add(item);
+                    }
+                }
+            }
+           
+            int i = 0;
+            if (chainsGroupsToUpdate.Count != 0)
+            {
+                
+                for (i = 0; i < chainsGroupsToUpdate.Count; i++)
+                {
+                    chainsGroupsToUpdate[i].SortNumber = i + 1;
+                }
+                int updateResult = chainsGroupService.UpdateChainsGroup(chainsGroupsToUpdate);
+            }
+            if (chainsGroupsToDel.Count != 0)
+            {
+                int updateResult = chainsGroupService.DelChainsGroup(chainsGroupsToDel);
+            }
+            int j = 0;
+            if (chainsGroupsToAdd.Count != 0)
+            {
+                ChainsGroup  chainsGroup = chainsGroupService.SelectChainsGroup().Where(m => m.ClassesId == solitaire.SolitaireClassID).LastOrDefault();
+                for (j = 0; j < chainsGroupsToAdd.Count; j++)
+                {
+                    chainsGroupsToAdd[j].SortNumber = chainsGroup.SortNumber + j+1;
+                }
+                int addResult = chainsGroupService.AddChainsGroup(chainsGroupsToAdd);
+            }
+            List<ChainsGroup> chainsGroupList = chainsGroupService.SelectChainsGroup().Where(m => m.ClassesId == solitaire.SolitaireClassID).ToList();
+            foreach (var item in chainsGroupList)
+            {
+                ids += item.Id + ",";
+            }
+            solitaire.ChainsGroupIds = ids.Substring(0, ids.Length - 1);
+            int result = solitaireService.UpdateSolitaire(solitaire);
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            {
+                List<SoChains> list = conn.Query<SoChains>("up_ChainsTable", null).ToList();
+                return Json(list);
+            }
+        }
+        /// <summary>
+        /// 添加组员
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult AddMember(int id)
         {
             index = id;
             ViewBag.index = index;
             return View(UsersList());
+        }
+        [HttpPost]
+        public void DelChains(int classesId)
+        {
+        
+            int i = 0;
+            int delSoResult = solitaireService.DelSolitaire(classesId);
+            List<ChainsGroup> chainsGroupsToDel = chainsGroupService.SelectChainsGroup().Where(m => m.ClassesId == classesId).ToList();
+       
+            int delChResult = chainsGroupService.DelChainsGroup(chainsGroupsToDel);
+            List<Solitaire> list = solitaireService.SelectSolitaire().ToList();
+            for (i = 0; i < list.Count; i++)
+            {
+                list[i].SoSortNumber = i + 1;
+                int updateResult = solitaireService.UpdateSolitaire(list[i]);
+            }
+           
         }
     }
 }

@@ -16,7 +16,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="~/css/x-admin.css" media="all">
     <link rel="stylesheet" href="~/css/pag.css" media="all">
-
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script src="~/Scripts/vue.js"></script>
     <script src="~/Scripts/axios.js"></script>
 </head>
@@ -32,9 +32,9 @@
             <ul class="toolbar" style="float:left">
 
                 <li onclick="user_management_show('用户查看','Dangan-look.html','600','500')"><span><img src="~/images/t06.png" /></span>查询</li>
-                <li><span><img src="~/images/t03.png" /></span>删除</li>
+                <li v-on:click="user_management_del()"><span><img src="~/images/t03.png" /></span>删除</li>
                 <li onclick="user_management_add('接龙设置','/Solitaire/AddChains','1000','600')"><span><img src="~/images/t01.png" /></span>添加</li>
-                <li onclick="user_management_edit('接龙设置','/Solitaire/UodateChains','1000','600')"><span><img src="~/images/t02.png" /></span>编辑</li>
+                <li v-on:click="user_management_edit('接龙设置','/Solitaire/UodateChains?classesName=','1000','600')"><span><img src="~/images/t02.png" /></span>编辑</li>
 
             </ul>
             <span class="x-right" style="line-height:25px">共有数据：88 条</span>
@@ -56,11 +56,13 @@
             <tbody>
 
                 <tr v-for="(item,index) in chainsList">
-                    <td :rowspan="item.ChainsGroupIds.split(',').length" v-if="item.SortNumber==1">{{index+1}}</td>
-                    <td :rowspan="item.ChainsGroupIds.split(',').length" v-if="item.SortNumber==1">{{item.ClassesName}}</td>
+                    <td :rowspan="item.ChainsGroupIds.split(',').length" v-if="item.SortNumber==1">{{item.SoSortNumber}}</td>
+                    <td :rowspan="item.ChainsGroupIds.split(',').length" v-if="item.SortNumber==1" v-on:click="clickfun" :id="item.SolitaireClassID">
+                        {{item.ClassesName}}
+                    </td>
                     <td :rowspan="item.ChainsGroupIds.split(',').length" v-if="item.SortNumber==1">
-                        <span style="display:block">{{ Date.parse(item.StartSolitaire)}}</span>
-                        <span style="display:block">{{item.LastStartSolitaire}}</span>
+                        <span style="display:block"><span style="display:block;margin-bottom:-10px">开始时间：</span>{{ChangeDateFormat(item.StartSolitaire)}}</span>
+                        <span style="display:block"><span style="display:block;margin-bottom:-10px">结束时间：</span>{{ChangeDateFormat(item.LastStartSolitaire)}}</span>
                     </td>
                     <td>
                         <span>{{item.SortNumber}}</span>
@@ -76,13 +78,13 @@
 
             </tbody>
         </table>
-        <div class="page">
-            <div class="pagelist">
-                <span class="jump">上一页</span> <span class="jump">1</span> <span class="jump">2</span> <span class="jump">3</span> <span class="jump">4</span> <span class="jump">5</span> <span class="jump">6</span> <span class="ellipsis">...</span> <span class="jump">下一页</span> <span class="jumppoint">跳转到：</span> <span class="jumpinp">
-                    <input type="text">
-                </span> <span class="jump gobtn">GO</span>
-            </div>
-        </div>
+        @*<div class="page">
+                <div class="pagelist">
+                    <span class="jump">上一页</span> <span class="jump">1</span> <span class="jump">2</span> <span class="jump">3</span> <span class="jump">4</span> <span class="jump">5</span> <span class="jump">6</span> <span class="ellipsis">...</span> <span class="jump">下一页</span> <span class="jumppoint">跳转到：</span> <span class="jumpinp">
+                        <input type="text">
+                    </span> <span class="jump gobtn">GO</span>
+                </div>
+            </div>*@
     </div>
     <br />
     <br />
@@ -108,13 +110,14 @@
         function user_management_show(title, url, w, h) {
             x_admin_show(title, url, w, h);
         }
-        // 用户-编辑
-        function user_management_edit(title, url, w, h) {
-            x_admin_show(title, url, w, h);
-        }
+
+        //gong子窗体调用
         function setChainsList(chainsList) {
             vm.getChainsList(chainsList);
         }
+
+
+
     </script>
     <script type="text/javascript">
         $('.tablelist tbody tr:odd').addClass('odd');
@@ -127,19 +130,57 @@
             el: "#app",
             data: {
 
-                chainsList:[]
-
+                chainsList:[],
+                chainsClasses: "",
+                chainsClassesId:0
             },
             mounted() {
                 this.showChainsList();
             },
             methods: {
+                clickfun: function (e) {
+                    var el = e.target;
+
+                    this.chainsClasses = $(el).text().trim();
+                    this.chainsClassesId = $(el).prop("id");
+                },
+                ChangeDateFormat(cellval) {
+
+                var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+
+                var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+
+                var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+
+                return date.getFullYear() + "-" + month + "-" + currentDate;
+
+                },
+                // 用户-编辑
+                user_management_edit: function (title, url, w, h) {
+
+                    x_admin_show(title, url + this.chainsClasses, w, h);
+                },
+                user_management_del: function () {
+                    alert(this.chainsClassesId);
+                    alert(this.chainsClasses);
+                    axios.post('@Url.Action("DelChains", "Solitaire")', { classesId: this.chainsClassesId }).then(
+                        (response) => {
+                            this.showChainsList();
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
                 getChainsList: function (chainss) {
 
-                    this.chainsList = [];
-                    for (var i = 0; i < chainss.length; i++) {
-                        this.chainsList.push(chainss[i]);
-                    }
+                    //this.chainsList = [];
+                    //for (var i = 0; i < chainss.length; i++) {
+                    //    this.chainsList.push(chainss[i]);
+                    //}
+                    this.showChainsList();
                 },
                 showChainsList: function () {
                     axios.get('@Url.Action("IndexShow", "Solitaire")'
@@ -151,6 +192,7 @@
                             }
                             //this.chainsList = response.data;
                             //alert(this.chainsList);
+
                         },
                         (response) => {
                             alert(response.status);

@@ -38,9 +38,22 @@ namespace Services
             }
         }
 
-        public int DelChainsGroup(int id)
+        public int DelChainsGroup(List<ChainsGroup> chainsGroupList)
         {
-            throw new NotImplementedException();
+            List<DynamicParameters> parametersList = new List<DynamicParameters>();
+            foreach (var chainsGroup in chainsGroupList)
+            {
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("Id", chainsGroup.Id);
+                parametersList.Add(parameters);
+            }
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            {
+
+                int i = conn.Execute("up_DelChainsgroup", parametersList, commandType: CommandType.StoredProcedure);
+                return i;
+            }
         }
 
         public List<ChainsGroup> SelectChainsGroup()
@@ -53,9 +66,27 @@ namespace Services
             }
         }
 
-        public int UpdateChainsGroup(ChainsGroup chainsGroup)
+        public int UpdateChainsGroup(List<ChainsGroup> chainsGroupList)
         {
-            throw new NotImplementedException();
+            List<DynamicParameters> parametersList = new List<DynamicParameters>();
+            foreach (var chainsGroup in chainsGroupList)
+            {
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("Id", chainsGroup.Id);
+                parameters.Add("GroupLeader", chainsGroup.GroupLeader);
+                parameters.Add("GropCrew", chainsGroup.GropCrew);
+                parameters.Add("ClassesId", chainsGroup.ClassesId);
+                parameters.Add("SortNumber", chainsGroup.SortNumber);
+
+                parametersList.Add(parameters);
+            }
+            using (MySqlConnection conn = DapperHelper.Instance().GetConnection())
+            {
+
+                int i = conn.Execute("up_UpdatecChainsgroup", parametersList, commandType: CommandType.StoredProcedure);
+                return i;
+            }
         }
     }
 }
