@@ -1,0 +1,74 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Indexs</title>
+    <script src="~/Scripts/axios.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+</head>
+<body>
+    <div id="app"> 
+        <table>
+            <tr>
+                <th>手术间</th>
+                <th>台次</th>
+                <th>病区</th>
+                <th>手术名称</th>
+                <th>主刀医生</th>
+                <th>器械</th>
+                <th>巡回</th>
+                <th>麻醉师</th>
+                <th>患者姓名</th>
+                <th>年龄</th>
+                <th>性别</th>
+            </tr>
+            <tr v-for="(contact,key,index) in OperationList">
+                <td>{{contact.OperationNames}}</td> 
+                <td>@*{{index+1}}*@</td>
+                <td>{{contact.DepartmentName}}</td>
+                <td>{{contact.OperationName}}</td>
+                <td>{{contact.OperatorDoctor}}</td>
+                <td>{{contact.Instrument}}</td>
+                <td>{{contact.Tour}}</td>
+                <td>{{contact.Anesthetist}}</td>
+                <td>{{contact.PatientName}}</td>
+                <td>{{contact.PatientAge}}</td>
+                <td>{{contact.PatientSex}}</td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                OperationList: [],
+
+            },
+            mounted() {
+                this.GetOperation();
+            },
+            methods: {
+                GetOperation: function () {
+                    axios.get('@Url.Action("Indexs", "Arrangeoperation")').then(
+                            (response) => {
+                                console.log(response)
+                                this.OperationList = response.data;
+                            },
+                            (response) => {
+                                alert(response.status);
+                            }
+                        ).catch(function (response) {
+                            alert(response);
+                        });
+                },
+            }
+        })
+    </script>
+</body>
+</html>

@@ -37,12 +37,12 @@
             <thead>
                 <tr>
                     <th>序号</th>
+                    <th>科室</th>
                     <th>姓名</th>
                     <th>工号</th>
-                    <th>科室</th>
-
-                    <th>层级</th>
                     <th>职务</th>
+                    <th>层级</th>
+                    
                     <th>年假天数</th>
                     <th>入职时间</th>
                     <th>操作</th>
@@ -50,23 +50,24 @@
             </thead>
             <tbody id="x-link">
                 <tr v-for="(contact,key,index) in UserList" class="odd" style="background-color:#ffffff">
+                    <td>{{contact.Id}}</td>
+                    <td>{{contact.DepartmentName}}</td>
+                    @*<td><input id="Text1" type="text" v-model="contact.Id" style="border:0" /></td>*@
+                    @*<td>
+            <select id="Select1" v-model="contact.DepartmentID" style="border:0">
+                <option value="请选择">--请选择--</option>
+                <option v-for="contact in DepartmentList" v-bind:value="contact.Id">
+                    {{contact.DepartmentName}}
+                </option>
+            </select>
 
-                    <td><input id="Text1" type="text" v-model="contact.Id" style="border:0" /></td>
-                    <td>
-                        <select id="Select1" v-model="contact.DepartmentID" style="border:0">
-                            <option value="请选择">--请选择--</option>
-                            <option v-for="contact in DepartmentList" v-bind:value="contact.Id">
-                                {{contact.DepartmentName}}
-                            </option>
-                        </select>
-
-                    </td>
-
-                    <td><input id="Text1" type="text" v-model="contact.UserName" style="border:0" /></td>
-
-                    <td><input id="Text1" type="text" v-model="contact.UserNumber" style="border:0" /></td>
-
-                    <td>
+        </td>*@
+                    <td>{{contact.UserName}}</td>
+                    @*<td><input id="Text1" type="text" v-model="contact.UserName" style="border:0" /></td>*@
+                    <td>{{contact.UserNumber}}</td>
+                    @*<td><input id="Text1" type="text" v-model="contact.UserNumber" style="border:0" /></td>*@
+                    <td>{{contact.DutyName}}</td>
+                    @*<td>
 
                         <select id="Select1" v-model="contact.DutyID" style="border:0">
                             <option value="请选择">--请选择--</option>
@@ -74,11 +75,11 @@
                                 {{contact.DutyName}}
                             </option>
                         </select>
-                    </td>
+                    </td>*@
 
 
-
-                    <td>
+                    <td>{{contact.TierName}}</td>
+                    @*<td>
 
                         <select id="Select1" v-model="contact.TierID" style="border:0">
                             <option value="请选择">--请选择--</option>
@@ -86,15 +87,15 @@
                                 {{contact.TierName}}
                             </option>
                         </select>
-                    </td>
+                    </td>*@
 
-
-                    <td><input id="Text1" type="text" v-model="contact.AnnualDay" style="border:0" /></td>
-
-                    <td><input id="Text1" type="text" v-model="contact.EntryTime" style="border:0" /></td>
+                    <td>{{contact.AnnualDay}}</td>
+                    @*<td><input id="Text1" type="text" v-model="contact.AnnualDay" style="border:0" /></td>*@
+                    <td>{{contact.EntryTime}}</td>
+                    @*<td><input id="Text1" type="text" v-model="contact.EntryTime" style="border:0" /></td>*@
                     <td>
                         <div v-if="contact.Id!=''">
-                            <a href="javascript:void(0)" v-on:click="UpdateUsers(contact.Id,contact.DepartmentID,contact.UserName, contact.UserNumber,contact.DutyID,contact.TierID, contact.AnnualDay, contact.EntryTime)">修改</a>
+                            <a href="#" v-on:click="GetUsers(contact.Id)">修改</a>
                             <a href="javascript:void(0)" v-on:click="DeleteUsers(contact.Id)">删除</a>
                         </div>
                         <div v-else>
@@ -163,24 +164,10 @@
                             alert(response);
                         });
                     },
-                    ///修改用户信息
-                    UpdateUsers: function (Id, DepartmentID, UserName, UserNumber, DutyID, TierID, AnnualDay, EntryTime) {
-                        axios.post('@Url.Action("Update", "Users")', { users: { Id: Id, DepartmentID: DepartmentID, UserName: UserName, UserNumber: UserNumber, DutyID: DutyID, TierID: TierID, AnnualDay: AnnualDay, EntryTime: EntryTime } }).then(
-                            (response) => {
-                                if (response.data > 0) {
-                                    alert("修改成功");
-                                    this.ShowUsers();
-                                }
-
-
-                        },
-                        (response) => {
-                            alert(response.status);
-                        }
-                    ).catch(function (response) {
-                        alert(response);
-                    });
+                    GetUsers: function (Id) {
+                        location.href = "Update?Id=" + Id;
                     },
+                    
                     ///删除用户信息
                     DeleteUsers: function (Id) {
                         axios.post('@Url.Action("Delete", "Users")', { Id: Id }).then(

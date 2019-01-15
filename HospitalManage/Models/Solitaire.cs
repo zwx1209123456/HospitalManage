@@ -10,25 +10,29 @@ namespace Models
     /// <summary>
     /// 接龙表
     /// </summary>
-  public   class Solitaire
+    public class Solitaire
     {
-     public int Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// 接龙班次ID
         /// </summary>
-     public int ClassesId { get; set; }
+        public int SolitaireClassID { get; set; }
         /// <summary>
         /// 接龙开始时间
         /// </summary>
-     public DateTime StartSolitaire { get; set; }
+        public DateTime StartSolitaire { get; set; }
         /// <summary>
         /// 接龙结束时间
         /// </summary>
-     public DateTime LastStartSolitaire { get; set; }
+        public DateTime LastStartSolitaire { get; set; }
         /// <summary>
         /// 接龙小组Id
         /// </summary>
-     public string  ChainsGroupIds { get; set; }
+        public string ChainsGroupIds { get; set; }
+        /// <summary>
+        /// 接龙组排序
+        /// </summary>
+        public int SoSortNumber { get; set; }
 
 
     }

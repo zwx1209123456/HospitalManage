@@ -68,6 +68,17 @@ namespace HospitalManage.Controllers
             return result;
         }
         /// <summary>
+        /// 获取id
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        // GET: Users
+        public JsonResult GetUsers(int Id)
+        {
+            //return idepartmentServices.GetDepartments();
+            return Json(iusersServices.GetUsers(Id), JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
         /// 科室显示
         /// </summary>
         /// <returns></returns>

@@ -31,7 +31,7 @@ namespace IServices
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        int GetUsers(int Id);
+        Users GetUsers(int Id);
         /// <summary>
         /// 修改用户的信息
         /// </summary>

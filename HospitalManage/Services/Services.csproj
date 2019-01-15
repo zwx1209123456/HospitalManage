@@ -49,10 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrangeMonthService.cs" />
+    <Compile Include="ArrangeoperationServices.cs" />
     <Compile Include="ChainsGroupService.cs" />
     <Compile Include="ClassesService.cs" />
     <Compile Include="DepartmentServices.cs" />
     <Compile Include="DutyServices.cs" />
+    <Compile Include="OperationServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SolitaireService.cs" />
     <Compile Include="SpecialtyServices.cs" />

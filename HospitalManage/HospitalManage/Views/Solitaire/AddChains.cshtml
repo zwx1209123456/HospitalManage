@@ -28,7 +28,7 @@
         <div style="margin:0 auto">
             <div>
                 <span style="float:left;margin-right:20px">接龙班次</span>
-                <select v-model="id" lay-verify="required" name="cid" class="layui-input" style="width:66px;float:left">
+                <select v-model="id" lay-verify="required" name="cid" class="layui-input" style="width:96px;float:left">
                     <option v-for="classes in classesList" v-bind:value="classes.Id">{{classes.ClassesName}}</option>
                     @*//v-bind:value="classes.id" v-on:input="id=$event.target.value"*@
                 </select>
@@ -58,22 +58,22 @@
                     </tr>
                 </thead>
                 <tbody id="tbl">
-                    <tr class="groupInfo" v-for="(chainsGroup,index) in chainsGroupList">
-                        <td><input  type="text" v-model="chainsGroup.SortNumber" value="chainsGroup.SortNumber" /></td>
-                        <td v-if="GropCrew!=0" onclick="user_management_edit('人员设置','/Solitaire/AddMember?id='+0,'800','500')">
-                            <input id="index"  type="text" v-model="index" value="index" />
+                    <tr :id="chainsGroup.SortNumber" class="groupInfo" v-for="(chainsGroup,index) in chainsGroupList">
+                        <td>{{index+1}}</td>
+                        <td v-if="chainsGroup.GropCrew!=''" v-on:click="user_management_edit('人员设置', '/Solitaire/AddMember?id='+chainsGroup.SortNumber, '800', '500')">
+                            {{chainsGroup.GropCrew}}
                         </td>
-                        <td v-else onclick="user_management_edit('人员设置','/Solitaire/AddMember?id='+0,'800','500')">
-                            <input id="Hidden1" type="text"   v-model="chainsGroup.GropCrew" value="chainsGroup.GropCrew" />
+                        <td v-else v-on:click="user_management_edit('人员设置', '/Solitaire/AddMember?id='+chainsGroup.SortNumber, '800', '500')">
+                            <img src="~/images/t06.png" />
                         </td>
                         <td v-if="chainsGroup.GropCrew!=''">
 
-                            <select  lay-verify="required" name="cid" class="layui-input" v-model="chainsGroup.GroupLeader">
-                                <option v-for="gropCrewx in gropCrewList" value="gropCrewx">{{gropCrewx}}</option>
+                            <select  lay-verify="required" name="cid" class="layui-input" >
+                                <option v-for="gropCrewx in chainsGroup.GropCrew.split(',')" v-bind:value="gropCrewx">{{gropCrewx}}</option>
                             </select>
                         </td>
                         <td v-else ><input id="Hidden1" type="hidden" v-model="chainsGroup.GroupLeader" value="chainsGroup.GroupLeader"/></td>
-                        <td v-on:click="addRow(id)">+</td>
+                        <td v-on:click="addRow(id)"><img src="~/images/t01.png" /></td>
                     </tr>
 
                 </tbody>
@@ -81,7 +81,8 @@
         </div>
         <div style="width:200px;margin:50px auto">
             <button class="layui-btn" v-on:click="addChains()"> 保存 </button>
-            <button class="layui-btn" style="float:right"> 取消 </button>
+            <button class="layui-btn" style="float:right" onclick="cancel()"> 取消 </button>
+
         </div>
     </div>
     <script src="~/lib/layui/layui.js" charset="utf-8">
@@ -94,8 +95,22 @@
             var form = layui.form()
                 , layer = layui.layer;
         });
-        function user_management_edit(title, url, w, h) {
-            x_admin_show(title, url, w, h);
+        //function user_management_edit(title, url, w, h) {
+        //    x_admin_show(title, url, w, h);
+        //}
+        function setChooseValues(ref, indexId) {
+
+           localStorage.ids = ref;
+           //alert(localStorage.ids);
+            //alert(indexId);
+            //$("#" + indexId).children("td").eq(1).children().eq(0).val(localStorage.ids);
+            //$("#" + indexId).children("td").eq(1).text(localStorage.ids);
+            vm.ChooseValues(indexId);
+        }
+
+        function cancel() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index); 
         }
     </script>
 
@@ -105,39 +120,49 @@
         var vm = new Vue({
             el: "#app",
             data: {
-                start:"",
+               
                 sortNumber:1,
-
-                classesList: [],
-                //{ Id: "", GroupLeader: this.GroupLeader, GropCrew: this.GropCrew, ClassesId: this.id, SortNumber: this.SortNumber }
+                classesList: [],             
                 chainsGroupList: [{ Id: "", GroupLeader: "", GropCrew: "", ClassesId: 0, SortNumber: 1 }],
-                gropCrewList: [],
+                //gropCrewList: [],
                 groupList: [],
                 SortNumber: 1,         
-                GropCrew: "@ViewBag.ids",
+                GropCrew: "",
                 GroupLeader: "",
-                id: 1
-                //startTime: "2017-01-12",
-                //endTime:""
+                id: 1,
+          
             },
+            //computed: {//计算属性_——计算属性一定要return一个值，这个值存在属性里。计算属性和data属性可以简单的理解为数据的不同形式。
+            //    gropCrewList: function () {
+            //        return this.GropCrew.split(',')
+            //    }
+            //},
             mounted() {
                 this.load();
+                
                 this.getClassesList();
             },
             methods: {
-                //addChainsGroupList:function () {
-                //    this.chainsGroupList.push({ Id: "", GroupLeader: "", GropCrew: "", ClassesId: 0, SortNumber: 1});
-                //},
-                //getstartTime: function () {
-                //    startTime = this.startTime;
-                //},
-                //getendTime: function () {
-                //    endTime = this.endTime;
-                //},
+         
+                user_management_edit(title, url, w, h) {
+                    console.log(url);
+                    x_admin_show(title, url, w, h);
+                },
                 load: function () {
-                    if (this.GropCrew!=0) {
-                         $("#" +@ViewBag.index).val(@ViewBag.ids);
+                    localStorage.ids = "";
+                    this.GropCrew = "";
+                    //alert(localStorage.ids);
+                    //alert(this.GropCrew);
+                },
+                ChooseValues: function (rowNumber) {
+                 
+                    if (localStorage.ids != null) {
+                        this.GropCrew = localStorage.ids;
+                        var groupIndex = rowNumber-1;
+                        this.chainsGroupList[groupIndex].GropCrew = localStorage.ids;
+                        
                     }
+               
                 },
                 addRow: function (classesId) {
                     this.sortNumber += 1;
@@ -160,73 +185,35 @@
                         alert(response);
                     });
                 },
+
                 addChains: function () {
                     var _this = this;
+                    _this.groupList = [];
                     $(".groupInfo").each(function () {//注意不能id选择器，因为只会选中一个
-
-                        _this.groupList.push({ SortNumber: this.cells[0].firstElementChild.value, ClassesId: _this.id, GropCrew: this.cells[1].firstElementChild.value, GroupLeader: this.cells[2].firstElementChild.value });
+                       
+                        _this.groupList.push({ SortNumber: this.cells[0].innerText, ClassesId: _this.id, GropCrew: this.cells[1].innerText, GroupLeader: this.cells[2].firstElementChild.value });
                 
                     });
                     var startTime = $("#startTime").val();
                     var endTime = $("#endTime").val();
-                    //var tab = document.getElementById("tbl");
-                    //var rows = tab.rows;
-
-                    //for (var i = 0; i < rows.length; i++) { //遍历表格tbody的行
-                    //    _this.groupList.push({ SortNumber: _this.SortNumber, ClassesId: _this.id, GropCrew: _this.GropCrew, GroupLeader: _this.GroupLeader });
-                    //}
+                   
                     axios.post('@Url.Action("AddChains", "Solitaire")', {
-                        solitaire: { ClassesId: _this.id, StartSolitaire: startTime, LastStartSolitaire: endTime },
+                        solitaire: { SolitaireClassID: _this.id, StartSolitaire: startTime, LastStartSolitaire: endTime },
                         chainsGroups: this.groupList
                     }).then(
                         (response) => {
-                            this.SolitaireList = [];
-                            for (var i = 0; i < response.data.length; i++) {
-                                this.SolitaireList.push(response.data[i]);
-                            }
-                            this.SolitaireList.push({ Id: "", SolitaireName: "" });
-                        },
-                        (response) => {
-                            alert(response.status);
+                            parent.setChainsList(response.data)
                         }
                     ).catch(function (response) {
                         alert(response);
-                    });
-                },
-                getAllSolitaires: function () {
-                    axios.get('@Url.Action("SelectSolitaire", "Solitaire")'
-                    ).then(
-                        (response) => {
-                            this.SolitaireList = [];
-                            for (var i = 0; i < response.data.length; i++) {
-                                this.SolitaireList.push(response.data[i]);
-                            }
-                            this.SolitaireList.push({ Id: "", SolitaireName: "" });
-                        },
-                        (response) => {
-                            alert(response.status);
-                        }
-                    ).catch(function (response) {
-                        alert(response);
-                    });
+                        });
+                 
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index); 
                 },
 
-                updateSolitaire: function (id, name) {
-                    axios.post('@Url.Action("UpdateSolitaire", "Solitaire")', { Solitaire: { Id: id, SolitaireName: name} }).then(
-                        (response) => {
-                            this.SolitaireList = [];
-                            for (var i = 0; i < response.data.length; i++) {
-                                this.SolitaireList.push(response.data[i]);
-                            }
-                            this.SolitaireList.push({ Id: "", SolitaireName: ""});
-                        },
-                        (response) => {
-                            alert(response.status);
-                        }
-                    ).catch(function (response) {
-                        alert(response);
-                    });
-                },
+               
+                
                 deleteSolitaireById: function (id) {
                     axios.post('@Url.Action("DelSolitaire", "Solitaire")', { id: id }).then(
                         (response) => {

@@ -32,6 +32,7 @@ namespace HospitalManage.Controllers
         
         public ActionResult Add()
         {
+          
             return View();
         }
         [HttpPost]
@@ -92,16 +93,14 @@ namespace HospitalManage.Controllers
             //return idepartmentServices.GetDepartments();
             return Json(iclassesService.GetClasses(), JsonRequestBehavior.AllowGet);
         }
-        public ActionResult RuleGet()
-        {
-            return View();
-        }
         [HttpGet]
         // GET: Users
-        public JsonResult RuleGets(int Id)
+        public JsonResult Get(string Id)
         {
             //return idepartmentServices.GetDepartments();
-            return Json(iruleServices.Get(Id), JsonRequestBehavior.AllowGet);
+            return Json(iruleServices.Get(Convert.ToInt32(Id)), JsonRequestBehavior.AllowGet);
+           
         }
+      
     }
 }

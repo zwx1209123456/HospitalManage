@@ -45,7 +45,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommHelps\DLL\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data, Version=8.0.13.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommHelps\DLL\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -169,15 +177,18 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="App_Start\UnityWebApiActivator.cs" />
     <Compile Include="Controllers\ArrangeMonthController.cs" />
+    <Compile Include="Controllers\ArrangeoperationController.cs" />
     <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DutyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OperationController.cs" />
     <Compile Include="Controllers\SpecialtyController.cs" />
     <Compile Include="Controllers\SolitaireController.cs" />
     <Compile Include="Controllers\RuleController.cs" />
     <Compile Include="Controllers\TierController.cs" />
+    <Compile Include="Controllers\ToArrOperationController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -185,6 +196,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bootstrap——datetime控件\bootstrap-datetimepicker.min.css" />
+    <Content Include="bootstrap——datetime控件\bootstrap-datetimepicker.min.js" />
+    <Content Include="bootstrap——datetime控件\bootstrap-datetimepicker.zh-CN.js" />
+    <Content Include="bootstrap——datetime控件\moment-with-locales%281%29.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -295,11 +310,14 @@
     <Content Include="images\user.png" />
     <Content Include="images\void.jpg" />
     <Content Include="images\wc.png" />
+    <Content Include="js\addChains-layui.js" />
     <Content Include="js\cloud.js" />
     <Content Include="js\corechart.js" />
     <Content Include="js\external.js" />
     <Content Include="js\jquery-1.11.0.min.js" />
     <Content Include="js\jquery-latest.js" />
+    <Content Include="js\jquery-ui.js" />
+    <Content Include="js\jquery-ui.min.js" />
     <Content Include="js\jquery.ba-resize.min.js" />
     <Content Include="js\jquery.gvChart-1.0.1.min.js" />
     <Content Include="js\jquery.js" />
@@ -472,6 +490,7 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\vue-resource.js" />
     <Content Include="Scripts\vue.js" />
+    <Content Include="Scripts\vue.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -515,10 +534,16 @@
     <Content Include="Views\Rule\Update.cshtml" />
     <Content Include="Views\Specialty\Update.cshtml" />
     <Content Include="Views\ArrangeMonth\Index.cshtml" />
+    <Content Include="Views\Arrangeoperation\Add.cshtml" />
+    <Content Include="Views\ToArrOperation\Index.cshtml" />
+    <Content Include="Views\Arrangeoperation\Indexs.cshtml" />
+    <Content Include="Views\Arrangeoperation\Show.cshtml" />
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Operation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -534,6 +559,10 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommHelps\CommHelps.csproj">
+      <Project>{DB57A746-F133-499B-9007-2C38E4EBD6C3}</Project>
+      <Name>CommHelps</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IServices\IServices.csproj">
       <Project>{24bba5a3-3de4-423e-813f-52438032079e}</Project>
       <Name>IServices</Name>

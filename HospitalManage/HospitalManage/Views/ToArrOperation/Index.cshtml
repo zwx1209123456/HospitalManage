@@ -1,0 +1,264 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="~/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="~/css/pag.css" media="all">
+
+
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/axios.js"></script>
+    <style type="text/css">
+       /*table thead tr th {
+            vertical-align: middle;
+            text-align: center
+        }*/
+
+        td{
+            vertical-align: middle;
+            text-align: center
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div style="width:60%;height:500px;float:left">
+            <div class="x-tablelist" style="width:93.5%;height:40px;background-color:lightskyblue;text-align:center;margin-left:30px">
+                手术排班
+            </div>
+            <div class="x-body" style="height:80%;overflow:auto">
+
+                <table class="tablelist" style="margin-top:-30px">
+                    <thead>
+                        <tr>
+
+                            <th style="text-align:center">手术间</th>
+                            <th style="text-align:center"> 科室 </th>
+                            <th style="text-align:center" colspan="2"> 器械</th>
+                            @*<th> 年龄</th>*@
+                            <th style="text-align:center" colspan="2"> 巡回</th>
+                            @*<th> 宗教信仰 </th>*@
+                            <th style="text-align:center"> 上班时间 </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                            <td>张三</td>
+                            <td>男</td>
+                            <td> 安徽</td>
+                            <td> 12</td>
+                            <td> 初中</td>
+                            <td> 佛教</td>
+                            <td>15812345678</td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="x-tablelist" style="width:93.5%;height:40px;background-color:lightskyblue;text-align:center;margin-left:30px;margin-top:20px">手术排班</div>
+            <div class="x-body" style="height:20%;overflow:auto;">
+
+                <table class="tablelist" style="margin-top:-30px">
+                    <thead>
+                        <tr>
+
+                            <th style="text-align:center">台次</th>
+                            <th style="text-align:center"> 科室 </th>
+                            <th style="text-align:center"> 手术名称</th>
+                            <th style="text-align:center"> 诊断</th>
+                            <th style="text-align:center"> 患者姓名</th>
+                            <th style="text-align:center"> 年龄 </th>
+                            <th style="text-align:center"> 性别 </th>
+                            <th style="text-align:center"> 麻醉医生 </th>
+                            <th style="text-align:center"> 床号 </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                            <td>张三</td>
+                            <td>男</td>
+                            <td> 安徽</td>
+                            <td> 12</td>
+                            <td> 初中</td>
+                            <td> 佛教</td>
+                            <td>15812345678</td>
+                            <td>张三</td>
+                            <td>男</td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div style="width:40%;height:500px;float:left">
+            <div class="x-tablelist" style="width:90.3%;height:40px;background-color:lightskyblue;text-align:center;margin-left:30px">手术排班</div>
+            <div class="x-body" style="height:100%;overflow:auto">
+
+                <table class="tablelist" style="margin-top:-30px">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">序号</th>
+                            <th style="text-align:center"> 姓名 </th>
+                            <th style="text-align:center"> 手术名称</th>
+                            <th style="text-align:center"> 专业技能</th>
+                            <th style="text-align:center"> 总工时</th>
+                            <th style="text-align:center"> 加班时间 </th>
+                            <th style="text-align:center"> 欠班时间 </th>
+                            <th style="text-align:center"> 昨日下班时间 </th>
+                            <th style="text-align:center"> 能级 </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                            <td>张三</td>
+                            <td>男</td>
+                            <td> 安徽</td>
+                            <td> 12</td>
+                            <td> 初中</td>
+                            <td> 佛教</td>
+                            <td>15</td>
+                            <td> 初中</td>
+                            <td> 佛教</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <script src="~/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="~/js/x-layui.js" charset="utf-8"></script>
+    <script src="~/js/jquery2.js" charset="utf-8"></script>
+    <script src="~/js/js.js" charset="utf-8"></script>
+    <script>
+        layui.use(['laydate', 'element', 'laypage', 'layer'], function () {
+            $ = layui.jquery;
+            lement = layui.element();//面包导航
+            laypage = layui.laypage;//分页
+            layer = layui.layer;//弹出层
+
+        });
+        /*用户-添加*/
+        function user_management_add(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+        /*用户-查看*/
+        function user_management_show(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+        // 用户-编辑
+        function user_management_edit(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+
+    @*//vue操作*@
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                ArrOperationList:[]
+            },
+            mounted() {
+                this.getAllArrOperations();
+            },
+            methods: {
+                getAllArrOperations: function () {
+                    axios.get('@Url.Action("Indexs", "ToArrOperation")'
+                    ).then(
+                        (response) => {
+                            this.ArrOperationList = [];
+                            for (var i = 0; i < response.data.length; i++) {
+                                this.ArrOperationList.push(response.data[i]);
+                            }
+                            this.ArrOperationList.push({ Id: "", ArrOperationName: "" });
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                addArrOperation: function (name) {
+                    axios.post('@Url.Action("AddArrOperation", "ArrOperation")', { ArrOperation: { ArrOperationName: name} }).then(
+                        (response) => {
+                            this.ArrOperationList = [];
+                            for (var i = 0; i < response.data.length; i++) {
+                                this.ArrOperationList.push(response.data[i]);
+                            }
+                            this.ArrOperationList.push({ Id: "", ArrOperationName: "" });
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                updateArrOperation: function (id, name) {
+                    axios.post('@Url.Action("UpdateArrOperation", "ArrOperation")', { ArrOperation: { Id: id, ArrOperationName: name} }).then(
+                        (response) => {
+                            this.ArrOperationList = [];
+                            for (var i = 0; i < response.data.length; i++) {
+                                this.ArrOperationList.push(response.data[i]);
+                            }
+                            this.ArrOperationList.push({ Id: "", ArrOperationName: ""});
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                deleteArrOperationById: function (id) {
+                    axios.post('@Url.Action("DelArrOperation", "ArrOperation")', { id: id }).then(
+                        (response) => {
+                            this.ArrOperationList = [];
+                            for (var i = 0; i < response.data.length; i++) {
+                                this.ArrOperationList.push(response.data[i]);
+                            }
+                            this.ArrOperationList.push({ Id: "", ArrOperationName: "" });
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
