@@ -55,6 +55,14 @@ namespace Services
         /// 性别
         /// </summary>
         public string PatientSex { get; set; }
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public string OperationNames { get; set; }
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public string DepartmentName { get; set; }
 
     }
 }

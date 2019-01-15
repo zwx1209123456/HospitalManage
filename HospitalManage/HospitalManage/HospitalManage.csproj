@@ -527,7 +527,12 @@
     <Content Include="Views\Rule\Update.cshtml" />
     <Content Include="Views\Specialty\Update.cshtml" />
     <Content Include="Views\Arrangeoperation\Add.cshtml" />
+
     <Content Include="Views\ToArrOperation\Index.cshtml" />
+
+    <Content Include="Views\Arrangeoperation\Indexs.cshtml" />
+    <Content Include="Views\Arrangeoperation\Show.cshtml" />
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
