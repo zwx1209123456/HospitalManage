@@ -11,6 +11,9 @@ using Dapper;
 
 namespace HospitalManage.Controllers
 {
+    using Services;
+    using IServices;
+    using Models;
     public class SolitaireController : Controller
     {
         [Unity.Attributes.Dependency]

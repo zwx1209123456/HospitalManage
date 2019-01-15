@@ -8,6 +8,7 @@ namespace HospitalManage.Controllers
 {
     using Services;
     using IServices;
+    using Models;
     public class ArrangeoperationController : Controller
     {
         IArrangeoperationServices iarrangeoperationServices = null;
