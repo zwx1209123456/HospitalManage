@@ -28,6 +28,7 @@ namespace HospitalManage.Controllers
         {
             return View();
         }
+
         [HttpGet]
         public JsonResult Indexs()
         {
@@ -105,6 +106,16 @@ namespace HospitalManage.Controllers
         public JsonResult ShowOperation()
         {
             return Json(ioperation.ShowOperation(), JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public ActionResult Show()
+        {
+            return View();
+        }
+        
+        public JsonResult Shows()
+        {
+            return Json(iarrangeoperationServices.Show(), JsonRequestBehavior.AllowGet);
         }
     }
 }
