@@ -211,7 +211,7 @@
                             }
                             this.id = response.data[0].SolitaireClassID;
                             $("#startTime").val(this.ChangeDateFormat(response.data[0].StartSolitaire));
-                            $("#endTime").val(this.ChangeDateFormat(response.data[0].LastStartSolitair));
+                            $("#endTime").val(this.ChangeDateFormat(response.data[0].LastStartSolitaire));
                             this.sortNumber = response.data.length;
                         },
                         (response) => {
