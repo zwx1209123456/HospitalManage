@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 namespace IServices
 {
     using Models;
-    using Services;
-
     public interface IRuleServices
     {
         /// <summary>

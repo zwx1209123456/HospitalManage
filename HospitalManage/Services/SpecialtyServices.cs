@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services
+namespace Models
 {
     using CommHelps;
     using Dapper;
@@ -79,7 +79,7 @@ namespace Services
             parameters.Add("@_GropCrewName", specialty.GropCrewName);
             parameters.Add("@_GroupLeaderName", specialty.GroupLeaderName);
             parameters.Add("@_TeachingName", specialty.TeachingName);
-            int result = conn.Execute("Specialty_Add", parameters, commandType: System.Data.CommandType.StoredProcedure);
+            int result = conn.Execute("Specialty_Update", parameters, commandType: System.Data.CommandType.StoredProcedure);
             return result;
         }
        public Specialty GetSpecialty(int Id)

@@ -68,7 +68,8 @@
     <div id="app">
         <div class="tools">
             <input type="text" v-model="SpecialtyName" id="UserName" />
-        <input id="Button1" type="button" value="查询" v-on:click="searchUser(searchVal)" />
+        <input id="Button1" type="button" value=
+               "查询" v-on:click="searchUser(SpecialtyName)" />
             <ul class="toolbar">
                 <li><a href="#" onclick="location.href='/Specialty/Add'"><span><img src="~/images/t01.png" /></span>添加</a></li>
             </ul>
@@ -90,15 +91,20 @@
                 <td>{{specialty.SpecialtyColor}}</td>
                 <td>{{specialty.SpecialtyName}}</td>
                 <td>{{specialty.DepartmentName}}</td>
-                <td>{{specialty.TeachingName}}</td>
-                <td>{{specialty.GroupLeaderName}}</td>
-                <td>{{specialty.GropCrewName}}</td>
+                <td v-if="specialty.TeachingName!=null">{{specialty.TeachingName}}</td>
+                <td v-else="specialty.TeachingName=null">无</td>
+
+                <td v-if="specialty.GroupLeaderName!=null">{{specialty.GroupLeaderName}}</td>
+                <td v-else="specialty.GroupLeaderName=null">无</td>
+                <td v-if="specialty.GropCrewName!=null">{{specialty.GropCrewName}}</td>
+                <td v-else="specialty.GropCrewName=null">无</td>
+
                 <td>
                     <div v-if="specialty.Id!=''">
                         <a href="#" v-on:click="DeleteSpecialty(specialty.Id)">删除</a>
                         @*<a href="#" v-on:click="UpdateSpecialty(specialty.Id,specialty.SpecialtyName,specialty.SpecialtyColor,specialty.DepartmentID,specialty.GropCrew,specialty.GroupLeader,specialty.Teaching,specialty.GropCrewName,specialty.GroupLeaderName,specialty.TeachingName)">修改</a>*@
                         <a href="#" v-on:click="jump(specialty.Id)">修改</a>
-                        
+
                     </div>
                 </td>
             </tr>
@@ -124,6 +130,7 @@
         //提供一个在页面上已存在的 DOM 元素作为 Vue 实例的挂载目标。可以是 CSS 选择器，也可以是一个 HTMLElement 实例。
         el: "#app",
         data: {
+            SpecialtyName:"",
             SpecialtiesList: [],
             all: 2, //总页数
             cur: 1//当前页码

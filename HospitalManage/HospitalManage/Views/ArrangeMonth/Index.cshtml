@@ -1,0 +1,145 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GetMoth</title>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <td></td>
+                <td>星期一</td>
+                <td>星期二</td>
+                <td>星期三</td>
+                <td>星期四</td>
+                <td>星期五</td>
+                <td>星期六</td>
+                <td>星期日</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    var week = [];
+    var classList = [];
+    var zaoban = [];
+    var wanban = [];
+    var yeban = [];
+    $(function () {
+        //得到日期
+        GetMonth();
+        //得到班次 自己去写ajax注意同步异步问题
+        GetClasses();
+        //得到表格
+        GetTable();
+
+
+    })
+
+    function GetMonth() {
+        //获取系统当前时间
+        //var now = new Date("2019-09-01");
+        var now = new Date();
+        var nowTime = now.getTime();
+        // console.log(now.getDay());
+        //一天时间
+        var oneDayTime = 24 * 60 * 60 * 1000;
+        //对应的月份
+        var month = now.getMonth() + 1;
+        //对应的日
+        var date = now.getDate();
+        //求出当前月份对应的1号
+        var onetime = nowTime - (date - 1) * oneDayTime;
+        //一号对应的日期
+        var myDate = new Date(onetime);
+        //1号对应的星期
+        var weekNum = myDate.getDay();
+        //如果本月1号对应的日期不是周一
+        if (weekNum == 0) {
+            onetime = onetime - 6 * oneDayTime;
+        }
+        else if (weekNum != 1) {
+            onetime = onetime - (weekNum - 1) * oneDayTime;
+        }
+        for (var i = 0; i < 35; i++) {
+            var ShowTime = onetime + (i) * oneDayTime;
+            //初始化日期时间
+            var myDate = new Date(ShowTime);
+            var year = myDate.getFullYear();
+            var month = myDate.getMonth() + 1;
+            var date = myDate.getDate();
+            var xinqi = myDate.getDay()
+            //console.log(xinqi);
+            //console.log(year + "-" + month + "-" + date)
+            var str = "星期" + "日一二三四五六".charAt(myDate.getDay());
+            week.push({ dateShow1: month + "-" + date, dateShow2: year + "-" + month + "-" + date, weekName: str });
+
+
+        }
+    }
+
+    var totleDate = 0;
+    var str3 = [];
+    function GetTable() {
+        $.ajax({
+            url: '/ArrangeMonth/GetArrangeMonth',
+            type: 'get',
+            success: function (data) {
+                for (var z = 0; z < 5; z++) {
+                    var str1 = "<tr><td>日期</td>";
+                    var str2 = "";
+                   
+                    for (var i = 0; i < classList.length; i++) {                       
+                        var str3 = "";
+                        var dd = getArrangeMonth(data, classList[i].ClassesName);
+                        for (var j = 0; j < dd.length; j++) {
+                            str3 += "<td>" + dd[j] + "</td>";                                                     
+                            
+                        }
+                        str2 += "<tr><td style='background-color:" + classList[i].ClassesColor + "'>" + classList[i].ClassesName + "</td>" + str3 + "</tr >";
+
+                    }
+                    for (var i = 0; i < 7; i++) {
+                        if (totleDate < week.length) {
+                            str1 += "<td>" + week[totleDate].dateShow1 + "</td>";
+                            totleDate++;
+                        }
+                    }
+                    str1 += "</tr>";
+                    $("table").append(str1);
+                    $("table").append(str2);
+                }
+            }
+        })
+    }
+    function getArrangeMonth(data, name) {
+        var UsersName = []; var i = 0;
+        for (i = 0; i < data.length; i++)
+        {
+            if (data[i].ClassesName == name) {
+                UsersName.push(data[i].userNames);
+            }
+        }
+        return UsersName;
+    }
+    function GetClasses() {
+        $.ajax({
+            url: '/Classes/IndexShow',
+            type: 'get',
+            async: false,
+            success: function (data) {
+                classList = data;               
+            }
+        })
+        //classList = [{ color: "red", name: "早班" }, { color: "yellow", name: "中班" }, { color: "blue", name: "晚班" }];
+    }
+</script>

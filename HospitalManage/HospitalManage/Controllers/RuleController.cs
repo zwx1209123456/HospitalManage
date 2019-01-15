@@ -6,9 +6,8 @@ using System.Web.Mvc;
 
 namespace HospitalManage.Controllers
 {
-    using Services;
+    using Models;
     using IServices;
-    using Models;   
     /// <summary>
     /// 排班规则
     /// </summary>

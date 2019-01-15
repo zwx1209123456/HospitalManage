@@ -2,7 +2,7 @@ using System;
 
 using Unity;
 using IServices;
-using Services;
+using Models;
 
 namespace HospitalManage
 {
@@ -57,7 +57,7 @@ namespace HospitalManage
             container.RegisterType<ISpecialtyServices, SpecialtyServices>();
             container.RegisterType<ISolitaireService, SolitaireService>();
             container.RegisterType<IChainsGroupService, ChainsGroupService>();
-
+            container.RegisterType<IArrangeMonthServices, ArrangeMonthService>();
         }
     }
 }

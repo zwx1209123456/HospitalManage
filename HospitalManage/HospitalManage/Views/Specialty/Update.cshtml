@@ -84,7 +84,7 @@
             </tr>
         </table>
         <div class="searchBox">
-            组员设置 &nbsp;&nbsp;<input type="text" class="select">
+            组员设置 &nbsp;&nbsp;<input type="text" class="select" :value="UserNameShow">
             <div class="down" v-on:click="show"></div>
             <div v-show="listShow">
                 <ul class="list" v-for="(item,index) in TierList">
@@ -129,7 +129,7 @@
             </table>
         </div>
         <div>
-            <input id="Button1" type="button" value="确定" v-on:click="AddSpecialty(SpecialtyName, SpecialtyColor, DepartmentID, GropCrew, GroupLeader, Teaching)" />
+            <input id="Button1" type="button" value="确定" v-on:click="AddSpecialty(entity.SpecialtyName, entity.SpecialtyColor, entity.DepartmentID, GropCrew, GroupLeader, Teaching)" />
         </div>
     </div>
 </body>
@@ -139,6 +139,7 @@
     var vm = new Vue({
         el: "#app",
         data: {
+            UserNameShow: [],
             GroupLeader: "",
             Teaching:"",
             DepartmentList: [],
@@ -146,7 +147,7 @@
             DepartmentID: 0,
             GropCrew: [],
             UserName: "",
-            SpecialtyName: "",
+            //SpecialtyName: "",
             SpecialtyColor: "",
             listShow: false,
             search: '',
@@ -156,15 +157,15 @@
                 default: []
             },
             entity: {
+                Id: null,
+                SpecialtyName: null,
+                SpecialtyColor: null,
                 DepartmentID: null,
                 DepartmentName: null,
                 GropCrew: null,
                 GropCrewName: null,
                 GroupLeader: null,
                 GroupLeaderName: null,
-                Id: null,
-                SpecialtyColor: null,
-                SpecialtyName: null,
                 Teaching: null,
                 TeachingName: null
             },
@@ -178,7 +179,17 @@
         },
         watch: {
             DepartmentID: function (newvalue, oldvalue) {
-                this.getTierList(newvalue);
+                this.getTierList();
+                this.UserNameShow = [];
+
+            },
+            GropCrew: function (newvalue, oldvalue) {
+                console.log(newvalue);
+                this.UserNameShow = [];
+                for (var i = 0; i < newvalue.length; i++) {
+                    this.UserNameShow.push(newvalue[i].UserName);
+                }
+
             },
             search: {
                 handler() {//搜索框输入变化触发
@@ -188,7 +199,7 @@
             }
         },
         methods: {
-            AddSpecialty: function (Id,SpecialtyName, SpecialtyColor, DepartmentID, GropCrew, GroupLeader, Teaching) {
+            AddSpecialty: function (SpecialtyName, SpecialtyColor, DepartmentID, GropCrew, GroupLeader, Teaching) {
                 var a = GropCrew;
                 var Teaching = [];
                 var GroupLeader = [];
@@ -212,9 +223,9 @@
                     }
                 };
                 var param = new URLSearchParams();
-                param.append("Id",Id);
-                param.append("SpecialtyName", SpecialtyName);
-                param.append("SpecialtyColor", SpecialtyColor);
+                param.append("Id",@Request.QueryString["Id"]);
+                param.append("SpecialtyName",SpecialtyName);
+                param.append("SpecialtyColor",SpecialtyColor);
                 param.append("DepartmentID", DepartmentID);
                 param.append("GropCrew", GropCrew1);
                 param.append("GroupLeader", GroupLeader);
@@ -227,9 +238,6 @@
                     (response) => {
                         if (response.data > 0) {
                             alert("修改成功")
-                        }
-                        else {
-                            alert("该用户已存在")
                         }
                     },
                     (response) => {
@@ -254,10 +262,9 @@
             },
             //获取人员
             getTierList: function () {
-                console.log(this.DepartmentID)
                 axios.post('@Url.Action("GetUsers", "Specialty")', { DepartmentID: this.DepartmentID }).then(
                     (response) => {
-                        console.log(response.data)
+                      //  console.log(response.data)
                         this.TierList = response.data;
 
                     },
@@ -271,28 +278,69 @@
             show() {
                 this.listShow = !this.listShow;
                 if (this.listShow == true) {
-                    this.GropCrew = [];
+                    //this.GropCrew = [];
                 }
             },
             removeTodo: function (index) {
                 this.GropCrew.splice(index, 1);
             },
+            //反填
             GetSpecialty: function (Id) {
                 var that = this;
-                console.log(Id)
                 var param = new URLSearchParams();
                 param.append("Id", Id);
                 axios.get('@Url.Action("GetSpecialty", "Specialty")', { params: {Id:Id} }).then(
                     (response) => {
                         console.log(response.data)
                         if (response.data) {
-                            that.entity=response.data;
+                            that.entity = response.data;
+                            //科室反填
                             that.DepartmentID = response.data.DepartmentID;
-                            this.getTierList();
-                            this.GropCrew = response.data.GropCrew.split(',');
-                            
-                                console.log(this.GropCrew)
-                            //that.getTierList();
+                           axios.post('@Url.Action("GetUsers", "Specialty")', { DepartmentID: this.DepartmentID }).then(
+                           (result) => {
+                            this.TierList = result.data;
+
+                               //组员反填
+                               if (response.data.GropCrew != null) {
+                                   var strids = response.data.GropCrew;
+                                   var GropCrewids = strids.split(',');
+                                   for (var i = 0; i < GropCrewids.length; i++) {
+                                       for (var j = 0; j < this.TierList.length; j++) {
+                                           if (GropCrewids[i] == this.TierList[j].Id) {
+                                               this.GropCrew.push(this.TierList[j]);
+                                           }
+                                       }
+                                   }
+                               }
+                               //组长反填
+                               if (response.data.GroupLeader != null) {
+                                   var GroupLeaderids = response.data.GroupLeader.split(',');
+                                   for (var i = 0; i < GroupLeaderids.length; i++) {
+                                       for (var j = 0; j < this.TierList.length; j++) {
+                                           if (GroupLeaderids[i] == this.TierList[j].Id) {
+                                               this.GropCrew.push(this.TierList[j]);
+                                           }
+                                       }
+                                   }
+                               }
+                                //带教反填
+                               if (response.data.Teaching != null) {
+                                   var Teachingids = response.data.Teaching.split(',');
+                                   for (var i = 0; i < Teachingids.length; i++) {
+                                       for (var j = 0; j < this.TierList.length; j++) {
+                                           if (GroupLeaderids[i] == this.TierList[j].Id) {
+                                               this.GropCrew.push(this.TierList[j]);
+                                           }
+                                       }
+                                   }
+                               }
+                    },
+                      (result) => {
+                                   alert(result.status);
+                    }
+                ).catch(function (response) {
+                    alert(response);
+                });
                         }
                     },
                     (response) => {

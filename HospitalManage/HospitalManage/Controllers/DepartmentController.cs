@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using Models;
 using IServices;
-using Services;
 using Unity.Attributes;
 
 namespace HospitalManage.Controllers

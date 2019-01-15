@@ -6,7 +6,6 @@ using System.Web.Mvc;
 
 namespace HospitalManage.Controllers
 {
-    using Services;
     using Models;
     using Newtonsoft.Json;
     using System.Runtime.CompilerServices;

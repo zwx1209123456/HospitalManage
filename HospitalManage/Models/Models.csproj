@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChainsGroup.cs" />
+    <Compile Include="NewArrage.cs" />
     <Compile Include="PageBox.cs" />
     <Compile Include="Powerduty.cs" />
     <Compile Include="Solitaire.cs" />

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services
+namespace Models
 {
     /// <summary>
     /// 排班表
@@ -22,7 +22,7 @@ namespace Services
         /// <summary>
         /// 班次
         /// </summary>
-        public string Classes { get; set; }
+        public int ClassesID { get; set; }
         /// <summary>
         /// 是否发布
         /// </summary>
@@ -39,5 +39,6 @@ namespace Services
         /// 日期
         /// </summary>
         public DateTime Dates { get; set; }
+        public string UserNames { get; set; }
     }
 }

@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrangeMonthService.cs" />
     <Compile Include="ChainsGroupService.cs" />
     <Compile Include="ClassesService.cs" />
     <Compile Include="DepartmentServices.cs" />
