@@ -194,6 +194,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bootstrap——datetime控件\bootstrap-datetimepicker.min.css" />
+    <Content Include="bootstrap——datetime控件\bootstrap-datetimepicker.min.js" />
+    <Content Include="bootstrap——datetime控件\bootstrap-datetimepicker.zh-CN.js" />
+    <Content Include="bootstrap——datetime控件\moment-with-locales%281%29.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -310,6 +314,8 @@
     <Content Include="js\external.js" />
     <Content Include="js\jquery-1.11.0.min.js" />
     <Content Include="js\jquery-latest.js" />
+    <Content Include="js\jquery-ui.js" />
+    <Content Include="js\jquery-ui.min.js" />
     <Content Include="js\jquery.ba-resize.min.js" />
     <Content Include="js\jquery.gvChart-1.0.1.min.js" />
     <Content Include="js\jquery.js" />

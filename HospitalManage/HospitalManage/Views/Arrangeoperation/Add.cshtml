@@ -13,12 +13,11 @@
     <script src="~/Scripts/vue.js"></script>
     <link href="~/css/pag.css" rel="stylesheet" media="all" />
     <link href="~/css/css.css" rel="stylesheet" media="all" />
-    <script src="~/Scripts/bootstrap.min.js"></script>
     <link href="~/css/x-admin.css" rel="stylesheet" media="all" />
 </head>
 <body style="background-color:#ffffff">
     <div id="app" class="x-body">
-        <table  class="tablelist">
+        <table class="tablelist">
             <tr>
                 <td>手术间</td>
                 <td>
@@ -96,7 +95,7 @@
                     <a href="#" v-on:click="Add(OperationNames, DepartmentName, OperationName, OperatorDoctor, Instrument, Tour, Anesthetist, PatientName, PatientAge, PatientSex)"><span><img src="~/images/t01.png" /></span>保存</a>
                 </td>
                 <td>
-                    <a href="#" onclick="location.href='/Arrangeoperation/Show'">显示</a>
+                    <a href="#" onclick="location.href='/Arrangeoperation/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
                 </td>
             </tr>
         </table>
@@ -106,22 +105,10 @@
     <script src="~/lib/layui/layui.js" charset="utf-8"></script>
     <script src="~/js/jquery2.js" charset="utf-8"></script>
     <script src="~/js/js.js" charset="utf-8"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script>
-        layui.use(['element', 'laypage', 'layer', 'form'], function () {
-            $ = layui.jquery;//jquery
-            lement = layui.element();//面包导航
-            laypage = layui.laypage;//分页
-            layer = layui.layer;//弹出层
-            form = layui.form();//弹出层
-        });
         /*添加*/
         function new_add(title, url, w, h) {
-            x_admin_show(title, url, w, h);
-        }
-
-
-        // 编辑
-        function new_edit(title, url, id, w, h) {
             x_admin_show(title, url, w, h);
         }
         $('.tablelist tbody tr:odd').addClass('odd');
@@ -130,9 +117,6 @@
             x_admin_show(title, url, w, h);
         }
 
-    </script>
-    <script type="text/javascript">
-        $('.tablelist tbody tr:odd').addClass('odd');
     </script>
     <script>
         var vm = new Vue({
@@ -151,7 +135,7 @@
                 Anesthetist:"",
                 PatientName:"",
                 PatientAge:"",
-                PatientSex:"",
+                PatientSex: "",
             },
             mounted() {
                 this.getDepartmentList();
@@ -159,7 +143,7 @@
             },
             methods: {
                 Add: function (OperationNames, DepartmentName, OperationName, OperatorDoctor, Instrument, Tour, Anesthetist, PatientName, PatientAge, PatientSex) {
-                    axios.post('@Url.Action("Add", "Arrangeoperation")', { arrangeoperation: { OperationID: OperationNames, DepartmentID: DepartmentName, OperationName: OperationName, OperatorDoctor: OperatorDoctor, Instrument: Instrument, Tour: Tour, Anesthetist: Anesthetist, PatientName: PatientName, PatientAge: PatientAge, PatientSex: PatientSex } }).then(
+                    axios.post('@Url.Action("Add", "Arrangeoperation")', { arrangeoperation: { OperationID: OperationNames, DepartmentID: DepartmentName, OperationName: OperationName, OperatorDoctor: OperatorDoctor, Instrument: Instrument, Tour: Tour, Anesthetist: Anesthetist, PatientName: PatientName, PatientAge: PatientAge, PatientSex: PatientSex} }).then(
                         (response) => {
                             if (response.data > 0) {
                                 alert("保存成功")

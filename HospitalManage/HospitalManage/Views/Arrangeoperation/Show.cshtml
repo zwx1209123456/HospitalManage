@@ -7,34 +7,39 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-
+    <meta name="viewport" content="width=device-width" charset="UTF-8" />
+    <script src="~/js/jquery-1.11.0.min.js"></script>
+    <script src="~/js/jquery-ui.min.js"></script>
     <script src="~/Scripts/axios.js"></script>
     <script src="~/Scripts/vue.js"></script>
     <link href="~/css/pag.css" rel="stylesheet" media="all" />
     <link href="~/css/css.css" rel="stylesheet" media="all" />
     <script src="~/Scripts/bootstrap.min.js"></script>
     <link href="~/css/x-admin.css" rel="stylesheet" media="all" />
-
+    <script src="~/js/jquery-ui.js"></script>
+    <style>
+        tr {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body style="background-color:#ffffff">
-    
     <div class="x-body">
         <ul class="toolbar">
             <li><a href="#" onclick="location.href='/Arrangeoperation/Add'"><span><img src="~/images/t01.png" /></span>添加</a></li>
-            <li><span><img src="~/images/t03.png" /></span>取消发布</li>
-            <li><input type="text" name="Status" placeholder="发布状态：" autocomplete="off" class="layui-input"></li>
+            <li>@*<span><img src="~/images/t03.png" /></span>*@<span><img src="~/images/t09.png" /></span>取消发布</li>
+            <li><input type="text" name="Status" placeholder="发布状态：已发布" autocomplete="off" class="layui-input"></li>
             <li><span><img src="~/images/t02.png" /></span>导出</li>
 
         </ul>
         <span class="x-right" style="line-height:25px"></span>
     </div>
     <div id="app" class="x-body">
-        <table class="tablelist">
+        <table class="tablelist" id="sort">
             <thead>
                 <tr>
                     <th>手术间</th>
-                    @*<th>台次</th>*@
+                    <th class="index">台次</th>
                     <th>病区</th>
                     <th>手术名称</th>
                     <th>主刀医生</th>
@@ -46,10 +51,10 @@
                     <th>性别</th>
                 </tr>
             </thead>
-            <tbody id="x-link">
+            <tbody @*id="x-link"*@>
                 <tr v-for="(contact,key,index) in OperationList">
                     <td>{{contact.OperationNames}}</td>
-                    @*<td>{{index }}</td>*@
+                    <td class="index"></td>
                     <td>{{contact.DepartmentName}}</td>
                     <td>{{contact.OperationName}}</td>
                     <td>{{contact.OperatorDoctor}}</td>
@@ -63,36 +68,37 @@
             </tbody>
         </table>
     </div>
-    <script src="~/js/x-layui.js" charset="utf-8"></script>
-    <script src="~/lib/layui/layui.js" charset="utf-8"></script>
-    <script src="~/js/jquery2.js" charset="utf-8"></script>
-    <script src="~/js/js.js" charset="utf-8"></script>
+    @*//拖动整行进行调整顺序*@
     <script>
-        layui.use(['element', 'laypage', 'layer', 'form'], function () {
-            $ = layui.jquery;//jquery
-            lement = layui.element();//面包导航
-            laypage = layui.laypage;//分页
-            layer = layui.layer;//弹出层
-            form = layui.form();//弹出层
+        $(document).ready(function () {
+            var fixHelperModified = function (e, tr) {
+                var $originals = tr.children();
+                var $helper = tr.clone();
+                $helper.children().each(function (index) {
+                    $(this).width($originals.eq(index).width())
+                });
+                return $helper;
+            },
+                updateIndex = function (e, ui) {
+                    $('td.index', ui.item.parent()).each(function (i) {
+                        $(this).html(i + 1);
+                    });
+                };
+            $("#sort tbody").sortable({
+                helper: fixHelperModified,
+                stop: updateIndex
+            }).disableSelection();
         });
+    </script>
+    <script>
         /*添加*/
         function new_add(title, url, w, h) {
             x_admin_show(title, url, w, h);
         }
-
-
-        // 编辑
-        function new_edit(title, url, id, w, h) {
-            x_admin_show(title, url, w, h);
-        }
-        $('.tablelist tbody tr:odd').addClass('odd');
         // 编辑
         function data_management_look(title, url, id, w, h) {
             x_admin_show(title, url, w, h);
         }
-
-    </script>
-    <script type="text/javascript">
         $('.tablelist tbody tr:odd').addClass('odd');
     </script>
     <script>
@@ -119,7 +125,6 @@
                             alert(response);
                         });
                 },
-
             }
         })
     </script>

@@ -63,6 +63,13 @@ namespace Services
         /// 性别
         /// </summary>
         public string DepartmentName { get; set; }
-
+        /// <summary>
+        /// 发布状态
+        /// </summary>
+         public int Status { get; set; }
+        /// <summary>
+        /// 手术台次
+        /// </summary>
+        public int Were { get; set; }
     }
 }

@@ -34,6 +34,7 @@ namespace Services
                 parameters.Add("@_PatientName", arrangeoperation.PatientName);
                 parameters.Add("@_PatientAge", arrangeoperation.PatientAge);
                 parameters.Add("@_PatientSex", arrangeoperation.PatientSex);
+                parameters.Add("@_Status", arrangeoperation.Status);
                 int res = conn.Execute("operation_Add", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 return res;
             }
@@ -103,6 +104,8 @@ namespace Services
                 parameters.Add("@_PatientName", arrangeoperation.PatientName);
                 parameters.Add("@_PatientAge", arrangeoperation.PatientAge);
                 parameters.Add("@_PatientSex", arrangeoperation.PatientSex);
+                parameters.Add("@_Status", arrangeoperation.Status); 
+                parameters.Add("@_Were", arrangeoperation.Were);
                 int res = conn.Execute("operation_Update", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 return res;
             }
