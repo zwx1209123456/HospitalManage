@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApprovalServices.cs" />
     <Compile Include="ArrangeMonthService.cs" />
     <Compile Include="ArrangeoperationServices.cs" />
     <Compile Include="ChainsGroupService.cs" />

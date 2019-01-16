@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IApprovalServices.cs" />
     <Compile Include="IArrangeMonthServices.cs" />
     <Compile Include="IArrangeoperationServices.cs" />
     <Compile Include="IChainsGroupService.cs" />

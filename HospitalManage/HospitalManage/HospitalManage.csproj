@@ -176,6 +176,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="App_Start\UnityWebApiActivator.cs" />
+    <Compile Include="Controllers\ApprovalController.cs" />
     <Compile Include="Controllers\ArrangeMonthController.cs" />
     <Compile Include="Controllers\ArrangeoperationController.cs" />
     <Compile Include="Controllers\CaseController.cs" />
@@ -538,6 +539,7 @@
     <Content Include="Views\ToArrOperation\Index.cshtml" />
     <Content Include="Views\Arrangeoperation\Indexs.cshtml" />
     <Content Include="Views\Arrangeoperation\Show.cshtml" />
+    <Content Include="Views\Approval\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
