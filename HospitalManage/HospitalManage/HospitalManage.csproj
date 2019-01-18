@@ -179,6 +179,7 @@
     <Compile Include="Controllers\ApprovalconditionController.cs" />
     <Compile Include="Controllers\ApprovalController.cs" />
     <Compile Include="Controllers\ApprovalflowController.cs" />
+    <Compile Include="Controllers\ArrangeController.cs" />
     <Compile Include="Controllers\ArrangeMonthController.cs" />
     <Compile Include="Controllers\ArrangeoperationController.cs" />
     <Compile Include="Controllers\CaseController.cs" />
@@ -558,6 +559,7 @@
     <Content Include="Views\Approvalflow\Add.cshtml" />
     <Content Include="Views\Approvalflow\Show.cshtml" />
     <Content Include="Views\Approvalflow\Update.cshtml" />
+    <Content Include="Views\Arrange\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
