@@ -17,6 +17,7 @@
 </head>
 <body style="background-color:#ffffff">
     <div id="app" class="x-body">
+        <a href="#" onclick="location.href='/Vacation/Add'"><span><img src="~/images/t01.png" /></span>添加</a>
         <table class="tablelist">
             <thead>
                 <tr>
@@ -24,7 +25,6 @@
                     <th>每天请假上限人数</th>
                     <th>每周请假上限人数</th>
                     <th>每月请假上限人数</th>
-                    <th>操作</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -39,9 +39,6 @@
                             <a href="#" v-on:click="Get(item.Id)">修改</a>
                             <a href="javascript:void(0)" v-on:click="Delete(item.Id)">删除</a>
                         </div>
-                    </td>
-                    <td>
-                        <a href="#" onclick="location.href='/Vacation/Add'"><span><img src="~/images/t01.png" /></span>添加</a>
                     </td>
                 </tr>
             </tbody>
