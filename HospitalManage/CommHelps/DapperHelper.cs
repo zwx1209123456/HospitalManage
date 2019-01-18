@@ -14,7 +14,7 @@ namespace CommHelps
         {
            // _cnnstr = "server=.;database=DataMip;uid=sa;pwd=123456";
 			_cnnstr= "server=172.25.53.46;port=; database=hospital;username=root;password=123456;";//MySQL
-            //_cnnstr = "server=localhost;port=; database=hospitaldate;username=root;password=123456;";//MySQL
+           //_cnnstr = "server=localhost;port=; database=hospitaldate;username=root;password=123456;";//MySQL
         }
 
         /// <summary>

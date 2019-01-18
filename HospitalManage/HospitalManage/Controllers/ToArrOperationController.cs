@@ -67,9 +67,9 @@ namespace HospitalManage.Controllers
             return View();
         }
         [HttpPost]
-        public int Update(Arrangeoperation arrangeoperation)
+        public int Update(List<Arrangeoperation> operations)
         {
-            return iarrangeoperationServices.Update(arrangeoperation);
+            return iarrangeoperationServices.Update(operations);
         }
         /// <summary>
         /// 获取id
