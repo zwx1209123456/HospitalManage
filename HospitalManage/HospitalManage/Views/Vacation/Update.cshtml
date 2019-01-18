@@ -1,0 +1,126 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <script src="~/Scripts/axios.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+    <link href="~/css/pag.css" rel="stylesheet" media="all" />
+    <link href="~/css/css.css" rel="stylesheet" media="all" />
+    <link href="~/css/x-admin.css" rel="stylesheet" media="all" />
+</head>
+<body style="background-color:#ffffff">
+    <div id="app" class="x-body">
+        <table class="tablelist">
+            <tr>
+                <td>编号：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="Id" />
+                </td>
+            </tr>
+            <tr>
+                <td>每天请假上限人数：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="DayApplyLimit" />
+                </td>
+            </tr>
+            <tr>
+                <td>每周请假上限人数：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="WeekApplyLimit" />
+                </td>
+            </tr>
+            <tr>
+                <td>每月请假上限人数：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="MonthApplyLimit" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="#" v-on:click="Add(Id,DayApplyLimit,WeekApplyLimit,MonthApplyLimit)"><span><img src="~/images/t01.png" /></span>保存</a>
+                </td>
+                <td>
+                    <a href="#" onclick="location.href='/Vacation/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script src="~/js/x-layui.js" charset="utf-8"></script>
+    <script src="~/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="~/js/jquery2.js" charset="utf-8"></script>
+    <script src="~/js/js.js" charset="utf-8"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script>
+        /*添加*/
+        function new_add(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+        $('.tablelist tbody tr:odd').addClass('odd');
+        // 编辑
+        function data_management_look(title, url, id, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+
+    </script>
+    <script>
+          var vm = new Vue({
+            el: "#app",
+              data: {
+                Id:"",
+                DayApplyLimit: "",
+                WeekApplyLimit: "",
+                MonthApplyLimit: "",
+              },
+            mounted() {
+                this.Get(@Request.QueryString["Id"]);
+            },
+              methods: {
+                 Get: function (Id) {
+                    var that = this;
+                    var param = new URLSearchParams();
+                    param.append("Id", Id);
+                    axios.get('@Url.Action("Get", "Vacation")', { params:{ Id: Id }}).then(
+                            (response) => {
+                                if (response.data) {
+                                    that.Id = response.data.Id;
+                                    that.DayApplyLimit = response.data.DayApplyLimit;
+                                    that.WeekApplyLimit = response.data.WeekApplyLimit;
+                                    that.MonthApplyLimit = response.data.MonthApplyLimit;
+                                }
+                            },
+                            (response) => {
+                                alert(response.status);
+                            }
+                        ).catch(function (response) {
+                            alert(response);
+                        });
+                },
+                Add: function (Id,DayApplyLimit, WeekApplyLimit, MonthApplyLimit) {
+                    axios.post('@Url.Action("Update", "Vacation")', { vacation: { Id: Id, DayApplyLimit: DayApplyLimit, WeekApplyLimit: WeekApplyLimit, MonthApplyLimit: MonthApplyLimit} }).then(
+                        (response) => {
+                            if (response.data > 0) {
+                                alert("保存成功")
+                            }
+                            else {
+                                alert("已有该条节点")
+                            }
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <script src="~/Scripts/axios.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+    <link href="~/css/pag.css" rel="stylesheet" media="all" />
+    <link href="~/css/css.css" rel="stylesheet" media="all" />
+    <link href="~/css/x-admin.css" rel="stylesheet" media="all" />
+</head>
+<body style="background-color:#ffffff">
+    <div id="app" class="x-body">
+        <table class="tablelist">
+            <tr>
+                <td>编号：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="Id" />
+                </td>
+            </tr>
+            <tr>
+                <td>业务名称：</td>
+                <td>
+                    <select id="Select1" v-model="ApprovalName">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="item in ApprovalList" v-bind:value="item.Id">
+                            {{item.ApprovalName}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>配置流程编码：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="FlowCode" />
+                </td>
+            </tr>
+            <tr>
+                <td>科室名称：</td>
+                <td>
+                    <select id="Select1" v-model="DepartmentName">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="item in DepartmentList" v-bind:value="item.Id">
+                            {{item.DepartmentName}}
+                        </option>
+                    </select>
+
+                </td>
+            </tr>
+            <tr>
+                <td>条件名称：</td>
+                <td>
+                    <select id="Select1" v-model="Conditions">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="item in ConditionList" v-bind:value="item.Id">
+                            {{item.Conditions}}
+                        </option>
+                    </select>
+
+                </td>
+            </tr>
+            <tr>
+                <td>审批状态：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="ApprovalStatus" />
+                </td>
+            </tr>
+            <tr>
+                <td>审批类型：</td>
+                <td>
+                    <input id="Radio1" type="radio" value="主管（指定一级）" v-model="ApprovalType" />主管（指定一级）
+                    <input id="Radio1" type="radio" value="主管（指定多级）" v-model="ApprovalType" />主管（指定多级）
+                    <input id="Radio1" type="radio" value="指定成员" v-model="ApprovalType" />指定成员
+                    <input id="Radio1" type="radio" value="指定角色" v-model="ApprovalType" />指定角色
+                    <input id="Radio1" type="radio" value="发起人自己" v-model="ApprovalType" />发起人自己
+                </td>
+            </tr>
+            <tr>
+                <td>审批方式：</td>
+                <td>
+                    <input id="Radio1" type="radio" value="依次审批" v-model="ApprovalWay" />依次审批
+                    <input id="Radio1" type="radio" value="或签（一名审批人同意或拒绝）" v-model="ApprovalWay" />或签（一名审批人同意或拒绝）
+                    <input id="Radio1" type="radio" value="会签（需所有审批人同意）（不可多选）" v-model="ApprovalWay" />会签（需所有审批人同意）（不可多选）
+                </td>
+            </tr>
+            <tr>
+                <td>职务名称</td>
+                <td>
+                    <select id="Select1" v-model="DutyName">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="item in DutyList" v-bind:value="item.Id">
+                            {{item.DutyName}}
+                        </option>
+                    </select>
+
+                </td>
+            </tr>
+            <tr>
+                <td>审批起点</td>
+                <td>
+                    <select id="Select1" v-model="StartApproval">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="StartApproval in StartList" v-bind:value="StartApproval">
+                            {{StartApproval}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>审批终点</td>
+                <td>
+                    <select id="Select1" v-model="LastApproval">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="LastApproval in LastList" v-bind:value="LastApproval">
+                            {{LastApproval}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>审批人</td>
+                <td>
+                    <input id="Text1" type="text" v-model="UserIDs" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="#" v-on:click="Add(Id,ApprovalName, FlowCode, DepartmentName, Conditions, ApprovalStatus, ApprovalType, ApprovalWay, DutyName, StartApproval, LastApproval, UserIDs)">保存</a>
+                </td>
+                <td>
+                    <a href="#" onclick="location.href='/Approvalflow/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script src="~/js/x-layui.js" charset="utf-8"></script>
+    <script src="~/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="~/js/jquery2.js" charset="utf-8"></script>
+    <script src="~/js/js.js" charset="utf-8"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script>
+        /*添加*/
+        function new_add(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+        $('.tablelist tbody tr:odd').addClass('odd');
+        // 编辑
+        function data_management_look(title, url, id, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+
+    </script>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                Id:"",
+                //科室
+                DepartmentList: [],
+                DepartmentName: "请选择",
+                //职务
+                DutyList: [],
+                DutyName: "请选择",
+                //职务
+                ConditionList: [],
+                Conditions: "请选择",
+                //职务
+                ApprovalList: [],
+                ApprovalName: "请选择",
+                //职务
+                //UserList: [],
+                //UserName: "请选择",
+
+                StartList: ['一级主管', '二级主管', '三级主管'],
+                StartApproval: "请选择",
+
+                LastList: ['一级主管', '二级主管', '三级主管'],
+                LastApproval: "请选择",
+            },
+            mounted() {
+                this.getDepartmentList();
+                this.getDutyList();
+                this.getApprovalList();
+                //this.getUserList();
+                this.getConditionList();
+                this.Get(@Request.QueryString["Id"]);
+            },
+            methods: {
+                     Get: function (Id) {
+                    var that = this;
+                    var param = new URLSearchParams();
+                    param.append("Id", Id);
+                    axios.get('@Url.Action("Get", "Approvalflow")', { params:{ Id: Id }}).then(
+                            (response) => {
+                                if (response.data) {
+                                    that.Id = response.data.Id;
+                                    that.ApprovalName = response.data.ApprovalID;
+                                    that.FlowCode = response.data.FlowCode;
+                                    that.DepartmentName = response.data.DepartmentID;
+                                    that.Conditions = response.data.ConditionID;
+                                    that.ApprovalStatus = response.data.ApprovalStatus;
+                                    that.ApprovalType = response.data.ApprovalType;
+                                    that.ApprovalWay = response.data.ApprovalWay;
+                                    that.DutyName = response.data.DutyID;
+                                    that.StartApproval = response.data.StartApproval;
+                                    that.LastApproval = response.data.LastApproval;
+                                    that.UserIDs = response.data.UserIDs;
+                                }
+                            },
+                            (response) => {
+                                alert(response.status);
+                            }
+                        ).catch(function (response) {
+                            alert(response);
+                        });
+                },
+                 Add: function (Id,ApprovalName, FlowCode, DepartmentName, Conditions, ApprovalStatus, ApprovalType, ApprovalWay, DutyName, StartApproval, LastApproval, UserIDs) {
+                     axios.post('@Url.Action("Update", "Approvalflow")', { approvalflow: { Id: Id, ApprovalID: ApprovalName, FlowCode: FlowCode, DepartmentID: DepartmentName, ConditionID: Conditions, ApprovalStatus: ApprovalStatus, ApprovalType: ApprovalType, ApprovalWay: ApprovalWay, DutyID: DutyName, StartApproval: StartApproval, LastApproval: LastApproval, UserIDs: UserIDs} }).then(
+                        (response) => {
+                            if (response.data > 0) {
+                                alert("保存成功")
+                            }
+                            else {
+                                alert("已有该个配置信息")
+                            }
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                 },
+                 ///获取审批条件的下拉菜单
+                getConditionList: function () {
+                    axios.get('@Url.Action("Shows", "Approvalcondition")').then(
+                        (response) => {
+                            console.log(response)
+                            this.ConditionList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                  ///获取业务下拉菜单
+                getApprovalList: function () {
+                    axios.get('@Url.Action("Shows", "Approval")').then(
+                        (response) => {
+                            console.log(response)
+                            this.ApprovalList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                ///获取科室的下拉菜单
+                getDepartmentList: function () {
+                    axios.get('@Url.Action("GetDepartments", "Users")').then(
+                        (response) => {
+                            console.log(response)
+                            this.DepartmentList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                ///获取职务的下拉菜单
+                getDutyList: function () {
+                    axios.get('@Url.Action("GetDuties", "Users")').then(
+                        (response) => {
+                            console.log(response)
+                            this.DutyList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                 },
+                 ///获取用户的下拉菜单
+                @*getUserList: function () {
+                    axios.get('@Url.Action("GetUsers", "Users")').then(
+                        (response) => {
+                            console.log(response)
+                            this.UserList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },*@
+            }
+        })
+    </script>
+</body>
+</html>

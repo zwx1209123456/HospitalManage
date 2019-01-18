@@ -1,0 +1,117 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Show</title>
+    <script src="~/Scripts/axios.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+    <link href="~/css/pag.css" rel="stylesheet" media="all" />
+    <link href="~/css/css.css" rel="stylesheet" media="all" />
+    <link href="~/css/x-admin.css" rel="stylesheet" media="all" />
+</head>
+<body style="background-color:#ffffff">
+    <div id="app" class="x-body">
+        <table class="tablelist">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>每天请假上限人数</th>
+                    <th>每周请假上限人数</th>
+                    <th>每月请假上限人数</th>
+                    <th>操作</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="x-link">
+                <tr v-for="(item,key,index) in List">
+                    <td>{{item.Id}}</td>
+                    <td>{{item.DayApplyLimit}}</td>
+                    <td>{{item.WeekApplyLimit}}</td>
+                    <td>{{item.MonthApplyLimit}}</td>
+                    <td>
+                        <div v-if="item.Id!=''">
+                            <a href="#" v-on:click="Get(item.Id)">修改</a>
+                            <a href="javascript:void(0)" v-on:click="Delete(item.Id)">删除</a>
+                        </div>
+                    </td>
+                    <td>
+                        <a href="#" onclick="location.href='/Vacation/Add'"><span><img src="~/images/t01.png" /></span>添加</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="~/js/x-layui.js" charset="utf-8"></script>
+    <script src="~/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="~/js/jquery2.js" charset="utf-8"></script>
+    <script src="~/js/js.js" charset="utf-8"></script>
+    <script>
+        layui.use(['element', 'laypage', 'layer', 'form'], function () {
+            $ = layui.jquery;//jquery
+            lement = layui.element();//面包导航
+            laypage = layui.laypage;//分页
+            layer = layui.layer;//弹出层
+            form = layui.form();//弹出层
+        });
+        // 编辑
+        function data_management_look(title, url, id, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+    <script>
+         var vm = new Vue({
+            el: "#app",
+            data: {
+                Id:"",
+                List:[],
+            },
+            mounted() {
+                this.Show();
+            },
+            methods: {
+                Show: function () {
+                        axios.get('@Url.Action("Shows", "Vacation")').then(
+                            (response) => {
+                                this.List = response.data;
+                            },
+                            (response) => {
+                                alert(response.status);
+                            }
+                        ).catch(function (response) {
+                            alert(response);
+                        });
+                },
+                Get: function (Id) {
+                    location.href = "Update?Id=" + Id;
+                },
+                 ///删除用户信息
+                Delete: function (Id) {
+                        axios.post('@Url.Action("Delete", "Vacation")', { Id: Id }).then(
+                        (response) => {
+                            if (response.data > 0) {
+                                alert("删除成功")
+                                this.Show();
+                            }
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                    },
+            }
+        })
+    </script>
+</body>
+</html>

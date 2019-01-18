@@ -19,36 +19,29 @@
     <div id="app" class="x-body">
         <table class="tablelist">
             <tr>
-                <td>业务名称：</td>
+                <td>每天请假上限人数：</td>
                 <td>
-                    <input id="Text1" type="text" v-model="ApprovalName" />
+                    <input id="Text1" type="text" v-model="DayApplyLimit" />
                 </td>
             </tr>
             <tr>
-                <td>是否启用：</td>
+                <td>每周请假上限人数：</td>
                 <td>
-                    <input id="Radio1" type="radio" value="是" v-model="IsAllowModify" />是
-                    <input id="Radio1" type="radio" value="否" v-model="IsAllowModify" />否
+                    <input id="Text1" type="text" v-model="WeekApplyLimit" />
                 </td>
             </tr>
             <tr>
-                <td>创建人：</td>
+                <td>每月请假上限人数：</td>
                 <td>
-                    <input id="Text1" type="text" v-model="Creator" />
-                </td>
-            </tr>
-            <tr>
-                <td>创建时间：</td>
-                <td>
-                    <input id="Text1" type="text" v-model="CreateTime" />
+                    <input id="Text1" type="text" v-model="MonthApplyLimit" />
                 </td>
             </tr>
             <tr>
                 <td>
-                    <a href="#" v-on:click="Add(ApprovalName, IsAllowModify, Creator, CreateTime)"><span><img src="~/images/t01.png" /></span>保存</a>
+                    <a href="#" v-on:click="Add(DayApplyLimit,WeekApplyLimit,MonthApplyLimit)"><span><img src="~/images/t01.png" /></span>保存</a>
                 </td>
                 <td>
-                    <a href="#" onclick="location.href='/Approval/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
+                    <a href="#" onclick="location.href='/Vacation/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
                 </td>
             </tr>
         </table>
@@ -71,23 +64,22 @@
 
     </script>
     <script>
-        var vm = new Vue({
+          var vm = new Vue({
             el: "#app",
             data: {
-                ApprovalName: "",
-                IsAllowModify: "",
-                Creator: "",
-                CreateTime: "",
+                DayApplyLimit: "",
+                WeekApplyLimit: "",
+                MonthApplyLimit: "",
             },
             methods: {
-                Add: function (ApprovalName, IsAllowModify, Creator, CreateTime) {
-                    axios.post('@Url.Action("Add", "Approval")', { approval: { ApprovalName: ApprovalName, IsAllowModify: IsAllowModify, Creator: Creator, CreateTime: CreateTime} }).then(
+                Add: function (DayApplyLimit, WeekApplyLimit, MonthApplyLimit) {
+                    axios.post('@Url.Action("Add", "Vacation")', { vacation: { DayApplyLimit: DayApplyLimit, WeekApplyLimit: WeekApplyLimit, MonthApplyLimit: MonthApplyLimit} }).then(
                         (response) => {
                             if (response.data > 0) {
                                 alert("保存成功")
                             }
                             else {
-                                alert("已有该条业务")
+                                alert("已有该条节点")
                             }
                         },
                         (response) => {

@@ -13,7 +13,7 @@ namespace Models
     {
         /// <summary>
         /// 主键id
-        /// </summary>
+        /// </summary>  
          public int Id { get; set; }
         /// <summary>
         /// 审批条件

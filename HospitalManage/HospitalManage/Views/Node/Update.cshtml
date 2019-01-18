@@ -19,16 +19,15 @@
     <div id="app" class="x-body">
         <table class="tablelist">
             <tr>
-                <td>业务名称：</td>
+                <td>编号：</td>
                 <td>
-                    <input id="Text1" type="text" v-model="ApprovalName" />
+                    <input id="Text1" type="text" v-model="Id" />
                 </td>
             </tr>
             <tr>
-                <td>是否启用：</td>
+                <td>节点名称：</td>
                 <td>
-                    <input id="Radio1" type="radio" value="是" v-model="IsAllowModify" />是
-                    <input id="Radio1" type="radio" value="否" v-model="IsAllowModify" />否
+                    <input id="Text1" type="text" v-model="NodeName" />
                 </td>
             </tr>
             <tr>
@@ -45,10 +44,10 @@
             </tr>
             <tr>
                 <td>
-                    <a href="#" v-on:click="Add(ApprovalName, IsAllowModify, Creator, CreateTime)"><span><img src="~/images/t01.png" /></span>保存</a>
+                    <a href="#" v-on:click="Add(Id,NodeName, Creator, CreateTime)"><span><img src="~/images/t01.png" /></span>保存</a>
                 </td>
                 <td>
-                    <a href="#" onclick="location.href='/Approval/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
+                    <a href="#" onclick="location.href='/Node/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
                 </td>
             </tr>
         </table>
@@ -71,23 +70,46 @@
 
     </script>
     <script>
-        var vm = new Vue({
+         var vm = new Vue({
             el: "#app",
-            data: {
-                ApprovalName: "",
-                IsAllowModify: "",
+             data: {
+                Id:"",
+                NodeName: "",
                 Creator: "",
                 CreateTime: "",
+             },
+              mounted() {
+                this.Get(@Request.QueryString["Id"]);
             },
-            methods: {
-                Add: function (ApprovalName, IsAllowModify, Creator, CreateTime) {
-                    axios.post('@Url.Action("Add", "Approval")', { approval: { ApprovalName: ApprovalName, IsAllowModify: IsAllowModify, Creator: Creator, CreateTime: CreateTime} }).then(
+             methods: {
+                  Get: function (Id) {
+                    var that = this;
+                    var param = new URLSearchParams();
+                    param.append("Id", Id);
+                    axios.get('@Url.Action("Get", "Node")', { params:{ Id: Id }}).then(
+                            (response) => {
+                                if (response.data) {
+                                    that.Id = response.data.Id;
+                                    that.NodeName = response.data.NodeName;
+                                    that.Creator = response.data.Creator;
+                                    that.CreateTime = that.ChangeDateFormat(response.data.CreateTime);
+                                }
+                            },
+                            (response) => {
+                                alert(response.status);
+                            }
+                        ).catch(function (response) {
+                            alert(response);
+                        });
+                },
+                Add: function (Id,NodeName, Creator, CreateTime) {
+                    axios.post('@Url.Action("Update", "Node")', { node: { Id: Id, NodeName: NodeName, Creator: Creator, CreateTime: CreateTime} }).then(
                         (response) => {
                             if (response.data > 0) {
                                 alert("保存成功")
                             }
                             else {
-                                alert("已有该条业务")
+                                alert("已有该条节点")
                             }
                         },
                         (response) => {
@@ -96,7 +118,13 @@
                     ).catch(function (response) {
                         alert(response);
                     });
-                },
+                 },
+                 ChangeDateFormat(cellval) {
+                     var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+                     var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                     var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                     return date.getFullYear() + "-" + month + "-" + currentDate;
+                 },
             }
         })
     </script>

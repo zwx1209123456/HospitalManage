@@ -19,36 +19,28 @@
     <div id="app" class="x-body">
         <table class="tablelist">
             <tr>
-                <td>业务名称：</td>
+                <td>审批条件</td>
                 <td>
-                    <input id="Text1" type="text" v-model="ApprovalName" />
+                    <input id="Text1" type="text" v-model="Conditions" />
                 </td>
             </tr>
             <tr>
-                <td>是否启用：</td>
+                <td>业务名称</td>
                 <td>
-                    <input id="Radio1" type="radio" value="是" v-model="IsAllowModify" />是
-                    <input id="Radio1" type="radio" value="否" v-model="IsAllowModify" />否
-                </td>
-            </tr>
-            <tr>
-                <td>创建人：</td>
-                <td>
-                    <input id="Text1" type="text" v-model="Creator" />
-                </td>
-            </tr>
-            <tr>
-                <td>创建时间：</td>
-                <td>
-                    <input id="Text1" type="text" v-model="CreateTime" />
+                    <select id="Select1" v-model="ApprovalName">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="item in ApprovalList" v-bind:value="item.Id">
+                            {{item.ApprovalName}}
+                        </option>
+                    </select>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <a href="#" v-on:click="Add(ApprovalName, IsAllowModify, Creator, CreateTime)"><span><img src="~/images/t01.png" /></span>保存</a>
+                    <a href="#" v-on:click="Add(Conditions, ApprovalName)"><span><img src="~/images/t01.png" /></span>保存</a>
                 </td>
                 <td>
-                    <a href="#" onclick="location.href='/Approval/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
+                    <a href="#" onclick="location.href='/Approvalcondition/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
                 </td>
             </tr>
         </table>
@@ -74,21 +66,37 @@
         var vm = new Vue({
             el: "#app",
             data: {
-                ApprovalName: "",
-                IsAllowModify: "",
-                Creator: "",
-                CreateTime: "",
+                Conditions: "",
+                ApprovalList: [],
+                ApprovalName:"请选择",
+            },
+            mounted() {
+                this.getApprovalList();
             },
             methods: {
-                Add: function (ApprovalName, IsAllowModify, Creator, CreateTime) {
-                    axios.post('@Url.Action("Add", "Approval")', { approval: { ApprovalName: ApprovalName, IsAllowModify: IsAllowModify, Creator: Creator, CreateTime: CreateTime} }).then(
+                Add: function (Conditions, ApprovalName) {
+                    axios.post('@Url.Action("Add", "Approvalcondition")', { approvalcondition: { Conditions: Conditions, Approvalid: ApprovalName} }).then(
                         (response) => {
                             if (response.data > 0) {
                                 alert("保存成功")
                             }
                             else {
-                                alert("已有该条业务")
+                                alert("已存在这个审批条件")
                             }
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                 ///获取科室的下拉菜单
+                getApprovalList: function () {
+                    axios.get('@Url.Action("Shows", "Approval")').then(
+                        (response) => {
+                            console.log(response)
+                            this.ApprovalList = response.data;                    
                         },
                         (response) => {
                             alert(response.status);

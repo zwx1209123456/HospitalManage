@@ -19,16 +19,9 @@
     <div id="app" class="x-body">
         <table class="tablelist">
             <tr>
-                <td>业务名称：</td>
+                <td>节点名称：</td>
                 <td>
-                    <input id="Text1" type="text" v-model="ApprovalName" />
-                </td>
-            </tr>
-            <tr>
-                <td>是否启用：</td>
-                <td>
-                    <input id="Radio1" type="radio" value="是" v-model="IsAllowModify" />是
-                    <input id="Radio1" type="radio" value="否" v-model="IsAllowModify" />否
+                    <input id="Text1" type="text" v-model="NodeName" />
                 </td>
             </tr>
             <tr>
@@ -45,10 +38,10 @@
             </tr>
             <tr>
                 <td>
-                    <a href="#" v-on:click="Add(ApprovalName, IsAllowModify, Creator, CreateTime)"><span><img src="~/images/t01.png" /></span>保存</a>
+                    <a href="#" v-on:click="Add(NodeName, Creator, CreateTime)"><span><img src="~/images/t01.png" /></span>保存</a>
                 </td>
                 <td>
-                    <a href="#" onclick="location.href='/Approval/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
+                    <a href="#" onclick="location.href='/Node/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
                 </td>
             </tr>
         </table>
@@ -71,23 +64,22 @@
 
     </script>
     <script>
-        var vm = new Vue({
+         var vm = new Vue({
             el: "#app",
             data: {
-                ApprovalName: "",
-                IsAllowModify: "",
+                NodeName: "",
                 Creator: "",
                 CreateTime: "",
             },
             methods: {
-                Add: function (ApprovalName, IsAllowModify, Creator, CreateTime) {
-                    axios.post('@Url.Action("Add", "Approval")', { approval: { ApprovalName: ApprovalName, IsAllowModify: IsAllowModify, Creator: Creator, CreateTime: CreateTime} }).then(
+                Add: function (NodeName, Creator, CreateTime) {
+                    axios.post('@Url.Action("Add", "Node")', { node: { NodeName: NodeName, Creator: Creator, CreateTime: CreateTime} }).then(
                         (response) => {
                             if (response.data > 0) {
                                 alert("保存成功")
                             }
                             else {
-                                alert("已有该条业务")
+                                alert("已有该条节点")
                             }
                         },
                         (response) => {

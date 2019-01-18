@@ -66,6 +66,14 @@ namespace HospitalManage
             container.RegisterType<IOperationServices, OperationServices>();
             ///审批业务表
             container.RegisterType<IApprovalServices, ApprovalServices>();
+            //审批条件表
+            container.RegisterType<IApprovalconditionServices, ApprovalconditionServices>();
+            //审批节点表
+            container.RegisterType<INodeServices, NodeServices>();
+            //假期管理
+            container.RegisterType<IVacationServices, VacationServices>();
+            //审批流程配置信息
+            container.RegisterType<IApprovalflowServices, ApprovalflowServices>();
         }
     }
 }

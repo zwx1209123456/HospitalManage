@@ -8,7 +8,6 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Add</title>
     <script src="~/Scripts/axios.js"></script>
     <script src="~/Scripts/vue.js"></script>
     <link href="~/css/pag.css" rel="stylesheet" media="all" />
@@ -18,6 +17,12 @@
 <body style="background-color:#ffffff">
     <div id="app" class="x-body">
         <table class="tablelist">
+            <tr>
+                <td>业务编号：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="Id" />
+                </td>
+            </tr>
             <tr>
                 <td>业务名称：</td>
                 <td>
@@ -45,7 +50,7 @@
             </tr>
             <tr>
                 <td>
-                    <a href="#" v-on:click="Add(ApprovalName, IsAllowModify, Creator, CreateTime)"><span><img src="~/images/t01.png" /></span>保存</a>
+                    <a href="#" v-on:click="Add(Id,ApprovalName, IsAllowModify, Creator, CreateTime)"><span><img src="~/images/t01.png" /></span>保存</a>
                 </td>
                 <td>
                     <a href="#" onclick="location.href='/Approval/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
@@ -74,14 +79,39 @@
         var vm = new Vue({
             el: "#app",
             data: {
+                Id:"",
                 ApprovalName: "",
                 IsAllowModify: "",
                 Creator: "",
                 CreateTime: "",
             },
+             mounted() {
+                this.Get(@Request.QueryString["Id"]);
+            },
             methods: {
-                Add: function (ApprovalName, IsAllowModify, Creator, CreateTime) {
-                    axios.post('@Url.Action("Add", "Approval")', { approval: { ApprovalName: ApprovalName, IsAllowModify: IsAllowModify, Creator: Creator, CreateTime: CreateTime} }).then(
+                Get: function (Id) {
+                    var that = this;
+                    var param = new URLSearchParams();
+                    param.append("Id", Id);
+                    axios.get('@Url.Action("Get", "Approval")', { params:{ Id: Id }}).then(
+                            (response) => {
+                                if (response.data) {
+                                    that.Id = response.data.Id;
+                                    that.ApprovalName = response.data.ApprovalName;
+                                    that.IsAllowModify = response.data.IsAllowModify;
+                                    that.Creator = response.data.Creator;
+                                    that.CreateTime = that.ChangeDateFormat(response.data.CreateTime);
+                                }
+                            },
+                            (response) => {
+                                alert(response.status);
+                            }
+                        ).catch(function (response) {
+                            alert(response);
+                        });
+                },
+                Add: function (Id,ApprovalName, IsAllowModify, Creator, CreateTime) {
+                    axios.post('@Url.Action("Update", "Approval")', { approval: { Id: Id, ApprovalName: ApprovalName, IsAllowModify: IsAllowModify, Creator: Creator, CreateTime: CreateTime} }).then(
                         (response) => {
                             if (response.data > 0) {
                                 alert("保存成功")
@@ -96,6 +126,12 @@
                     ).catch(function (response) {
                         alert(response);
                     });
+                },
+                ChangeDateFormat(cellval) {
+                    var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+                    var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                    var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                    return date.getFullYear() + "-" + month + "-" + currentDate;
                 },
             }
         })
