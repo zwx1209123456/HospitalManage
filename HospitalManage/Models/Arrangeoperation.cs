@@ -9,7 +9,7 @@ namespace Models
     /// <summary>
     /// 手术申请表
     /// </summary>
-   public class Arrangeoperation
+    public class Arrangeoperation
     {
         /// <summary>
         /// 主键id
@@ -56,20 +56,23 @@ namespace Models
         /// </summary>
         public string PatientSex { get; set; }
         /// <summary>
-        /// 性别
+        /// 手术名称
         /// </summary>
         public string OperationNames { get; set; }
         /// <summary>
-        /// 性别
+        /// 科室名称
         /// </summary>
         public string DepartmentName { get; set; }
         /// <summary>
         /// 发布状态
         /// </summary>
-         public int Status { get; set; }
+        public int Status { get; set; }
         /// <summary>
         /// 手术台次
         /// </summary>
         public int Were { get; set; }
+
+        public DateTime OpeTime { get; set; }
+        public DateTime publishTime { get; set; }
     }
 }

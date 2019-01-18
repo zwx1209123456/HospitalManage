@@ -496,6 +496,7 @@
     <Content Include="Scripts\vue-resource.js" />
     <Content Include="Scripts\vue.js" />
     <Content Include="Scripts\vue.min.js" />
+    <Content Include="Views\Solitaire\Index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -520,7 +521,6 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Show.cshtml" />
     <Content Include="Views\Users\Update.cshtml" />
-    <Content Include="Views\Solitaire\Index.cshtml" />
     <Content Include="Views\Solitaire\AddChains.cshtml" />
     <Content Include="Views\Solitaire\UodateChains.cshtml" />
     <Content Include="Views\Solitaire\AddMember.cshtml" />

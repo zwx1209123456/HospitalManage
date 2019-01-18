@@ -38,6 +38,6 @@ namespace IServices
         /// </summary>
         /// <param name="arrangeoperation"></param>
         /// <returns></returns>
-        int Update(Arrangeoperation arrangeoperation);
+        int Update(List<Arrangeoperation> operations);
     }
 }

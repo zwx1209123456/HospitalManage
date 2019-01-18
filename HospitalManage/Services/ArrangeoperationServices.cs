@@ -88,25 +88,33 @@ namespace Services
         /// </summary>
         /// <param name="arrangeoperation"></param>
         /// <returns></returns>
-        public int Update(Arrangeoperation arrangeoperation)
+        public int Update(List<Arrangeoperation> operations)
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@_Id", arrangeoperation.Id);
-                parameters.Add("@_OperationID", arrangeoperation.OperationID);
-                parameters.Add("@_DepartmentID", arrangeoperation.DepartmentID);
-                parameters.Add("@_OperationName", arrangeoperation.OperationName);
-                parameters.Add("@_OperatorDoctor", arrangeoperation.OperatorDoctor);
-                parameters.Add("@_Instrument", arrangeoperation.Instrument);
-                parameters.Add("@_Tour", arrangeoperation.Tour);
-                parameters.Add("@_Anesthetist", arrangeoperation.Anesthetist);
-                parameters.Add("@_PatientName", arrangeoperation.PatientName);
-                parameters.Add("@_PatientAge", arrangeoperation.PatientAge);
-                parameters.Add("@_PatientSex", arrangeoperation.PatientSex);
-                parameters.Add("@_Status", arrangeoperation.Status); 
-                parameters.Add("@_Were", arrangeoperation.Were);
-                int res = conn.Execute("operation_Update", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                List<DynamicParameters> dynamicParameters = new List<DynamicParameters>();
+                foreach (var arrangeoperation in operations)
+                {
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@_Id", arrangeoperation.Id);
+                    parameters.Add("@_OperationID", arrangeoperation.OperationID);
+                    parameters.Add("@_DepartmentID", arrangeoperation.DepartmentID);
+                    parameters.Add("@_OperationName", arrangeoperation.OperationName);
+                    parameters.Add("@_OperatorDoctor", arrangeoperation.OperatorDoctor);
+                    parameters.Add("@_Instrument", arrangeoperation.Instrument);
+                    parameters.Add("@_Tour", arrangeoperation.Tour);
+                    parameters.Add("@_Anesthetist", arrangeoperation.Anesthetist);
+                    parameters.Add("@_PatientName", arrangeoperation.PatientName);
+                    parameters.Add("@_PatientAge", arrangeoperation.PatientAge);
+                    parameters.Add("@_PatientSex", arrangeoperation.PatientSex);
+                    parameters.Add("@_Status", arrangeoperation.Status);
+                    parameters.Add("@_Were", arrangeoperation.Were);
+                    parameters.Add("@_publishTime", arrangeoperation.publishTime);
+                    parameters.Add("@_OpeTime", arrangeoperation.OpeTime); 
+                    dynamicParameters.Add(parameters);
+                }
+             
+                int res = conn.Execute("operation_Update", dynamicParameters, commandType: System.Data.CommandType.StoredProcedure);
                 return res;
             }
         }

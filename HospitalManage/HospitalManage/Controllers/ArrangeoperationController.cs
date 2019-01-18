@@ -30,11 +30,11 @@ namespace HospitalManage.Controllers
             return View();
         }
 
-        [HttpGet]
-        public JsonResult Indexs()
-        {
-            return Json(iarrangeoperationServices.Show(), JsonRequestBehavior.AllowGet);
-        }
+        //[HttpGet]
+        //public JsonResult Indexs()
+        //{
+        //    return Json(iarrangeoperationServices.Show(), JsonRequestBehavior.AllowGet);
+        //}
         /// <summary>
         /// 添加手术申请
         /// </summary>
@@ -71,9 +71,9 @@ namespace HospitalManage.Controllers
             return View();
         }
         [HttpPost]
-        public int Update(Arrangeoperation arrangeoperation)
+        public int Update(List<Arrangeoperation> operations)
         {
-            return iarrangeoperationServices.Update(arrangeoperation);
+            return iarrangeoperationServices.Update(operations);
         }
         /// <summary>
         /// 获取id
@@ -116,7 +116,8 @@ namespace HospitalManage.Controllers
         
         public JsonResult Shows()
         {
-            return Json(iarrangeoperationServices.Show(), JsonRequestBehavior.AllowGet);
+            var list = iarrangeoperationServices.Show();
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
     }
 }
