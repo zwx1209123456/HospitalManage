@@ -13,12 +13,19 @@ namespace Models
     {
         /// <summary>
         /// 主键id
-        /// </summary>
+        /// </summary>  
          public int Id { get; set; }
         /// <summary>
         /// 审批条件
         /// </summary>
          public string Conditions { get; set; }
-
+        /// <summary>
+        /// 业务id
+        /// </summary>
+        public int Approvalid { get; set; }
+        /// <summary>
+        /// 业务名称
+        /// </summary>
+        public string ApprovalName { get; set; }
     }
 }

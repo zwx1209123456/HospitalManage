@@ -176,6 +176,9 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="App_Start\UnityWebApiActivator.cs" />
+    <Compile Include="Controllers\ApprovalconditionController.cs" />
+    <Compile Include="Controllers\ApprovalController.cs" />
+    <Compile Include="Controllers\ApprovalflowController.cs" />
     <Compile Include="Controllers\ArrangeMonthController.cs" />
     <Compile Include="Controllers\ArrangeoperationController.cs" />
     <Compile Include="Controllers\CaseController.cs" />
@@ -183,6 +186,7 @@
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DutyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NodeController.cs" />
     <Compile Include="Controllers\OperationController.cs" />
     <Compile Include="Controllers\SpecialtyController.cs" />
     <Compile Include="Controllers\SolitaireController.cs" />
@@ -190,6 +194,7 @@
     <Compile Include="Controllers\TierController.cs" />
     <Compile Include="Controllers\ToArrOperationController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\VacationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -538,6 +543,21 @@
     <Content Include="Views\ToArrOperation\Index.cshtml" />
     <Content Include="Views\Arrangeoperation\Indexs.cshtml" />
     <Content Include="Views\Arrangeoperation\Show.cshtml" />
+    <Content Include="Views\Approval\Add.cshtml" />
+    <Content Include="Views\Approval\Show.cshtml" />
+    <Content Include="Views\Approval\Update.cshtml" />
+    <Content Include="Views\Approvalcondition\Add.cshtml" />
+    <Content Include="Views\Approvalcondition\Show.cshtml" />
+    <Content Include="Views\Approvalcondition\Update.cshtml" />
+    <Content Include="Views\Node\Add.cshtml" />
+    <Content Include="Views\Node\Show.cshtml" />
+    <Content Include="Views\Node\Update.cshtml" />
+    <Content Include="Views\Vacation\Add.cshtml" />
+    <Content Include="Views\Vacation\Show.cshtml" />
+    <Content Include="Views\Vacation\Update.cshtml" />
+    <Content Include="Views\Approvalflow\Add.cshtml" />
+    <Content Include="Views\Approvalflow\Show.cshtml" />
+    <Content Include="Views\Approvalflow\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -58,9 +58,12 @@ namespace Models
         /// <summary>
         /// 审批人ids
         /// </summary>
-        public int UserIDs { get; set; }
-        
+        public string UserIDs { get; set; }
 
+        public string ApprovalName { get; set; }
+        public string DepartmentName { get; set; }
+        public string Conditions { get; set; }
+        public string DutyName { get; set; }
 
 
 

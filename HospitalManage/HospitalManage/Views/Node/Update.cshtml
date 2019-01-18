@@ -1,0 +1,132 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <script src="~/Scripts/axios.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+    <link href="~/css/pag.css" rel="stylesheet" media="all" />
+    <link href="~/css/css.css" rel="stylesheet" media="all" />
+    <link href="~/css/x-admin.css" rel="stylesheet" media="all" />
+</head>
+<body style="background-color:#ffffff">
+    <div id="app" class="x-body">
+        <table class="tablelist">
+            <tr>
+                <td>编号：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="Id" />
+                </td>
+            </tr>
+            <tr>
+                <td>节点名称：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="NodeName" />
+                </td>
+            </tr>
+            <tr>
+                <td>创建人：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="Creator" />
+                </td>
+            </tr>
+            <tr>
+                <td>创建时间：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="CreateTime" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="#" v-on:click="Add(Id,NodeName, Creator, CreateTime)"><span><img src="~/images/t01.png" /></span>保存</a>
+                </td>
+                <td>
+                    <a href="#" onclick="location.href='/Node/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script src="~/js/x-layui.js" charset="utf-8"></script>
+    <script src="~/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="~/js/jquery2.js" charset="utf-8"></script>
+    <script src="~/js/js.js" charset="utf-8"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script>
+        /*添加*/
+        function new_add(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+        $('.tablelist tbody tr:odd').addClass('odd');
+        // 编辑
+        function data_management_look(title, url, id, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+
+    </script>
+    <script>
+         var vm = new Vue({
+            el: "#app",
+             data: {
+                Id:"",
+                NodeName: "",
+                Creator: "",
+                CreateTime: "",
+             },
+              mounted() {
+                this.Get(@Request.QueryString["Id"]);
+            },
+             methods: {
+                  Get: function (Id) {
+                    var that = this;
+                    var param = new URLSearchParams();
+                    param.append("Id", Id);
+                    axios.get('@Url.Action("Get", "Node")', { params:{ Id: Id }}).then(
+                            (response) => {
+                                if (response.data) {
+                                    that.Id = response.data.Id;
+                                    that.NodeName = response.data.NodeName;
+                                    that.Creator = response.data.Creator;
+                                    that.CreateTime = that.ChangeDateFormat(response.data.CreateTime);
+                                }
+                            },
+                            (response) => {
+                                alert(response.status);
+                            }
+                        ).catch(function (response) {
+                            alert(response);
+                        });
+                },
+                Add: function (Id,NodeName, Creator, CreateTime) {
+                    axios.post('@Url.Action("Update", "Node")', { node: { Id: Id, NodeName: NodeName, Creator: Creator, CreateTime: CreateTime} }).then(
+                        (response) => {
+                            if (response.data > 0) {
+                                alert("保存成功")
+                            }
+                            else {
+                                alert("已有该条节点")
+                            }
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                 },
+                 ChangeDateFormat(cellval) {
+                     var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+                     var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                     var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                     return date.getFullYear() + "-" + month + "-" + currentDate;
+                 },
+            }
+        })
+    </script>
+</body>
+</html>

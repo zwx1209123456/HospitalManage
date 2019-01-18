@@ -11,7 +11,7 @@ namespace Services
     using MySql.Data.MySqlClient;
     using Dapper;
     using IServices;
-    public class UsersServices : IUsersServices
+   public class NodeServices:INodeServices
     {
         DapperHelper dapper = new DapperHelper();
         /// <summary>
@@ -19,20 +19,16 @@ namespace Services
         /// </summary>
         /// <param name="users"></param>
         /// <returns></returns>
-        public int AddUsers(Users users)
+        public int Add(Node node)
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                
+
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@_DepartmentID", users.DepartmentID);
-                parameters.Add("@_UserName", users.UserName);
-                parameters.Add("@_UserNumber", users.UserNumber);
-                parameters.Add("@_DutyID", users.DutyID);
-                parameters.Add("@_TierID", users.TierID);
-                parameters.Add("@_AnnualDay", users.AnnualDay);
-                parameters.Add("@_EntryTime", users.EntryTime);
-                int res = conn.Execute("Users_Add", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                parameters.Add("@_NodeName", node.NodeName);
+                parameters.Add("@_Creator", node.Creator);
+                parameters.Add("@_CreateTime", node.CreateTime);
+                int res = conn.Execute("node_Add", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 return res;
             }
         }
@@ -40,14 +36,14 @@ namespace Services
         /// 显示用户的所有信息
         /// </summary>
         /// <returns></returns>
-        public List<Users> ShowUsers()
+        public List<Node> Show()
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                
+
                 DynamicParameters parameters = new DynamicParameters();
 
-                return conn.Query<Users>("Users_Show", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                return conn.Query<Node>("node_Show", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
             }
         }
         /// <summary>
@@ -55,14 +51,14 @@ namespace Services
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public int DeleteUsers(int Id)
+        public int Delete(int Id)
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-                
+
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@_Id", Id);
-                return conn.Execute("Users_Delete", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                return conn.Execute("node_Delete", parameters, commandType: System.Data.CommandType.StoredProcedure);
             }
         }
         /// <summary>
@@ -70,15 +66,15 @@ namespace Services
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public Users GetUsers(int Id)
+        public Node Get(int Id)
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-              
+
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@_Id", Id);
-                return conn.QueryFirst<Users>("Users_Get", parameters, commandType: System.Data.CommandType.StoredProcedure);
-                
+                return conn.QueryFirst<Node>("node_Get", parameters, commandType: System.Data.CommandType.StoredProcedure);
+
             }
         }
         /// <summary>
@@ -86,25 +82,19 @@ namespace Services
         /// </summary>
         /// <param name="users"></param>
         /// <returns></returns>
-        public int UpdateUsers(Users users)
+        public int Update(Node node)
         {
             using (MySqlConnection conn = dapper.GetConnection())
             {
-              
+
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@_Id", users.Id);
-                parameters.Add("@_DepartmentID", users.DepartmentID);
-                parameters.Add("@_UserName", users.UserName);
-                parameters.Add("@_UserNumber", users.UserNumber);
-                parameters.Add("@_DutyID", users.DutyID);
-                parameters.Add("@_TierID", users.TierID);
-                parameters.Add("@_AnnualDay", users.AnnualDay);
-                parameters.Add("@_EntryTime", users.EntryTime);
-                int res = conn.Execute("Users_Update", parameters, commandType: System.Data.CommandType.StoredProcedure);
-                //var res = conn.Execute("Users_Update", parameters );
+                parameters.Add("@_Id", node.Id);
+                parameters.Add("@_NodeName", node.NodeName);
+                parameters.Add("@_Creator", node.Creator);
+                parameters.Add("@_CreateTime", node.CreateTime);
+                int res = conn.Execute("node_Update", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 return res;
             }
         }
-
     }
 }

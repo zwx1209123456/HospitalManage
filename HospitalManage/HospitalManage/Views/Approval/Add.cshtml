@@ -1,0 +1,104 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <script src="~/Scripts/axios.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+    <link href="~/css/pag.css" rel="stylesheet" media="all" />
+    <link href="~/css/css.css" rel="stylesheet" media="all" />
+    <link href="~/css/x-admin.css" rel="stylesheet" media="all" />
+</head>
+<body style="background-color:#ffffff">
+    <div id="app" class="x-body">
+        <table class="tablelist">
+            <tr>
+                <td>业务名称：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="ApprovalName" />
+                </td>
+            </tr>
+            <tr>
+                <td>是否启用：</td>
+                <td>
+                    <input id="Radio1" type="radio" value="是" v-model="IsAllowModify" />是
+                    <input id="Radio1" type="radio" value="否" v-model="IsAllowModify" />否
+                </td>
+            </tr>
+            <tr>
+                <td>创建人：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="Creator" />
+                </td>
+            </tr>
+            <tr>
+                <td>创建时间：</td>
+                <td>
+                    <input id="Text1" type="text" v-model="CreateTime" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="#" v-on:click="Add(ApprovalName, IsAllowModify, Creator, CreateTime)"><span><img src="~/images/t01.png" /></span>保存</a>
+                </td>
+                <td>
+                    <a href="#" onclick="location.href='/Approval/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script src="~/js/x-layui.js" charset="utf-8"></script>
+    <script src="~/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="~/js/jquery2.js" charset="utf-8"></script>
+    <script src="~/js/js.js" charset="utf-8"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script>
+        /*添加*/
+        function new_add(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+        $('.tablelist tbody tr:odd').addClass('odd');
+        // 编辑
+        function data_management_look(title, url, id, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+
+    </script>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                ApprovalName: "",
+                IsAllowModify: "",
+                Creator: "",
+                CreateTime: "",
+            },
+            methods: {
+                Add: function (ApprovalName, IsAllowModify, Creator, CreateTime) {
+                    axios.post('@Url.Action("Add", "Approval")', { approval: { ApprovalName: ApprovalName, IsAllowModify: IsAllowModify, Creator: Creator, CreateTime: CreateTime} }).then(
+                        (response) => {
+                            if (response.data > 0) {
+                                alert("保存成功")
+                            }
+                            else {
+                                alert("已有该条业务")
+                            }
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+            }
+        })
+    </script>
+</body>
+</html>

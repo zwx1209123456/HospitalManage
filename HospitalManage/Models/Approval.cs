@@ -22,7 +22,7 @@ namespace Models
         /// <summary>
         /// 是否修改
         /// </summary>
-        public int IsAllowModify { get; set; }
+        public string IsAllowModify { get; set; }
         /// <summary>
         /// 创建人
         /// </summary>
