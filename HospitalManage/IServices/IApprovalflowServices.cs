@@ -38,5 +38,11 @@ namespace IServices
         /// <param name="approvalcondition"></param>
         /// <returns></returns>
         int Update(Approvalflow approvalflow);
+        /// <summary>
+        /// 获取用户表
+        /// </summary>
+        /// <param name="DepartmentID"></param>
+        /// <returns></returns>
+         List<Users> GetUsers(int DepartmentID);
     }
 }

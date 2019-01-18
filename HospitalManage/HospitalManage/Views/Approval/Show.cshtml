@@ -17,6 +17,7 @@
 </head>
 <body style="background-color:#ffffff">
     <div id="app" class="x-body">
+        <a href="#" onclick="location.href='/Approval/Add'"><span><img src="~/images/t01.png" /></span>添加</a>
         <table class="tablelist">
             <thead>
                 <tr>
@@ -25,7 +26,6 @@
                     <th>是否启用</th>
                     <th>创建人</th>
                     <th>创建时间</th>
-                    <th>操作</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -43,9 +43,6 @@
                         <div v-if="item.Id!=''">
                             <a href="#" v-on:click="Get(item.Id)">修改</a>
                         </div>
-                    </td>
-                    <td>
-                        <a href="#" onclick="location.href='/Approval/Add'"><span><img src="~/images/t01.png" /></span>添加</a>
                     </td>
                 </tr>
             </tbody>

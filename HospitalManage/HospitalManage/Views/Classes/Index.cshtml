@@ -179,7 +179,6 @@
                         for (var i = 0; i < response.data.length; i++) {
                             console.log(response.data)
                             var str = response.data[i].ValidClasses;
-                            alert(str)
                             str.split(',');
                             classes.push({ Id: response.data[i].Id, ClassesColor: response.data[i].ClassesColor, ClassesName: response.data[i].ClassesName, StartTime: response.data[i].StartTime, LastTime: response.data[i].LastTime, ClasserType: response.data[i].ClasserType, ValidClasses: str.split(','), Sort: response.data[i].Sort })
                         }

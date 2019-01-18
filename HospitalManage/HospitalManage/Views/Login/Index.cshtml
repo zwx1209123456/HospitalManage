@@ -1,0 +1,64 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/js/jquery.js"></script>
+    <script>
+        $(function () {
+            $("#Button1").click(function () {
+                $.ajax({
+                    url: "/Login/Logins",
+                    data: {
+                        userName: "小强",
+                    },
+                    success: function (data) {
+                        if (data > 0) {
+                            location.href = "/Case/Index"
+                        }
+                    }
+                })
+            })
+            $("#Button2").click(function () {
+                $.ajax({
+                    url: "/Login/Logins",
+                    data: {
+                        userName: "王华",
+                    },
+                    success: function (data) {
+                        if (data > 0) {
+                            location.href = "/Case/Index"
+                        }
+                    }
+                })
+            })
+            $("#Button3").click(function () {
+                $.ajax({
+                    url: "/Login/Logins",
+                    data: {
+                        userName: "小芳",
+                    },
+                    success: function (data) {
+                        if (data > 0) {
+                            location.href = "/Case/Index"
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+    <div>
+        <input id="Button1" type="button" value="护士" />
+        <input id="Button2" type="button" value="护士长" />
+        <input id="Button3" type="button" value="带教" />
+    </div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>jQuery UI 放置（Droppable）</title>
+    <script src="~/js/My97DatePicker/My97DatePicker/WdatePicker.js"></script>
+    @*<script src="~/Scripts/jquery-3.1.1.js"></script>*@
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin: 5px;
+            padding: 5px;
+            width: 150px;
+        }
+
+        #cart td {
+            width: 200px;
+            height: 30px;
+        }
+
+        .close {
+            right: -21px;
+            float: right;
+            cursor: hand;
+            cursor: pointer;
+            margin-top: -6px;
+            margin-right: -1px;
+        }
+    </style>
+
+</head>
+<body>
+    <span><</span>
+    <input id="txtDate" class="Wdate" type="text" onfocus="WdatePicker()" v-model="Dates" />
+    @*<input id="Text1" type="text" />*@
+    <input id="txtDate" class="Wdate" type="text" onfocus="WdatePicker()" v-model="Dates" />
+    @*<input id="Text1" type="text" />*@
+    <span>></span>
+    <input id="Button1" type="button" value="月排班视图" onclick="location.href='/ArrangeMonth/Index'" />
+    <div id="cart">
+        <table style="width:100%;border:1px dashed #ccc" id="table1" border="1">
+            <tr id="tr1">
+                <td>序号</td>
+                <td>姓名</td>
+            </tr>
+        </table>
+
+    </div>
+</body>
+
+</html>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script>
+    var week = [];
+    var userlist = ["张三", "李四", "王五", "赵六", "刘能", "刘仁", "赵三", "钱三", "孙子"];
+    var classeslist = [{ color: "red", name: "早班" }, { color: "yellow", name: "中班" }, { color: "blue", name: "晚班" }];
+    $(function () {
+        GetWeek();
+        $(week).each(function (index, week) {
+            $("#tr1").append("<td><div>" + week.dateShow + "</div><div>" + week.weekName + "</div></td>");
+        });
+        $("#tr1").append("<td>" + "班次" + "</td>");
+
+        for (var u = 0; u < userlist.length; u++) {
+            if (u < classeslist.length) {
+                $("#table1").append("<tr><td>" + (u + 1) + "</td><td>" + userlist[u] + "</td><td class='container'  id='" + week[0].dateShow +"'></td><td class='container'></td><td class='container'></td><td class='container'></td><td  class='container'></td><td  class='container'></td><td  class='container'></td><td><div class='draggable1'  style='background-color:" + classeslist[u].color+"' >" + classeslist[u].name + "</div></td></tr>");
+            }
+            else {
+                $("#table1").append("<tr><td>" + u + "</td><td>" + userlist[u] + "</td><td class='container'></td><td class='container'></td><td class='container'></td><td class='container'></td><td  class='container'></td><td  class='container'></td><td  class='container'></td></tr>");
+            }
+        }
+        //被拖拽元素
+        $(".draggable1").draggable({
+            // 需要和sortable集成.（当拖动到绑定sortable的哪个对象时触发sortable事件）
+            //sortable：可分类的；合适的；可整理的
+            connectToSortable: "#cart td.container",
+            //设置拖动过程中, 跟随鼠标移动的组件：克隆
+            helper: "clone",
+            //设置撤销移动相关：无效的
+            revert: "invalid"
+        });
+        $("#cart td.container").droppable({
+            //被拖拽的元素在目标元素上同时鼠标放开触发的事件，此事件作用在目标元素上
+            drop: function (event, ui) {
+                var liE = $(this).find("div");
+                if (liE.length > 0) {
+                    liE.remove();
+                }
+                console.log(ui.draggable);
+                console.log(ui.draggable.context.attributes[1].nodeValue);
+                console.log(ui.draggable.text());
+                var content = '<a class="close">×</a>' + ui.draggable.text().replace(/×| /g, '');
+                $("<div style='" + ui.draggable.context.attributes[1].nodeValue + "'></div>").html(content).appendTo(this);
+                
+                //添加
+                $.ajax({
+
+                    url: "",
+                    dataType: "json",
+                    data: {},
+                    type: "post",
+                    success: function (data) {
+
+                    }
+                })
+                //右上角删除
+                $(this).find("div a.close").click(function () {
+                    $(this).closest('div').remove();
+                    $(this).remove();
+                    //删除
+                    $.ajax({
+                        url: "",
+                        dataType: "json",
+                        data: {},
+                        success: function (data) {
+
+                        }
+                    })
+                });
+            }
+        });
+    });
+    //获得日期
+    function GetWeek() {
+        //获取系统当前时间
+        var now = new Date();
+        var nowTime = now.getTime();
+        var oneDayTime = 24 * 60 * 60 * 1000;
+        console.log(now)
+        var id = now.getDay();
+        if (id == 0) {
+            nowTime = nowTime - 6 * oneDayTime;
+        }
+        else {
+            nowTime = nowTime - (id - 1) * oneDayTime;
+        }
+        for (var i = 0; i < 7; i++) {
+            var ShowTime = nowTime + (i) * oneDayTime;
+            //初始化日期时间
+            var myDate = new Date(ShowTime);
+            var year = myDate.getFullYear();
+            var month = myDate.getMonth() + 1;
+            var date = myDate.getDate();
+            var xinqi = myDate.getDay()
+            //console.log(xinqi);
+            //console.log(year + "-" + month + "-" + date)
+            var str = "星期" + "日一二三四五六".charAt(myDate.getDay());
+            week.push({ dateShow: month + "-" + date, weekName: str });
+
+        }
+    }
+    //上一周
+    function GetWeebBefor() {
+
+    }
+</script>

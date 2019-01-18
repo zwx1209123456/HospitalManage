@@ -32,6 +32,7 @@ namespace Services
                 parameters.Add("@_ApprovalType", approvalflow.ApprovalType);
                 parameters.Add("@_ApprovalWay", approvalflow.ApprovalWay);
                 parameters.Add("@_DutyID", approvalflow.DutyID);
+                parameters.Add("@_DutyIDs", approvalflow.DutyIDs);
                 parameters.Add("@_StartApproval", approvalflow.StartApproval);
                 parameters.Add("@_LastApproval", approvalflow.LastApproval);
                 parameters.Add("@_UserIDs", approvalflow.UserIDs);
@@ -98,12 +99,25 @@ namespace Services
                 parameters.Add("@_ApprovalType", approvalflow.ApprovalType);
                 parameters.Add("@_ApprovalWay", approvalflow.ApprovalWay);
                 parameters.Add("@_DutyID", approvalflow.DutyID);
+                parameters.Add("@_DutyIDs", approvalflow.DutyIDs);
                 parameters.Add("@_StartApproval", approvalflow.StartApproval);
                 parameters.Add("@_LastApproval", approvalflow.LastApproval);
                 parameters.Add("@_UserIDs", approvalflow.UserIDs);
                 int res = conn.Execute("flow_Update", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 return res;
             }
+        }
+        /// <summary>
+        /// 获取用户表
+        /// </summary>
+        /// <param name="DepartmentID"></param>
+        /// <returns></returns>
+        public List<Users> GetUsers(int DepartmentID)
+        {
+            MySqlConnection conn = dapper.GetConnection();
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@_DepartmentID", DepartmentID);
+            return conn.Query<Users>("flow_GetUsers", parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
         }
     }
 }

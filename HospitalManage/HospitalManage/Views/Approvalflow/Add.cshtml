@@ -38,7 +38,7 @@
             <tr>
                 <td>科室名称：</td>
                 <td>
-                    <select id="Select1" v-model="DepartmentName">
+                    <select id="Select1" v-model="DepartmentID">
                         <option value="请选择">--请选择--</option>
                         <option v-for="item in DepartmentList" v-bind:value="item.Id">
                             {{item.DepartmentName}}
@@ -59,7 +59,7 @@
 
                 </td>
             </tr>
-            <tr>
+            <tr v-if="iDutyName">
                 <td>审批状态：</td>
                 <td>
                     <input id="Text1" type="text" v-model="ApprovalStatus" />
@@ -84,7 +84,7 @@
                 </td>
             </tr>
             <tr>
-                <td>职务名称</td>
+                <td>申请人职务</td>
                 <td>
                     <select id="Select1" v-model="DutyName">
                         <option value="请选择">--请选择--</option>
@@ -95,7 +95,18 @@
 
                 </td>
             </tr>
-            <tr>
+            <tr v-if="role">
+                <td >审核人职务</td>
+                <td>
+                    <select id="Select1" v-model="DutyNames">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="item in DutyLists" v-bind:value="item.Id">
+                            {{item.DutyName}}
+                        </option>
+                    </select>
+
+                </td>
+            <tr v-if="multistep">
                 <td>审批起点</td>
                 <td>
                     <select id="Select1" v-model="StartApproval">
@@ -106,7 +117,7 @@
                     </select>
                 </td>
             </tr>
-            <tr>
+            <tr v-if="multistep">
                 <td>审批终点</td>
                 <td>
                     <select id="Select1" v-model="LastApproval">
@@ -117,15 +128,18 @@
                     </select>
                 </td>
             </tr>
-            <tr>
+            <tr  v-if="Approver">
                 <td>审批人</td>
                 <td>
-                    <input id="Text1" type="text" v-model="UserIDs" />
+                    <span v-for="itme in UserList">
+                        <input id="Checkbox1" type="checkbox" v-model="aaa" />
+                        {{itme.UserName}}
+                    </span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <a href="#" v-on:click="Add(ApprovalName, FlowCode, DepartmentName, Conditions, ApprovalStatus, ApprovalType, ApprovalWay, DutyName, StartApproval, LastApproval, UserIDs)">保存</a>
+                    <a href="#" v-on:click="Add(ApprovalName, FlowCode, DepartmentID, Conditions, ApprovalStatus, ApprovalType, ApprovalWay, DutyName,DutyNames, StartApproval, LastApproval, UserName)">保存</a>
                 </td>
                 <td>
                     <a href="#" onclick="location.href='/Approvalflow/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
@@ -154,12 +168,28 @@
         var vm = new Vue({
             el: "#app",
             data: {
+                iDutyName: false,
+                ///指定角色
+                role: false,
+                ///指定多级
+                multistep: false,
+                Approver: false,
+                aaa:[],
+                listShow: false,
+                search: '',
+                data1: {
+                    type: Array,
+                    default: []
+                },
                 //科室
                 DepartmentList: [],
-                DepartmentName: "请选择",
+                DepartmentID: "",
                 //职务
                 DutyList: [],
                 DutyName: "请选择",
+                //职务
+                DutyLists: [],
+                DutyNames: "请选择",
                 //职务
                 ConditionList: [],
                 Conditions: "请选择",
@@ -167,26 +197,84 @@
                 ApprovalList: [],
                 ApprovalName: "请选择",
                 //职务
-                //UserList: [],
-                //UserName: "请选择",
+                UserList: [],
+                UserName: "",
 
                 StartList: ['一级主管', '二级主管', '三级主管'],
                 StartApproval: "请选择",
 
                 LastList: ['一级主管', '二级主管', '三级主管'],
                 LastApproval: "请选择",
+                FlowCode: "",
+                ApprovalStatus: "",
+                ApprovalType: "",
+                ApprovalWay: "",
+                LastApproval:"",
+                StartApproval:"",
+            },
+            watch: { // 监视双向绑定的数据数组
+                DepartmentID: function (newvalue, oldvalue) {
+                    console.log(newvalue)
+                    this.getUserList(newvalue);
+                    this.UserName = [];
+
+                },
+                ApprovalType: function (newvalue, oldvalue) {
+                    console.log(newvalue)
+                    if (newvalue == "指定成员") {
+                        this.Approver = true;
+                        this.multistep = false;
+                        this.role = false;
+                    }
+                    if (newvalue == "主管（指定多级）") {
+                        this.multistep = true;
+                        this.role = false;
+                        this.Approver = false;
+                    }
+                    if (newvalue == "指定角色") {
+                        this.role = true;
+                        this.Approver = false;
+                        this.multistep = false;
+                    }
+                    if (newvalue == "发起人自己") {
+                        this.role = false;
+                        this.Approver = false;
+                        this.multistep = false;
+                    }
+                    if (newvalue == "主管（指定一级）") {
+                        this.role = false;
+                        this.Approver = false;
+                        this.multistep = false;
+                    }
+                },
+                UserList: function (newvalue, oldvalue) {
+                },
+                UserList: function (newvalue, oldvalue) {
+                    this.UserName = [];
+                    for (var i = 0; i < newvalue.length; i++) {
+                        this.UserName.push(newvalue[i].UserName);
+                    }
+                },
+                search: {
+                    handler() {//搜索框输入变化触发
+                        this.listShow = true;
+                    },
+                    deep: true // 深度监视
+                }
             },
             mounted() {
                 this.getDepartmentList();
                 this.getDutyList();
+                this.getDutyLists();
                 this.getApprovalList();
-                //this.getUserList();
+                this.getUserList();
                 this.getConditionList();
             },
              methods: {
-                 Add: function (ApprovalName, FlowCode, DepartmentName, Conditions, ApprovalStatus, ApprovalType, ApprovalWay, DutyName, StartApproval, LastApproval, UserIDs) {
-                     axios.post('@Url.Action("Add", "Approvalflow")', { approvalflow: { ApprovalID: ApprovalName, FlowCode: FlowCode, DepartmentID: DepartmentName, ConditionID: Conditions, ApprovalStatus: ApprovalStatus, ApprovalType: ApprovalType, ApprovalWay: ApprovalWay, DutyID: DutyName, StartApproval: StartApproval, LastApproval: LastApproval, UserIDs: UserIDs} }).then(
-                        (response) => {
+                 Add: function (ApprovalName, FlowCode, DepartmentID, Conditions, ApprovalStatus, ApprovalType, ApprovalWay, DutyName, DutyNames, StartApproval, LastApproval, UserName) {
+                     axios.post('@Url.Action("Add", "Approvalflow")', { approvalflow: { ApprovalID: ApprovalName, FlowCode: FlowCode, DepartmentID: DepartmentID, ConditionID: Conditions, ApprovalStatus: ApprovalStatus, ApprovalType: ApprovalType, ApprovalWay: ApprovalWay, DutyID: DutyName, DutyIDs: DutyNames, StartApproval: StartApproval, LastApproval: LastApproval, UserIDs: UserName} }).then(
+
+                         (response) => {
                             if (response.data > 0) {
                                 alert("保存成功")
                             }
@@ -206,7 +294,7 @@
                     axios.get('@Url.Action("Shows", "Approvalcondition")').then(
                         (response) => {
                             console.log(response)
-                            this.ConditionList = response.data;                    
+                            this.ConditionList = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -220,7 +308,7 @@
                     axios.get('@Url.Action("Shows", "Approval")').then(
                         (response) => {
                             console.log(response)
-                            this.ApprovalList = response.data;                    
+                            this.ApprovalList = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -234,7 +322,7 @@
                     axios.get('@Url.Action("GetDepartments", "Users")').then(
                         (response) => {
                             console.log(response)
-                            this.DepartmentList = response.data;                    
+                            this.DepartmentList = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -248,7 +336,21 @@
                     axios.get('@Url.Action("GetDuties", "Users")').then(
                         (response) => {
                             console.log(response)
-                            this.DutyList = response.data;                    
+                            this.DutyList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                 },
+                 ///获取职务的下拉菜单
+                getDutyLists: function () {
+                    axios.get('@Url.Action("GetDuties", "Users")').then(
+                        (response) => {
+                            console.log(response)
+                            this.DutyLists = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -258,11 +360,11 @@
                     });
                  },
                  ///获取用户的下拉菜单
-                @*getUserList: function () {
-                    axios.get('@Url.Action("GetUsers", "Users")').then(
+                 getUserList: function (DepartmentID) {
+                     axios.post('@Url.Action("GetUser", "Approvalflow")', { DepartmentID: DepartmentID }).then(
                         (response) => {
-                            console.log(response)
-                            this.UserList = response.data;                    
+                            console.log(response.data)
+                            this.UserList = response.data;
                         },
                         (response) => {
                             alert(response.status);
@@ -270,7 +372,24 @@
                     ).catch(function (response) {
                         alert(response);
                     });
-                },*@
+                 },
+                 checkAll(e) { // 点击全选事件函数
+                     var checkObj = document.querySelectorAll('.checkItem'); // 获取所有checkbox项
+                     if (e.target.checked) { // 判定全选checkbox的勾选状态
+                         for (var i = 0; i < checkObj.length; i++) {
+                             if (!checkObj[i].checked) { // 将未勾选的checkbox选项push到绑定数组中
+                                 this.UserList.push(checkObj[i].value);
+                             }
+                         }
+                     } else { // 如果是去掉全选则清空checkbox选项绑定数组
+                         this.UserList = [];
+                     }
+                 },
+                 show() {
+                     this.listShow = !this.listShow;
+                     if (this.listShow == true) {
+                     }
+                 },
             }
         })
     </script>
