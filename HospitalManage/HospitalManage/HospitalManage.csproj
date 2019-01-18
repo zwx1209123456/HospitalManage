@@ -187,6 +187,7 @@
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DutyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NodeController.cs" />
     <Compile Include="Controllers\OperationController.cs" />
     <Compile Include="Controllers\SpecialtyController.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Controllers\ToArrOperationController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\VacationController.cs" />
+    <Compile Include="Controllers\WordController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -560,11 +562,13 @@
     <Content Include="Views\Approvalflow\Show.cshtml" />
     <Content Include="Views\Approvalflow\Update.cshtml" />
     <Content Include="Views\Arrange\Add.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Operation\" />
+    <Folder Include="Views\Word\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

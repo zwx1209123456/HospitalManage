@@ -26,13 +26,9 @@
                     <th>配置流程编码</th>
                     <th>科室名称</th>
                     <th>条件名称</th>
-                    <th>审批状态</th>
                     <th>审批类型</th>
                     <th>审批方式</th>
-                    <th>职务名称</th>
-                    <th>审批起点</th>
-                    <th>审批终点</th>
-                    <th>审批人</th>
+                    <th>申请人职务</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -43,13 +39,9 @@
                     <td>{{item.FlowCode}}</td>
                     <td>{{item.DepartmentName}}</td>
                     <td>{{item.Conditions}}</td>
-                    <td>{{item.ApprovalStatus}}</td>
                     <td>{{item.ApprovalType}}</td>
                     <td>{{item.ApprovalWay}}</td>
                     <td>{{item.DutyName}}</td>
-                    <td>{{item.StartApproval}}</td>
-                    <td>{{item.LastApproval}}</td>
-                    <td>{{item.UserIDs}}</td>
                     <td>
                         <div v-if="item.Id!=''">
                             <a href="#" v-on:click="GetRules(item.Id)">修改</a>

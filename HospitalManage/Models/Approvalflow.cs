@@ -48,6 +48,10 @@ namespace Models
         /// </summary>
         public int DutyID { get; set; }
         /// <summary>
+        /// 角色id
+        /// </summary>
+        public int DutyIDs { get; set; }
+        /// <summary>
         /// 审批起点
         /// </summary>
         public string StartApproval { get; set; }
@@ -64,6 +68,7 @@ namespace Models
         public string DepartmentName { get; set; }
         public string Conditions { get; set; }
         public string DutyName { get; set; }
+        public string DutyNames { get; set; }
 
 
 

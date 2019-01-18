@@ -80,5 +80,15 @@ namespace HospitalManage.Controllers
         {
             return iapprovalflowServices.Delete(Id);
         }
+        /// <summary>
+        /// 根据科室获取用户
+        /// </summary>
+        /// <param name="DepartmentID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult GetUser(string DepartmentID)
+        {
+            return Json(iapprovalflowServices.GetUsers(Convert.ToInt32(DepartmentID)), JsonRequestBehavior.AllowGet);
+        }
     }
 }
