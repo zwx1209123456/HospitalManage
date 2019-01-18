@@ -56,7 +56,7 @@ namespace Models
         /// </summary>
         public string PatientSex { get; set; }
         /// <summary>
-        /// 手术名称
+        /// 手术jian名称
         /// </summary>
         public string OperationNames { get; set; }
         /// <summary>

@@ -356,6 +356,7 @@
     <Content Include="js\My97DatePicker\My97DatePicker\开发包\skin\whyGreen\img.gif" />
     <Content Include="js\pc.js" />
     <Content Include="js\public.js" />
+    <Content Include="js\tabTime.js" />
     <Content Include="js\x-admin.js" />
     <Content Include="js\x-layui.js" />
     <Content Include="lib\bootstrap\css\bootstrap-theme.css" />
