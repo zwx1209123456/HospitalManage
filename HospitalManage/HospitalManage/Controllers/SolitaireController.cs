@@ -102,6 +102,11 @@ namespace HospitalManage.Controllers
         public JsonResult AddChains(Solitaire solitaire, ChainsGroup[] chainsGroups)
         {
             var ids = "";
+            Solitaire solitaireIf = solitaireService.SelectSolitaire().Where(m => m.SolitaireClassID == solitaire.SolitaireClassID).FirstOrDefault();
+            if (solitaireIf != null)
+            {
+                return Json("");
+            }
             List<ChainsGroup> groupListToAdd = new List<ChainsGroup>();
             foreach (var item in chainsGroups)
             {

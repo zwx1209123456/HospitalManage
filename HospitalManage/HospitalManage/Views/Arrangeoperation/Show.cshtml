@@ -22,20 +22,34 @@
             cursor: pointer;
         }
     </style>
+    <script>
+        function init() {
+            vm.addProp();
+
+        }
+    </script>
 </head>
-<body style="background-color:#ffffff">
-    <div class="x-body">
+<body style="background-color:#ffffff" @*onload="init()"*@>
+  
+    <div id="app" class="x-body">
+        <div>
+            <span class="leftspan"  style="color:aqua;width:60px;height:18px;background-color:darkgray;font-size:24px"onclick="reducedate()"><</span>
+            <label id="beginTime" class="kbtn" style="font-size:24px">{{ChangeDateFormat(opeTime).replace(/-/g, "/")}}</label>
+            @*<input  id="beginTime" class="kbtn" style="font-size:24px" type="text" :value="ChangeDateFormat(opeTime).replace(/-/g, '/')"/>*@
+            <span class="rightspan" style="color:aqua;width:60px;height:18px;background-color:darkgray;font-size:24px"onclick="adddate()">></span>
+        </div>
         <ul class="toolbar">
             <li><a href="#" onclick="location.href='/Arrangeoperation/Add'"><span><img src="~/images/t01.png" /></span>添加</a></li>
-            <li>@*<span><img src="~/images/t03.png" /></span>*@<span><img src="~/images/t09.png" /></span>取消发布</li>
-            <li><input type="text" name="Status" placeholder="发布状态：已发布" autocomplete="off" class="layui-input"></li>
+            <li v-if="statuss==0"><span><img src="~/images/t09.png" />排班</span></li>
+            <li v-if="statuss==0"><span v-on:click="publish()"><img src="~/images/t09.png" />发布</span></li>
+            <li v-else><span v-on:click="publishCancel()"><img src="~/images/t03.png" />取消发布</span></li>
+            <li v-if="statuss!=0"><input type="text" name="" placeholder="发布状态：已发布" autocomplete="off" class="layui-input"></li>
+            <li v-else><input type="text" name="Status" placeholder="发布状态：未发布" autocomplete="off" class="layui-input"></li>
             <li><span><img src="~/images/t02.png" /></span>导出</li>
 
         </ul>
-        <span class="x-right" style="line-height:25px"></span>
-    </div>
-    <div id="app" class="x-body">
-        <table class="tablelist" id="sort">
+       
+        <table class="tablelist" id="sort" >
             <thead>
                 <tr>
                     <th>手术间</th>
@@ -52,10 +66,17 @@
                 </tr>
             </thead>
             <tbody @*id="x-link"*@>
-                <tr v-for="(contact,key,index) in OperationList">
-                    <td>{{contact.OperationNames}}</td>
-                    <td class="index"></td>
-                    <td>{{contact.DepartmentName}}</td>
+                <tr :id="contact.Id" class="operationInfo" v-for="(contact,key,index) in OperationList">
+
+                    <td v-if="contact.Status==0">
+                        <select v-model="contact.OperationID" lay-verify="required" name="cid" class="layui-input" style="width:96px;float:left">
+                            <option v-for="contact in OperationList" v-bind:value="contact.OperationID">{{contact.OperationNames}}</option>
+                            @*//v-bind:value="classes.id" v-on:input="id=$event.target.value"*@
+                        </select>
+                    </td>
+                    <td v-else :id="contact.OperationID">{{contact.OperationNames}}</td>
+                    <td :class="contact.OperationNames" v-on:mousedown="clickfun" style="color:red">{{contact.Were}}</td>
+                    <td :id="contact.DepartmentID">{{contact.DepartmentName}}</td>
                     <td>{{contact.OperationName}}</td>
                     <td>{{contact.OperatorDoctor}}</td>
                     <td>{{contact.Instrument}}</td>
@@ -68,29 +89,9 @@
             </tbody>
         </table>
     </div>
-    @*//拖动整行进行调整顺序*@
+
     <script>
-        $(document).ready(function () {
-            var fixHelperModified = function (e, tr) {
-                var $originals = tr.children();
-                var $helper = tr.clone();
-                $helper.children().each(function (index) {
-                    $(this).width($originals.eq(index).width())
-                });
-                return $helper;
-            },
-                updateIndex = function (e, ui) {
-                    $('td.index', ui.item.parent()).each(function (i) {
-                        $(this).html(i + 1);
-                    });
-                };
-            $("#sort tbody").sortable({
-                helper: fixHelperModified,
-                stop: updateIndex
-            }).disableSelection();
-        });
-    </script>
-    <script>
+
         /*添加*/
         function new_add(title, url, w, h) {
             x_admin_show(title, url, w, h);
@@ -106,17 +107,102 @@
             el: "#app",
             data: {
                 OperationList: [],
+                OperationNames: "",
+                OpeList: [],
+                upId: 0,
+                statuss: 0,
+                publishTime: "",
+                opeTime: "",
+                upIf:0
             },
             mounted() {
                 this.GetOperation();
 
             },
             methods: {
+                //获取当前时间，格式YYYY-MM-DD
+                getNowFormatDate:   function getNowFormatDate() {
+                    var date = new Date();
+                    var seperator1 = "-";
+                    var year = date.getFullYear();
+                    var month = date.getMonth() + 1;
+                    var strDate = date.getDate();
+                    if(month >= 1 && month <= 9) {
+                        month = "0" + month;
+                        }
+                       if (strDate >= 0 && strDate <= 9) {
+                          strDate = "0" + strDate;
+                         }
+                        var currentdate = year + seperator1 + month + seperator1 + strDate;
+                        return currentdate;
+                     },
+                addProp: function () {
+
+                    //var tr = document.createElement("tr");
+                    var tr = document.getElementsByTagName("tr");
+                    for (var i = 0; i < this.OperationList.length; i++) {
+
+                        var ifProp = this.OperationList[i].OperationNames;
+                        tr[i + 1].setAttribute("ifProp", ifProp);//记得去除表头
+
+                    }
+                },
+                clickfun: function (e) {
+                    var el = e.target;
+
+                    //重置台次排序时，值针对指定元素
+                    this.OperationNames = $(el).prop("class");
+                    //添加自定义属性，用于判断拖拽后，是否重载页面
+                    this.addProp();
+                    this.upId = $(el).parent().prop("id");
+                },
                 GetOperation: function () {
                     axios.get('@Url.Action("Shows", "Arrangeoperation")').then(
                             (response) => {
                                 console.log(response.data)
                                 this.OperationList = response.data;
+                                //console.log(this.OperationList);
+                                this.statuss = this.OperationList[0].Status;
+                                this.publishTime = this.OperationList[0].publishTime;
+                                this.opeTime = this.OperationList[0].OpeTime;
+                                console.log(this.statuss)
+                                console.log(this.opeTime)
+                                console.log(this.publishTime)
+                                @*//拖动整行进行调整顺序*@
+                                if (this.statuss == 0) {
+                                    var fixHelperModified = function (e, tr) {
+                                        //preProp = tr.prev().prop("ifProp");
+                                        //nextProp = tr.next().prop("ifProp");
+                                        var $originals = tr.children();
+                                        var $helper = tr.clone();
+                                        $helper.children().each(function (index) {
+                                            $(this).width($originals.eq(index).width())
+                                        });
+                                        return $helper;
+                                    },
+                                        updateIndex = function (e, ui) {
+                                            var upItem = vm.OperationNames;
+
+                                            $('td.' + upItem, ui.item.parent()).each(function (i) {
+                                                $(this).html(i + 1);
+                                            });
+
+                                            vm.updateOperation();
+                                            var preProp = $("#" + vm.upId).prev().attr("ifProp");
+                                            var nextProp = $("#" + vm.upId).next().attr("ifProp");
+
+                                            if (upItem != preProp && upItem != nextProp) {
+                                                location.reload(true);
+                                            }
+
+                                        };
+                                    $("#sort tbody").sortable({
+                                        helper: fixHelperModified,
+                                        stop: updateIndex
+                                    }).disableSelection();
+
+                                }
+                         
                             },
                             (response) => {
                                 alert(response.status);
@@ -124,9 +210,250 @@
                         ).catch(function (response) {
                             alert(response);
                         });
+
                 },
+                ChangeDateFormat(cellval) {
+
+                    var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+
+                    var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+
+                    var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+
+                    return date.getFullYear() + "-" + month + "-" + currentDate;
+
+                },
+                updateOperation: function () {
+                    var static = this.statuss;
+                    var time = this.publishTime;
+                    var time2 = this.ChangeDateFormat(this.opeTime);
+
+                    console.log(time2)
+                    console.log(time)
+                    var _this = this;
+                    _this.groupList = [];
+                    $(".operationInfo").each(function () {//注意不能id选择器，因为只会选中一个
+                        //取消发布
+                        if (_this.upIf == 2) {
+                            _this.OpeList.push({
+                                Id: $(this).prop("id"), OperationID: this.cells[0].id, DepartmentID: this.cells[2].id, OperationName: this.cells[3].innerText, OperatorDoctor: this.cells[4].innerText, Instrument: this.cells[5].innerText, Tour: this.cells[6].innerText, Anesthetist: this.cells[7].innerText,
+                                PatientName: this.cells[8].innerText, PatientAge: this.cells[9].innerText, PatientSex: this.cells[10].innerText, OperationNames: this.cells[0].innerText, DepartmentName: this.cells[2].innerText,
+                                Status: 0, Were: this.cells[1].innerText, OpeTime: time2, publishTime: time
+                            });
+                            //_this.upIf = 0;
+                        }
+                        //发布
+                        if (_this.upIf == 1) {
+                            _this.OpeList.push({
+                                Id: $(this).prop("id"), OperationID: this.cells[0].firstElementChild.value, DepartmentID: this.cells[2].id, OperationName: this.cells[3].innerText, OperatorDoctor: this.cells[4].innerText, Instrument: this.cells[5].innerText, Tour: this.cells[6].innerText, Anesthetist: this.cells[7].innerText,
+                                PatientName: this.cells[8].innerText, PatientAge: this.cells[9].innerText, PatientSex: this.cells[10].innerText, OperationNames: this.cells[0].firstElementChild.text, DepartmentName: this.cells[2].innerText,
+                                Status: 1, Were: this.cells[1].innerText, OpeTime: time2, publishTime: time
+                            });
+                        }
+                        //排序
+                        if (_this.upIf == 0) {
+                            _this.OpeList.push({
+                                Id: $(this).prop("id"), OperationID: this.cells[0].firstElementChild.value, DepartmentID: this.cells[2].id, OperationName: this.cells[3].innerText, OperatorDoctor: this.cells[4].innerText, Instrument: this.cells[5].innerText, Tour: this.cells[6].innerText, Anesthetist: this.cells[7].innerText,
+                                PatientName: this.cells[8].innerText, PatientAge: this.cells[9].innerText, PatientSex: this.cells[10].innerText, OperationNames: this.cells[0].firstElementChild.text, DepartmentName: this.cells[2].innerText,
+                                Status: 0, Were: this.cells[1].innerText, OpeTime: time2, publishTime: time
+                            });
+                        }
+                    })
+
+                    axios.post('@Url.Action("Update", "Arrangeoperation")', {
+                        operations: this.OpeList
+                    }).then(
+                        (response) => {
+                            //发布和取消发布时，重新加载数据，改变页面布局（修改排序时则不，否则会有buge）
+                            if (this.upIf != 0) {
+                                location.reload(true)//必须重载来确定有无拖拽
+                                 //this.GetOperation();
+                            }
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    })
+
+                },
+                publish: function () {
+
+                    this.upIf = 1;
+                    this.publishTime = this.getNowFormatDate();
+
+                    this.updateOperation();
+                },
+                //获取天数差  可用
+                //dateDiff: function (sDate1) {
+                //    var date2 = new Date();//当前时间
+                //    var date1 = new Date(Date.parse(sDate1.replace(/-/g, "/")));
+                //    console.log(date2);
+                //    console.log(date1);
+                //    var iDays = parseInt(Math.abs(date2.getTime() - date1.getTime()) / 1000 / 60 / 60 / 24);
+                //    return iDays;
+                //},
+                publishCancel: function () {
+                    //var time = new Date(this.ChangeDateFormat(this.publishTime));
+                    //var _this = this;
+                    //Date.prototype.DateDiff = function (strInterval, dtStart) {
+                    //    var dtEnd = new Date();//当前时间
+
+                    //    switch (strInterval) {
+                    //        case 's': return parseInt((dtEnd - dtStart) / 1000);
+                    //        case 'n': return parseInt((dtEnd - dtStart) / 60000);
+                    //        case 'h': return parseInt((dtEnd - dtStart) / 3600000);
+                    //        case 'd': return parseInt((dtEnd - dtStart) / 86400000);
+                    //        case 'w': return parseInt((dtEnd - dtStart) / (86400000 * 7));
+                    //        case 'm': return (dtEnd.getMonth() + 1) + ((dtEnd.getFullYear() - dtStart.getFullYear()) * 12) - (dtStart.getMonth() + 1);
+                    //        case 'y': return dtEnd.getFullYear() - dtStart.getFullYear();
+                    //    }
+                    //}
+                    //var yDiff = Date.prototype.DateDiff('y', time);
+                    //var mDiff = Date.prototype.DateDiff('m', time);
+                    //var dDiff = Date.prototype.DateDiff('d', time);
+                    //console.log(yDiff + "," + mDiff + "," + dDiff);
+                    //if (yDiff >= 0 && mDiff >= 0 && dDiff>0) {
+
+                    //}
+                    //var time = this.ChangeDateFormat(this.publishTime);
+                    //var dayDif = this.dateDiff(time);
+
+                    var timePub = new Date(this.ChangeDateFormat(this.publishTime)).getDay();
+                    var timeNow = new Date().getDay();
+                    var dayDif = timeNow - timePub;
+                    console.log(dayDif);
+                    if (dayDif==0) {
+                        this.upIf = 2;
+                        this.publishTime = this.ChangeDateFormat(this.publishTime);
+                        this.updateOperation();
+                    }
+                    else {
+                        alert("当前班次不能取消");
+                    }
+                }
             }
         })
+    </script>
+    @*//拖动整行进行调整顺序*@
+    <script>
+        $(document).ready(function () {
+ 
+        });
+        function adddate() {
+            //向右跳转时间（加时间）的按钮
+            var s = document.getElementById("beginTime").innerHTML;
+            var arr = s.split("/"); //将获取的数组按“/”拆分成字符串数组
+            var year = parseInt(arr[0]);//开分字符串数组的第一个地址的内容是年份
+            var mouth = parseInt(arr[1]);//开分字符串数组的第二个地址的内容是月份
+            var date = parseInt(arr[arr.length - 1]);//开分字符串数组的第三个地址的内容是日期
+            if (date == 28) {//当日期为28号时 只判断是否是2月
+                switch (mouth) {
+                    case 2:
+                        if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+                            date = date + 1;
+                        } //如果是闰年2月 日期就加一
+                        else {
+                            date = 1;
+                            mouth = mouth + 1;
+                        }; //不是闰年2月 日期就变为1 月份加一
+                        break;
+                    default: date += 1;
+                }
+
+            } else if (date == 29) { //当日期为29号是 也是判断是否是2月
+                switch (mouth) {
+                    case 2:
+                        date = 1;
+                        mouth = mouth + 1;
+                        break;
+                    default: date += 1;
+                } //当29号出现必定是闰年 日期变为1 月份加一
+            } else if (date == 30) { //当日期为30 时
+                switch (mouth) {
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        date = date + 1;
+                        break; //这些月份的时候一个月有31天 到30的时候再加一
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        date = 1;
+                        mouth = mouth + 1;
+                        break; //这些月份的时候一个月有30天 到30的时候 日期变为1 月份加一
+                }
+            } else if (date == 31) {
+                switch (mouth) {
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                        date = 1;
+                        mouth = mouth + 1;
+                        break; //这些月份的时候一个月有31天 到31的时候 日期为1月份加一
+                    case 12:
+                        date = 1;
+                        mouth = 1;
+                        year = year + 1;;
+                        break; //十二月 的 31 号 日期变为一 月份变为一 年份加一
+                }
+            }
+            else {
+                date += 1;
+            }
+            document.getElementById("beginTime").innerHTML = year + "/" + mouth + "/" + date;
+        }
+        function reducedate() {
+            //向左跳转时间（减时间）的按钮
+            var s = document.getElementById("beginTime").innerHTML;
+            var arr = s.split("/"); //将获取的数组按“/”拆分成字符串数组
+            var year = parseInt(arr[0]);//开分字符串数组的第一个地址的内容是年份
+            var mouth = parseInt(arr[1]);//开分字符串数组的第二个地址的内容是月份
+            var date = parseInt(arr[arr.length - 1]);//开分字符串数组的第三个地址的内容是日期
+            if (date == 1) {//当日期为1时，再剪就会改变月份，甚至年份
+                switch (mouth) {
+                    case 1:
+                        date = 31;
+                        mouth = 12;
+                        year = year - 1;
+                        break; //一月一日 再剪一天 年份减一 月份为12 日期为31
+                    case 2:
+                    case 4:
+                    case 6:
+                    case 8:
+                    case 9:
+                    case 11:
+                        date = 31;
+                        mouth = mouth - 1;
+                        break; //这些月一日 再剪一天 月份减一 日期为31
+                    case 3:
+                        if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+                            date = 29;
+                            mouth = mouth - 1;
+                        } else {
+                            date = 28;
+                            mouth = mouth - 1;
+                        }
+                        break; //三月一日 再剪一天 月份减一 日期为根据是否是闰年来判断 日期
+                    case 5:
+                    case 7:
+                    case 10:
+                        date = 30;
+                        mouth = mouth - 1;
+                        break; //这些月一日 再剪一天 月份减一 日期为30
+                }
+            } else {
+                date = date - 1;
+            }
+            document.getElementById("beginTime").innerHTML = year + "/" + mouth + "/" + date; //拼接字符串插入到标签中
+        }
+
     </script>
 </body>
 </html>
