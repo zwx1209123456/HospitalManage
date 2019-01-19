@@ -269,7 +269,12 @@
                                             stop: updateIndex
                                         }).disableSelection();
 
-                                    }
+                                }
+                                else {
+                                    $("#sort tbody").sortable({
+                                        cancel: "tbody"
+                                    });
+                                }
                                 //this.addProp();//放在这里报错，找不到添加属性的方法
                             }
                             else {
@@ -348,8 +353,8 @@
                             //发布和取消发布时，重新加载数据，改变页面布局（修改排序时则不，否则会有buge）
                             if (this.upIf != 0) {
 
-                                location.reload(true)//必须重载来确定有无拖拽
-                                 //this.GetOperation();
+                                //location.reload(true)//必须重载来确定有无拖拽
+                                 this.GetOperation();
                             }
                         }
                     ).catch(function (response) {
@@ -358,11 +363,18 @@
 
                 },
                 publish: function () {
-
-                    this.upIf = 1;
-                    this.publishTime = this.getNowFormatDate();
-
-                    this.updateOperation();
+                    var timeOpe = new Date(this.ChangeDateFormat(this.opeTime)).getDate();
+                    var timeNow = new Date().getDate();
+                    var dayDif = timeOpe- timeNow;
+                    console.log(dayDif);
+                    if (dayDif == 1) {
+                        this.upIf = 1;
+                        this.publishTime = this.getNowFormatDate();
+                        this.updateOperation(); 
+                    }
+                    else {
+                        alert("只能发布第二天班次");
+                    }            
                 },
                 //获取天数差  可用
                 //dateDiff: function (sDate1) {
@@ -399,8 +411,8 @@
                     //var time = this.ChangeDateFormat(this.publishTime);
                     //var dayDif = this.dateDiff(time);
 
-                    var timePub = new Date(this.ChangeDateFormat(this.publishTime)).getDay();
-                    var timeNow = new Date().getDay();
+                    var timePub = new Date(this.ChangeDateFormat(this.publishTime)).getDate();
+                    var timeNow = new Date().getDate();
                     var dayDif = timeNow - timePub;
                     console.log(dayDif);
                     if (dayDif==0) {
