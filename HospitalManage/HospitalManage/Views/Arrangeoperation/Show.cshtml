@@ -218,10 +218,11 @@
                     });
                 },
                 GetOperation: function () {
-                    var timeToShow = localStorage.time;//重载清空，存不住
-                    if (timeToShow== "") {
-                        timeToShow = $("#beginTime").html();
-                    }
+                    //var timeToShow = localStorage.time;//重载清空，存不住
+                    //if (timeToShow== "") {
+                    //    timeToShow = $("#beginTime").html();
+                    //}
+                    var timeToShow = $("#beginTime").html();
                    // alert(timeToShow);
                     axios.post('@Url.Action("Shows", "Arrangeoperation")', { opTime: timeToShow}).then(
                         (response) => {
