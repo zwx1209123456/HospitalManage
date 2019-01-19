@@ -71,11 +71,11 @@ namespace HospitalManage.Controllers
             return View();
         }
         [HttpPost]
-        public int Update(List<Arrangeoperation> operations,int opId)
+        public int Update(List<Arrangeoperation> operations,int opSId, int opEId)
         {
-            if (opId!=0)
+            if (opSId != 0&& opSId!=opEId)//防止换台次时，没点击或随意点击了手术间就进入此处
             {
-                List<Arrangeoperation> operationToScro = operations.Where(m => m.OperationID == opId).OrderBy(m => m.Were).ToList();
+                List<Arrangeoperation> operationToScro = operations.Where(m => m.OperationID == opSId).OrderBy(m => m.Were).ToList();
                 if (operationToScro.Count!=0)
                 {
                     for (int i = 0; i < operationToScro.Count; i++)
@@ -92,9 +92,9 @@ namespace HospitalManage.Controllers
         /// <param name="operationId"></param>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult OpChangeReWere(int operationId)
+        public JsonResult OpChangeReWere(int operationId,string time)
         {
-            var result = iarrangeoperationServices.Show().Where(m => m.OperationID == operationId).ToList();
+            var result = iarrangeoperationServices.Show().Where(m => m.OperationID == operationId&&m.OpeTime==DateTime.Parse(time)).ToList();
             if (result.Count != 0)
             {
                 int i= result.OrderByDescending(m => m.Were).FirstOrDefault().Were+1;

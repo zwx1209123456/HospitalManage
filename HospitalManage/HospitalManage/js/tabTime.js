@@ -69,6 +69,7 @@
     }
     document.getElementById("beginTime").innerHTML = year + "/" + mouth + "/" + date;
     vm.GetOperation();
+    localStorage.time = $("#beginTime").html();
 }
 function reducedate() {
     //向左跳转时间（减时间）的按钮
@@ -116,4 +117,5 @@ function reducedate() {
  
     vm.GetOperation();
     //location.reload(true);
+    localStorage.time = $("#beginTime").html();
 }

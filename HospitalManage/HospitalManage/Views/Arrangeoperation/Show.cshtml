@@ -93,7 +93,7 @@
     </div>
 
     <script>
-      
+        //localStorage.time="";
         /*添加*/
         function new_add(title, url, w, h) {
             x_admin_show(title, url, w, h);
@@ -119,7 +119,8 @@
                 upIf: 0,
                 were: 0,
                 id: 0,
-                opStartId:0
+                opStartId: 0,
+                opId:0
             },
             mounted() {
                 this.getNowFormatDate();
@@ -168,17 +169,18 @@
                     this.addProp();
                     this.upIf = 3;
                     var el = e.target;
-                    var opId = $(el).val();
+                    this.opId = $(el).val();
                     var id = $(el).prop("name");
-                    alert("手术室："+opId);
+                    //alert("手术室："+opId);
                     //alert("总："+id);
                     
                     this.id = id;
-                    this.OpChangeReWere(opId);
+                    this.OpChangeReWere(this.opId);
                 },
                 OpChangeReWere: function (id) {
+                    var timeNow = $("#beginTime").html();
                         axios.post('@Url.Action("OpChangeReWere", "Arrangeoperation")', {
-                            operationId:id
+                            operationId: id, time: timeNow
                     }).then(
                             (response) => {
                                 this.were = response.data;
@@ -216,7 +218,10 @@
                     });
                 },
                 GetOperation: function () {
-                    var timeToShow = $("#beginTime").html();
+                    var timeToShow = localStorage.time;//重载清空，存不住
+                    if (timeToShow== "") {
+                        timeToShow = $("#beginTime").html();
+                    }
                    // alert(timeToShow);
                     axios.post('@Url.Action("Shows", "Arrangeoperation")', { opTime: timeToShow}).then(
                         (response) => {
@@ -298,7 +303,7 @@
                     //alert($("[chooseProp='" + this.id + "']").text())
                  
                     var _this = this;
-                    _this.groupList = [];
+                    _this.OpeList = [];
                     $(".operationInfo").each(function () {//注意不能id选择器，因为只会选中一个
                         //取消发布
                         if (_this.upIf == 2) {
@@ -336,11 +341,12 @@
                     })
 
                     axios.post('@Url.Action("Update", "Arrangeoperation")', {
-                        operations: this.OpeList, opId: this.opStartId
+                        operations: this.OpeList, opSId: this.opStartId, opEId: this.opId
                     }).then(
                         (response) => {
                             //发布和取消发布时，重新加载数据，改变页面布局（修改排序时则不，否则会有buge）
                             if (this.upIf != 0) {
+
                                 location.reload(true)//必须重载来确定有无拖拽
                                  //this.GetOperation();
                             }
