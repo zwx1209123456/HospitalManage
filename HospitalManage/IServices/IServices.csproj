@@ -52,6 +52,7 @@
     <Compile Include="IDutyServices.cs" />
     <Compile Include="INodeServices.cs" />
     <Compile Include="IOperationServices.cs" />
+    <Compile Include="IPowerServices.cs" />
     <Compile Include="ISolitaireService.cs" />
     <Compile Include="ISpecialtyServices.cs" />
     <Compile Include="IRuleServices.cs" />
