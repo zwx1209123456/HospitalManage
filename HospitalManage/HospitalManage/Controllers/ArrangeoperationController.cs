@@ -71,10 +71,41 @@ namespace HospitalManage.Controllers
             return View();
         }
         [HttpPost]
-        public int Update(List<Arrangeoperation> operations)
+        public int Update(List<Arrangeoperation> operations,int opSId, int opEId)
         {
+            if (opSId != 0&& opSId!=opEId)//防止换台次时，没点击或随意点击了手术间就进入此处
+            {
+                List<Arrangeoperation> operationToScro = operations.Where(m => m.OperationID == opSId).OrderBy(m => m.Were).ToList();
+                if (operationToScro.Count!=0)
+                {
+                    for (int i = 0; i < operationToScro.Count; i++)
+                    {
+                        operationToScro[i].Were = i + 1;
+                    }
+                }
+            }
             return iarrangeoperationServices.Update(operations);
         }
+        /// <summary>
+        /// 手术室改变后，确定台次
+        /// </summary>
+        /// <param name="operationId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult OpChangeReWere(int operationId,string time)
+        {
+            var result = iarrangeoperationServices.Show().Where(m => m.OperationID == operationId&&m.OpeTime==DateTime.Parse(time)).ToList();
+            if (result.Count != 0)
+            {
+                int i= result.OrderByDescending(m => m.Were).FirstOrDefault().Were+1;
+                return Json(i);
+            }
+            else
+            {
+                return Json(1);
+            }
+        }
+
         /// <summary>
         /// 获取id
         /// </summary>
@@ -113,11 +144,18 @@ namespace HospitalManage.Controllers
         {
             return View();
         }
-        
-        public JsonResult Shows()
+        [HttpPost]
+        public JsonResult Shows(string opTime)
         {
-            var list = iarrangeoperationServices.Show();
-            return Json(list, JsonRequestBehavior.AllowGet);
+            var list = iarrangeoperationServices.Show().Where(m => m.OpeTime == DateTime.Parse(opTime)).ToList();
+            if (list.Count!=0)
+            {              
+                return Json(list);
+            }
+            else
+            {
+                return Json("");
+            }
         }
     }
 }
