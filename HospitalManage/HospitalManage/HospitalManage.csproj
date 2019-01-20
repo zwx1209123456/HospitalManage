@@ -190,6 +190,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NodeController.cs" />
     <Compile Include="Controllers\OperationController.cs" />
+    <Compile Include="Controllers\PowerController.cs" />
     <Compile Include="Controllers\SpecialtyController.cs" />
     <Compile Include="Controllers\SolitaireController.cs" />
     <Compile Include="Controllers\RuleController.cs" />
@@ -565,6 +566,9 @@
     <Content Include="Views\Arrange\Add.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Word\Add.cshtml" />
+    <Content Include="Views\Power\Add.cshtml" />
+    <Content Include="Views\Power\Index.cshtml" />
+    <Content Include="Views\Power\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
