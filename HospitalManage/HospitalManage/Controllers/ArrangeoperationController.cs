@@ -94,7 +94,7 @@ namespace HospitalManage.Controllers
         [HttpPost]
         public JsonResult OpChangeReWere(int operationId,string time)
         {
-            var result = iarrangeoperationServices.Show().Where(m => m.OperationID == operationId&&m.OpeTime==DateTime.Parse(time)).ToList();
+            var result = iarrangeoperationServices.Show().Where(m => m.OperationID == operationId&&(m.OpeTime-DateTime.Parse(time)).Days==1).ToList();
             if (result.Count != 0)
             {
                 int i= result.OrderByDescending(m => m.Were).FirstOrDefault().Were+1;
@@ -147,7 +147,8 @@ namespace HospitalManage.Controllers
         [HttpPost]
         public JsonResult Shows(string opTime)
         {
-            var list = iarrangeoperationServices.Show().Where(m => m.OpeTime == DateTime.Parse(opTime)).ToList();
+            //var list = iarrangeoperationServices.Show().Where(m => m.OpeTime == DateTime.Parse(opTime)).ToList();
+            var list = iarrangeoperationServices.Show().Where(m => (m.OpeTime - DateTime.Parse(opTime)).Days==1).ToList();
             if (list.Count!=0)
             {              
                 return Json(list);

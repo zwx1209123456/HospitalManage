@@ -68,7 +68,7 @@
                 </tr>
             </thead>
             <tbody @*id="x-link"*@>
-                <tr :id="contact.Id" class="operationInfo" v-for="(contact,key,index) in OperationList">
+                <tr :id="contact.Id" class="operationInfo" v-on:mousedown="clickfun" v-for="(contact,key,index) in OperationList" v-bind:ifProp="contact.OperationNames">
 
                     <td v-if="contact.Status==0">
                         <select :id="contact.OperationID" :name="contact.Id" v-on:change="opChang" v-on:click="opStart" v-model="contact.OperationID" lay-verify="required" @*name="cid"*@ class="layui-input" style="width:96px;float:left">
@@ -77,7 +77,7 @@
                         </select>
                     </td>
                     <td v-else :id="contact.OperationID">{{contact.OperationNames}}</td>
-                    <td @*:id="contact.Id"*@ :class="contact.OperationNames" v-on:mousedown="clickfun" style="color:red">{{contact.Were}}</td>
+                    <td @*:id="contact.Id"*@ :class="contact.OperationNames" @*v-on:mousedown="clickfun"*@ style="color:red"  :chooseProp="contact.Id">{{contact.Were}}</td>
                     <td :id="contact.DepartmentID">{{contact.DepartmentName}}</td>
                     <td>{{contact.OperationName}}</td>
                     <td>{{contact.OperatorDoctor}}</td>
@@ -163,17 +163,17 @@
                     var el = e.target;
                     var startId = $(el).prop("id");
                     //console.log("初始室：" + startId);
-                    this.opStartId = startId;
+                    this.opStartId = startId;//修改原手术室排序用
                 },
                 opChang: function (e) {
-                    this.addProp();
-                    this.upIf = 3;
+                    //this.addProp();//用于判断是否跨手术室拖动
+                    this.upIf = 3;//选择修改
                     var el = e.target;
-                    this.opId = $(el).val();
+                    this.opId = $(el).val();//修改变动后手术室排序用
                     var id = $(el).prop("name");
                     //alert("手术室："+opId);
                     //alert("总："+id);
-                    
+                    this.OperationNames = $(el).parent().find("td:eq(1)").prop("class");//修改完，加载时，排序用
                     this.id = id;
                     this.OpChangeReWere(this.opId);
                 },
@@ -185,7 +185,9 @@
                             (response) => {
                                 this.were = response.data;
                                 //alert(111)
+                               
                                 this.updateOperation();
+
                         }
                     ).catch(function (response) {
                         alert(response);
@@ -193,12 +195,18 @@
                 },
                 clickfun: function (e) {
                     var el = e.target;
-
-                    //重置台次排序时，值针对指定元素
-                    this.OperationNames = $(el).prop("class");
+                    this.upIf = 0;
+                    //重置台次排序时，值针对指定元素(鼠标按下事件放在tr，获取点中td)
+                    var element = $(el).parent();
+                    this.OperationNames = element.find("td:eq(1)").prop("class");
+                    
                     //添加自定义属性，用于判断拖拽后，是否重载页面
-                    this.addProp();//————应该 加载完数据后，就加载
-                    this.upId = $(el).parent().prop("id");
+                    //this.addProp();//————应该 加载完数据后，再加载（根数数据动态加入）——这里初始就需要属性确定是那一行，所以重载完数据后再重载一边属性就行
+                    this.upId = element.prop("id");
+                    //$("#sort tbody").on("sortstop", function (event, ui) {
+                    //    vm.updateOperation();
+                    //});
+                  
                 },
                 ShowOperation: function () {
                       axios.get('@Url.Action("ShowOperation", "Arrangeoperation")'
@@ -224,6 +232,7 @@
                     //}
                     var timeToShow = $("#beginTime").html();
                    // alert(timeToShow);
+                    var _this = this;
                     axios.post('@Url.Action("Shows", "Arrangeoperation")', { opTime: timeToShow}).then(
                         (response) => {
                             if (response.data.length!=0) {
@@ -238,42 +247,18 @@
                                     //console.log(this.publishTime)
                                     @*//拖动整行进行调整顺序*@
                                 if (this.statuss == 0) {
-                                        var fixHelperModified = function (e, tr) {
-                                            //preProp = tr.prev().prop("ifProp");
-                                            //nextProp = tr.next().prop("ifProp");
-                                            var $originals = tr.children();
-                                            var $helper = tr.clone();
-                                            $helper.children().each(function (index) {
-                                                $(this).width($originals.eq(index).width())
-                                            });
-                                            return $helper;
-                                        },
-                                            updateIndex = function (e, ui) {
-                                                var upItem = vm.OperationNames;
 
-                                                $('td.' + upItem, ui.item.parent()).each(function (i) {
-                                                    $(this).html(i + 1);
-                                                });
-
-                                                vm.updateOperation();
-                                                var preProp = $("#" + vm.upId).prev().attr("ifProp");
-                                                var nextProp = $("#" + vm.upId).next().attr("ifProp");
-
-                                                if (upItem != preProp && upItem != nextProp) {
-                                                    location.reload(true);
-                                                }
-
-                                            };
-                                        $("#sort tbody").sortable({
-                                            helper: fixHelperModified,
-                                            stop: updateIndex
-                                        }).disableSelection();
-
+                                    //setTimeout(function () {
+                                    //    _this.scro();
+                                    //}, 100);
+                                   this.scro();//GetOperation重载数据，数据的变动会触发一次scro的重排序
+                                    //(由于用于排序的 this.OperationNames没变，排序会比实际需求多排一位而出错，/*所以scro里 重载 与this.OperationNames对应的class属性*/)
+                                    //，然后修改进入0, 0修改后不会重载数据，结束执行（所以更换手术间，前期可只修改手术间而不修改台次？？）
                                 }
                                 else {
-                                    $("#sort tbody").sortable({
-                                        cancel: "tbody"
-                                    });
+                                    $("#sort tbody").sortable(
+                                        { disabled: true }//排序不可用
+                                    );
                                 }
                                 //this.addProp();//放在这里报错，找不到添加属性的方法
                             }
@@ -352,9 +337,8 @@
                         (response) => {
                             //发布和取消发布时，重新加载数据，改变页面布局（修改排序时则不，否则会有buge）
                             if (this.upIf != 0) {
-
-                                //location.reload(true)//必须重载来确定有无拖拽
-                                 this.GetOperation();
+                                 //this.GetOperation();
+                                location.reload(true);
                             }
                         }
                     ).catch(function (response) {
@@ -423,6 +407,42 @@
                     else {
                         alert("当前班次不能取消");
                     }
+                },
+                scro: function () {
+           
+                    var _this = this;
+                    var fixHelperModified = function (e, tr) {
+                        //preProp = tr.prev().prop("ifProp");
+                        //nextProp = tr.next().prop("ifProp");
+                        var $originals = tr.children();
+                        var $helper = tr.clone();
+                        $helper.children().each(function (index) {
+                            $(this).width($originals.eq(index).width())
+                        });
+                        return $helper;
+                    },
+                        updateIndex = function (e, ui) {
+                            var upItem = _this.OperationNames;
+
+                            $('td.' + upItem, ui.item.parent()).each(function (i) {//手术室改变后，数据更新还未完成，排序已完成？？？
+                                $(this).html(i + 1);
+                            });
+
+                            vm.updateOperation();
+                            var preProp = $("#" + vm.upId).prev().attr("ifProp");
+                            var nextProp = $("#" + vm.upId).next().attr("ifProp");
+
+                            if (upItem != preProp && upItem != nextProp) {
+                                location.reload(true);
+                            }
+
+                        };
+                    //***************拖拽换的是内容，列不变****************
+                    $("#sort tbody").sortable({
+                        disabled: false,
+                        helper: fixHelperModified,
+                        stop: updateIndex
+                    }).disableSelection();
                 }
             }
         })
