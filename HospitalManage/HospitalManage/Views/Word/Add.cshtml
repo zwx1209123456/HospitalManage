@@ -1,0 +1,91 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <script src="~/Scripts/axios.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+    <link href="~/css/pag.css" rel="stylesheet" media="all" />
+    <link href="~/css/css.css" rel="stylesheet" media="all" />
+    <link href="~/css/x-admin.css" rel="stylesheet" media="all" />
+</head>
+<body style="background-color:#ffffff">
+    <div id="app" class="x-body">
+        <table class="tablelist">
+            <tr>
+                <td>姓名：</td>
+                <td><input id="Text1" type="text" value="@ViewBag.userName" /></td>
+            </tr>
+            <tr>
+                <td>业务名称：</td>
+                <td>
+                    <select id="Select1" v-model="ApprovalName">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="item in ApprovalList" v-bind:value="item.Id">
+                            {{item.ApprovalName}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>科室名称：</td>
+                <td>
+                    <input id="Text1" type="text" value="@ViewBag.DepartmentName" />
+                </td>
+            </tr>
+            <tr>
+                <td>职务名称：</td>
+                <td>
+                    <input id="Text1" type="text" value="@ViewBag.DutyName" />
+                </td>
+            </tr>
+            <tr>
+                <td>条件名称：</td>
+                <td>
+                    <select id="Select1" v-model="Conditions">
+                        <option value="请选择">--请选择--</option>
+                        <option v-for="item in ConditionList" v-bind:value="item.Id">
+                            {{item.Conditions}}
+                        </option>
+                    </select>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="#" v-on:click="Add(ApprovalName, FlowCode, DepartmentID, Conditions, ApprovalStatus, ApprovalType, ApprovalWay, DutyName,DutyNames, StartApproval, LastApproval, UserName)">保存</a>
+                </td>
+                <td>
+                    <a href="#" onclick="location.href='/Approvalflow/Show'"><span><img src="~/images/t06.png" /></span>显示</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script src="~/js/x-layui.js" charset="utf-8"></script>
+    <script src="~/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="~/js/jquery2.js" charset="utf-8"></script>
+    <script src="~/js/js.js" charset="utf-8"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script>
+        /*添加*/
+        function new_add(title, url, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+        $('.tablelist tbody tr:odd').addClass('odd');
+        // 编辑
+        function data_management_look(title, url, id, w, h) {
+            x_admin_show(title, url, w, h);
+        }
+
+    </script>
+    <script>
+       
+    </script>
+</body>
+</html>

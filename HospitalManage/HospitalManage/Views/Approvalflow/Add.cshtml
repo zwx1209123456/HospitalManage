@@ -75,12 +75,19 @@
                     <input id="Radio1" type="radio" value="发起人自己" v-model="ApprovalType" />发起人自己
                 </td>
             </tr>
-            <tr>
+            <tr v-if="Loops">
                 <td>审批方式：</td>
                 <td>
-                    <input id="Radio1" type="radio" value="依次审批" v-model="ApprovalWay" />依次审批
-                    <input id="Radio1" type="radio" value="或签（一名审批人同意或拒绝）" v-model="ApprovalWay" />或签（一名审批人同意或拒绝）
-                    <input id="Radio1" type="radio" value="会签（需所有审批人同意）（不可多选）" v-model="ApprovalWay" />会签（需所有审批人同意）（不可多选）
+                    <div v-if="Loop">
+                        <input id="Radio1" type="radio" value="依次审批" v-model="ApprovalWay" />依次审批
+                    </div>
+                    <div v-if="Loop1">
+                        <input id="Radio1" type="radio" value="或签（一名审批人同意或拒绝）" v-model="ApprovalWay" />或签（一名审批人同意或拒绝）
+                    </div>
+                    <div v-if="Loop2">
+                        <input id="Radio1" type="radio" value="会签（需所有审批人同意）（不可多选）" v-model="ApprovalWay" />会签（需所有审批人同意）（不可多选）
+                    </div>
+                    
                 </td>
             </tr>
             <tr>
@@ -111,19 +118,19 @@
                 <td>
                     <select id="Select1" v-model="StartApproval">
                         <option value="请选择">--请选择--</option>
-                        <option v-for="StartApproval in StartList" v-bind:value="StartApproval">
-                            {{StartApproval}}
+                        <option v-for="StartApproval in StartList" v-bind:value="StartApproval.StartApproval">
+                            {{StartApproval.name}}
                         </option>
                     </select>
                 </td>
             </tr>
-            <tr v-if="multistep">
+            <tr v-if="multisteps">
                 <td>审批终点</td>
                 <td>
                     <select id="Select1" v-model="LastApproval">
                         <option value="请选择">--请选择--</option>
-                        <option v-for="LastApproval in LastList" v-bind:value="LastApproval">
-                            {{LastApproval}}
+                        <option v-for="LastApproval in LastList" v-bind:value="LastApproval.LastApproval">
+                            {{LastApproval.name}}
                         </option>
                     </select>
                 </td>
@@ -132,7 +139,7 @@
                 <td>审批人</td>
                 <td>
                     <span v-for="itme in UserList">
-                        <input id="Checkbox1" type="checkbox" v-model="aaa" />
+                        <input id="Checkbox1" type="checkbox" v-model="UserName" :value="itme.Id"/>
                         {{itme.UserName}}
                     </span>
                 </td>
@@ -168,6 +175,11 @@
         var vm = new Vue({
             el: "#app",
             data: {
+                Loops: false,
+                Loop2: false,
+                Loop1: false,
+                Loop: false,
+                multisteps: false,
                 iDutyName: false,
                 ///指定角色
                 role: false,
@@ -198,12 +210,11 @@
                 ApprovalName: "请选择",
                 //职务
                 UserList: [],
-                UserName: "",
-
-                StartList: ['一级主管', '二级主管', '三级主管'],
+                UserName: [],
+                StartList: [{ StartApproval: 1, name: 'N0' }, { StartApproval: 2, name: 'N1' }, { StartApproval: 3, name: 'N2' }, { StartApproval: 4, name: 'N3' }, { StartApproval: 5, name: 'N4' }],
                 StartApproval: "请选择",
 
-                LastList: ['一级主管', '二级主管', '三级主管'],
+                LastList: [{ StartApproval: 1, name: 'N0' }, { StartApproval: 2, name: 'N1' }, { StartApproval: 3, name: 'N2' }, { StartApproval: 4, name: 'N3' }, { StartApproval: 5, name: 'N4' }],
                 LastApproval: "请选择",
                 FlowCode: "",
                 ApprovalStatus: "",
@@ -216,7 +227,7 @@
                 DepartmentID: function (newvalue, oldvalue) {
                     console.log(newvalue)
                     this.getUserList(newvalue);
-                    this.UserName = [];
+                    //this.UserName = [];
 
                 },
                 ApprovalType: function (newvalue, oldvalue) {
@@ -225,36 +236,61 @@
                         this.Approver = true;
                         this.multistep = false;
                         this.role = false;
+                        this.multisteps = false;
+                        this.Loop = false;
+                        this.Loop1 = true;
+                        this.Loop2 = true;
+                        this.Loops = true;
                     }
                     if (newvalue == "主管（指定多级）") {
                         this.multistep = true;
+                        this.multisteps = true;
                         this.role = false;
                         this.Approver = false;
+                        this.Loop = true;
+                        this.Loops = true;
+                        this.Loop1 = false;
+                        this.Loop2 = false;
                     }
                     if (newvalue == "指定角色") {
                         this.role = true;
                         this.Approver = false;
                         this.multistep = false;
+                        this.multisteps = false;
+                        this.Loop = false;
+                        this.Loop1 = false;
+                        this.Loop2 = false;
+                        this.Loops = false;
                     }
                     if (newvalue == "发起人自己") {
                         this.role = false;
                         this.Approver = false;
                         this.multistep = false;
+                        this.multisteps = false;
+                        this.Loop = false;
+                        this.Loop1 = false;
+                        this.Loop2 = false;
+                        this.Loops = false;
                     }
                     if (newvalue == "主管（指定一级）") {
+                        this.multistep = true;
                         this.role = false;
                         this.Approver = false;
-                        this.multistep = false;
+                        this.multisteps = false;
+                        this.Loop = false;
+                        this.Loop1 = true;
+                        this.Loop2 = true;
+                        this.Loops = true;
                     }
                 },
-                UserList: function (newvalue, oldvalue) {
-                },
-                UserList: function (newvalue, oldvalue) {
-                    this.UserName = [];
-                    for (var i = 0; i < newvalue.length; i++) {
-                        this.UserName.push(newvalue[i].UserName);
-                    }
-                },
+                //UserList: function (newvalue, oldvalue) {
+                //},
+                //UserList: function (newvalue, oldvalue) {
+                //    this.UserName = [];
+                //    for (var i = 0; i < newvalue.length; i++) {
+                //        this.UserName.push(newvalue[i].UserName);
+                //    }
+                //},
                 search: {
                     handler() {//搜索框输入变化触发
                         this.listShow = true;
@@ -272,7 +308,8 @@
             },
              methods: {
                  Add: function (ApprovalName, FlowCode, DepartmentID, Conditions, ApprovalStatus, ApprovalType, ApprovalWay, DutyName, DutyNames, StartApproval, LastApproval, UserName) {
-                     axios.post('@Url.Action("Add", "Approvalflow")', { approvalflow: { ApprovalID: ApprovalName, FlowCode: FlowCode, DepartmentID: DepartmentID, ConditionID: Conditions, ApprovalStatus: ApprovalStatus, ApprovalType: ApprovalType, ApprovalWay: ApprovalWay, DutyID: DutyName, DutyIDs: DutyNames, StartApproval: StartApproval, LastApproval: LastApproval, UserIDs: UserName} }).then(
+                     console.log(UserName.join(','))
+                     axios.post('@Url.Action("Add", "Approvalflow")', { approvalflow: { ApprovalID: ApprovalName, FlowCode: FlowCode, DepartmentID: DepartmentID, ConditionID: Conditions, ApprovalStatus: ApprovalStatus, ApprovalType: ApprovalType, ApprovalWay: ApprovalWay, DutyID: DutyName, DutyIDs: DutyNames, StartApproval: StartApproval, LastApproval: LastApproval, UserIDs: UserName.join(',')} }).then(
 
                          (response) => {
                             if (response.data > 0) {

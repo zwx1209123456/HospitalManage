@@ -1,0 +1,79 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/axios.min.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+</head>
+<body>
+    <div id="app"> 
+        <table>
+            <tr>
+                <td>权限名称</td>
+                <td>权限URL</td>
+                <td>是否启用</td>
+                <td>操作</td>
+            </tr>
+            <tr v-for="power in powerList">
+                <td>{{power.PowerName}}</td>
+                <td>{{power.PowerUrl}}</td>
+                <td>{{power.IsEnabled}}</td>
+                <td>
+                 <div v-if="power.Id!=''">
+                     <a href="#" v-on:click="jump(power.Id)">修改</a>
+                <a href="#" v-on:click="DeletePower(power.Id)">删除</a>
+                </div>
+        </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+            var vm = new Vue({
+                el: "#app",
+                data:{
+                    powerList:[],
+                },
+                mounted() {
+                    this.GetPowers();
+                },
+            methods: {
+                GetPowers: function () {
+                    axios.get('@Url.Action("GetPowers", "Power")').then(
+                        (response) => {
+                            this.powerList = response.data;
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                DeletePower: function (Id) {
+                    axios.post('@Url.Action("Delete", "Power")', { Id:Id }).then(
+                        (response) => {
+                            this.GetPowers();
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+                jump: function (Id) {
+                    location.href = "Update?Id=" + Id;
+                }, 
+            },
+
+        });
+</script>

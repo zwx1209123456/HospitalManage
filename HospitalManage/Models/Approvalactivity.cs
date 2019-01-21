@@ -63,5 +63,9 @@ namespace Models
         /// 实际审批人ids
         /// </summary>
         public string FactUserIDs { get; set; }
+        /// <summary>
+        /// 申请人id
+        /// </summary>
+        public int UserID { get; set; }
     }
 }

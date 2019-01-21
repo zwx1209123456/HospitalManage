@@ -15,10 +15,12 @@ namespace HospitalManage.Controllers
         {
             return View();
         }
-        public int Logins(string userName)
+        public int Logins(string userName, string DepartmentName,string DutyName)
         {
             ///存入Session
             Session["userName"] = userName;
+            Session["DepartmentName"] = DepartmentName;
+            Session["DutyName"] = DutyName;
             return 1;
         }
     }

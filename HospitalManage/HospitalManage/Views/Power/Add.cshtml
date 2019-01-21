@@ -1,0 +1,82 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <script src="~/Scripts/axios.min.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+</head>
+<body>
+    <div id="app"> 
+        <table>
+            <tr>
+                <td>
+                    权限名称
+                </td>
+                <td>
+                    <input id="Text1" type="text" v-model="PowerName"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    权限URL
+                </td>
+                <td>
+                    <input id="Text1" type="text" v-model="PowerUrl"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    是否启用
+                </td>
+                <td>
+                    <input id="Radio1" type="radio" value="0" v-model="IsEnabled" checked="checked"/>启用
+                    <input id="Radio1" type="radio" value="1" v-model="IsEnabled"/>禁用
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="Button1" type="button" value="确定" v-on:click="AddPower(PowerName, PowerUrl, IsEnabled)" />
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+            var vm = new Vue({
+                el: "#app",
+                data:{
+                    PowerName: "",
+                    PowerUrl: "",
+                    IsEnabled: "",
+                    IsEnabled:0,
+                },
+            methods: {
+                AddPower: function (PowerName, PowerUrl, IsEnabled) {
+                    axios.post('@Url.Action("Add", "Power")', { power: { PowerName: PowerName, PowerUrl: PowerUrl, IsEnabled: IsEnabled} }).then(
+                        (response) => {
+                            if (response.data > 0) {
+                                alert("添加成功")
+                            }
+                            else{
+                                alert("该用户已存在")
+                            }
+                        },
+                        (response) => {
+                            alert(response.status);
+                        }
+                    ).catch(function (response) {
+                        alert(response);
+                    });
+                },
+            },
+
+        });
+</script>

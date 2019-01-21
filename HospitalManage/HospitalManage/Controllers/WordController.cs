@@ -6,6 +6,8 @@ using System.Web.Mvc;
 
 namespace HospitalManage.Controllers
 {
+    using Models;
+    using IServices;
     public class WordController : Controller
     {
         // GET: Word
@@ -13,5 +15,16 @@ namespace HospitalManage.Controllers
         {
             return View();
         }
+        public ActionResult Add()
+        {
+            ViewBag.userName = Session["userName"];
+            ViewBag.DepartmentName = Session["DepartmentName"];
+            ViewBag.DutyName = Session["DutyName"];
+            return View();
+        }
+        //public int Add()
+        //{
+        //    return View();
+        //}
     }
 }
